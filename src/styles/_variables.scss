@@ -1,0 +1,39 @@
+// 1. Base Palette (Inspired by Tailwind Slate & Indigo)
+$color-white: #ffffff;
+$color-black: #0f172a;
+
+// Primary (Brand color - Indigo)
+$primary-50: #eef2ff;
+$primary-100: #e0e7ff;
+$primary-500: #6366f1; // Primary button
+$primary-600: #4f46e5; // Hover state
+$primary-700: #4338ca; // Active state
+
+// Neutrals (Backgrounds, text, borders - Slate)
+$gray-50: #f8fafc; // App background
+$gray-100: #f1f5f9; // Card/Section background
+$gray-200: #e2e8f0; // Borders
+$gray-300: #cbd5e1;
+$gray-500: #64748b; // Secondary / Muted text
+$gray-700: #334155; // Main body text
+$gray-900: #0f172a; // Headings
+
+// Semantic (Reservation statuses & Feedback)
+$success: #10b981; // Confirmed / Available
+$warning: #f59e0b; // Pending
+$danger: #ef4444; // Occupied / Collision / Error
+$info: #3b82f6;
+
+// Design Tokens
+$font-main: "Inter", sans-serif;
+$radius-sm: 4px;
+$radius-md: 8px; // Standard for cards and inputs
+$radius-lg: 12px; // For modals
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+$transition-base: all 0.2s ease-in-out;
+
+// Breakpoints (Responsive Design)
+$mobile: 640px;
+$tablet: 768px;
+$desktop: 1024px;

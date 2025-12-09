@@ -1,0 +1,64 @@
+@use "variables" as v;
+
+// basic reset
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// css variables for easy theme changes
+:root {
+  --color-bg: #{v.$gray-50};
+  --color-surface: #{v.$color-white};
+  --color-text-main: #{v.$gray-900};
+  --color-text-muted: #{v.$gray-500};
+  --color-border: #{v.$gray-200};
+  --color-primary: #{v.$primary-500};
+  --color-primary-hover: #{v.$primary-600};
+
+  --shadow-card: #{v.$shadow-sm};
+}
+
+body {
+  font-family: v.$font-main;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; // better font rendering for mac
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+// links & button styling globally
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: v.$transition-base;
+
+  &:hover {
+    color: var(--color-primary-hover);
+  }
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+// utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// accessibility
+:focus-visible {
+  outline: 2px solid v.$primary-500;
+  outline-offset: 2px;
+}
