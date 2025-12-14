@@ -1,4 +1,4 @@
-@use "variables" as v; // Use '@use' instead of '@import' for modern Sass
+@use "variables" as v;
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap");
 
 // 1. Basic Reset
@@ -12,25 +12,25 @@
 // 2. CSS Variables for Theming
 :root {
   // Backgrounds
-  --color-bg: #{v.$bg-main};
-  --color-surface: #{v.$bg-card};
+  --color-bg: #{v.$color-bg-main};
+  --color-surface: #{v.$color-bg-card};
 
   // Text
-  --color-text-main: #{v.$text-main}; 
-  --color-text-muted: #{v.$text-dim};
+  --color-text-main: #{v.$color-text-main};
+  --color-text-muted: #{v.$color-text-dim};
 
   // Brand Colors
-  --color-primary: #{v.$primary}; // Electric Cyan
-  --color-secondary: #{v.$secondary}; // Electric Purple
-  --color-accent: #{v.$accent}; // Hot Pink
+  --color-primary: #{v.$color-primary}; // Electric Cyan
+  --color-secondary: #{v.$color-secondary}; // Electric Purple
+  --color-accent: #{v.$color-accent}; // Hot Pink
 
   // Utility
-  --radius-main: #{v.$radius};
+  --radius-main: #{v.$radius-md};
 }
 
 // 3. Global Body Styles
 body {
-  font-family: "Inter", sans-serif;
+  font-family: #{v.$font-main}, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text-main);
   line-height: 1.6;
@@ -66,7 +66,7 @@ button {
 
 // 6. Layout Utilities
 .container {
-  max-width: #{v.$container-width};
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
   width: 100%;
