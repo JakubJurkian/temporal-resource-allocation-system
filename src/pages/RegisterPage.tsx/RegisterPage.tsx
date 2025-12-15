@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useState } from "react";
 
@@ -12,6 +12,7 @@ interface RegisterFormData {
 }
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
   const [formData, setFormData] = useState<RegisterFormData>({
     fullName: "",
@@ -83,7 +84,6 @@ const RegisterPage = () => {
     localStorage.setItem(userId, JSON.stringify(userData));
     alert("Registration successful! You can now log in.");
 
-
     setErrors({});
     setFormData({
       fullName: "",
@@ -93,6 +93,8 @@ const RegisterPage = () => {
       confirmPassword: "",
       agreeOnTerms: false,
     });
+
+    navigate("/");
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
