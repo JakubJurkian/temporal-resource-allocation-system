@@ -1,4 +1,4 @@
-@use '../../styles/variables' as v;
+@use "../../styles/variables" as v;
 
 // --- LAYOUT ---
 .loginContainer {
@@ -18,7 +18,11 @@
   position: absolute;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(v.$color-primary, 0.15) 0%, rgba(v.$color-bg-main, 0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-primary, 0.15) 0%,
+    rgba(v.$color-bg-main, 0) 70%
+  );
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -54,7 +58,9 @@
     font-weight: 800;
     color: v.$color-text-main;
     margin-bottom: 1.5rem;
-    .highlight { color: v.$color-primary; }
+    .highlight {
+      color: v.$color-primary;
+    }
   }
 
   .title {
@@ -122,7 +128,9 @@
 .forgotLink {
   color: v.$color-primary;
   transition: color 0.2s;
-  &:hover { color: v.$color-secondary; }
+  &:hover {
+    color: v.$color-secondary;
+  }
 }
 
 // Custom Checkbox Styling
@@ -132,7 +140,7 @@
   gap: 0.5rem;
   cursor: pointer;
   color: v.$color-text-muted;
-  
+
   input {
     accent-color: v.$color-primary; // Simple browser native neon color
     width: 1rem;
@@ -177,6 +185,15 @@
     color: v.$color-text-main;
     font-weight: 600;
     margin-left: 0.25rem;
-    &:hover { color: v.$color-primary; }
+    &:hover {
+      color: v.$color-primary;
+    }
   }
+}
+
+.errorText {
+  color: v.$danger;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 700;
 }

@@ -1,7 +1,78 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.scss";
+import { useState } from "react";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 const LoginPage = () => {
+  const [errors, setErrors] = useState<Partial<LoginFormData>>({});
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newErrors: Partial<LoginFormData> = {};
+
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    // 4. Validate Password
+    if (!formData.password || formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters.";
+    }
+
+    let isAuthenticated = false;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(localStorage).forEach(([_, value]) => {
+      const user = JSON.parse(value);
+      if (
+        user.email === formData.email &&
+        user.password === formData.password
+      ) {
+        console.log("User authenticated successfully.");
+        isAuthenticated = true;
+      }
+    });
+
+    if (!isAuthenticated) {
+      newErrors.email = "Invalid email or password.";
+      newErrors.password = "Invalid email or password.";
+    }
+
+    // --- CHECK FOR ERRORS ---
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      console.log(newErrors);
+      return;
+    }
+
+    setErrors({});
+    setFormData({
+      email: "",
+      password: "",
+    });
+    navigate('/');
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
+  };
   return (
     <main className={styles.loginContainer}>
       <div className={styles.glowOrb} aria-hidden="true"></div>
@@ -19,7 +90,7 @@ const LoginPage = () => {
           </p>
         </header>
 
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="email">Email Address</label>
             <input
@@ -29,7 +100,11 @@ const LoginPage = () => {
               placeholder="name@velocity.com"
               autoComplete="email"
               required
+              onChange={handleInputChange}
             />
+            {errors.email && (
+              <span className={styles.errorText}>{errors.email}</span>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
@@ -41,7 +116,11 @@ const LoginPage = () => {
               placeholder="••••••••"
               autoComplete="current-password"
               required
+              onChange={handleInputChange}
             />
+            {errors.password && (
+              <span className={styles.errorText}>{errors.password}</span>
+            )}
           </div>
 
           <div className={styles.formFooter}>
