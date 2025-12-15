@@ -35,3 +35,8 @@ export const addUserToStorage = (user: User) => {
   users.push(user);
   localStorage.setItem("velocity_users", JSON.stringify(users));
 }
+
+export const getUsersFromStorage = (): User[] => {
+  const currentData = localStorage.getItem("velocity_users");
+  return currentData ? JSON.parse(currentData) : [];
+};

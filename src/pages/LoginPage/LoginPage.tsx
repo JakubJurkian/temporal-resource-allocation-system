@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.scss";
 import { useState } from "react";
+import { getUsersFromStorage } from "../../utils/storage";
 
 interface LoginFormData {
   email: string;
@@ -20,36 +21,27 @@ const LoginPage = () => {
 
     const newErrors: Partial<LoginFormData> = {};
 
-    // Validate Email
+    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address.";
     }
 
-    // 4. Validate Password
+    // Validate password
     if (!formData.password || formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
     }
 
-    let isAuthenticated = false;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Object.entries(localStorage).forEach(([_, value]) => {
-      const user = JSON.parse(value);
-      if (
-        user.email === formData.email &&
-        user.password === formData.password
-      ) {
-        console.log("User authenticated successfully.");
-        isAuthenticated = true;
-      }
-    });
-
-    if (!isAuthenticated) {
-      newErrors.email = "Invalid email or password.";
+    const users = getUsersFromStorage();
+    const userExists = users.find(
+      (user) =>
+        user.email === formData.email && user.password === formData.password
+    );
+    if (!userExists) {
       newErrors.password = "Invalid email or password.";
     }
 
-    // --- CHECK FOR ERRORS ---
+    // Check for errors
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       console.log(newErrors);
@@ -61,7 +53,7 @@ const LoginPage = () => {
       email: "",
       password: "",
     });
-    navigate('/');
+    navigate("/");
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +65,7 @@ const LoginPage = () => {
       };
     });
   };
+  
   return (
     <main className={styles.loginContainer}>
       <div className={styles.glowOrb} aria-hidden="true"></div>

@@ -29,12 +29,12 @@ const RegisterPage = () => {
 
     const newErrors: Partial<RegisterFormData> = {};
 
-    // 1. Validate Full Name
+    // Validate Full Name
     if (!formData.fullName || formData.fullName.trim().length < 2) {
       newErrors.fullName = "Name must be at least 2 characters.";
     }
 
-    // 2. Validate Phone (Simple Regex: Optional +, then 9-15 digits)
+    // Validate Phone (Simple Regex: Optional +, then 9-15 digits)
     const phoneRegex = /^\+?[0-9]{9,15}$/;
     if (
       !formData.phone ||
@@ -43,28 +43,28 @@ const RegisterPage = () => {
       newErrors.phone = "Please enter a valid phone number.";
     }
 
-    // 3. Validate Email
+    // Validate Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address.";
     }
 
-    // 4. Validate Password
+    // Validate Password
     if (!formData.password || formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
     }
 
-    // 5. Validate Confirm Password
+    // Validate Confirm Password
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
     }
 
-    // 6. Validate Terms
+    // Validate Terms
     if (!formData.agreeOnTerms) {
       newErrors.agreeOnTerms = "You must agree to the terms and conditions.";
     }
 
-    // --- CHECK FOR ERRORS ---
+    // Check for errors
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       console.log(newErrors);
@@ -82,7 +82,7 @@ const RegisterPage = () => {
       role: "client" as const,
     };
 
-    addUserToStorage(userData);
+    addUserToStorage(userData); // adding user to local storage (faking backend)
     alert("Registration successful! You can now log in.");
 
     setErrors({});
