@@ -5,7 +5,6 @@ const LandingPage = () => {
   return (
     <div className={styles.pageWrapper}>
       
-      {/* navbar */}
       <nav className={styles.navbar}>
         <div className={styles.logo}>
           Velo<span className={styles.highlight}>City</span>
@@ -17,7 +16,6 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      {/* hero section */}
       <header className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
@@ -40,7 +38,6 @@ const LandingPage = () => {
         </div>
       </header>
 
-      {/* stats bar */}
       <section className={styles.statsBar}>
         <div className={styles.statItem}>
           <h3>120 km</h3>
@@ -58,7 +55,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* features grid */}
       <section className={styles.featuresSection}>
         <h2 className={styles.sectionTitle}>Built for <span className={styles.highlight}>Delivery</span></h2>
         
@@ -81,7 +77,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* footer */}
       <footer className={styles.footer}>
         <p>© 2025 VeloCity Systems. Ride Safe.</p>
       </footer>
