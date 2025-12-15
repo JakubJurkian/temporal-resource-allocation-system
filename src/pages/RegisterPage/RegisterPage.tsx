@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useState } from "react";
+import { addUserToStorage } from "../../utils/storage";
 
 interface RegisterFormData {
   fullName: string;
@@ -73,15 +74,15 @@ const RegisterPage = () => {
     console.log("Submitting valid form:", formData);
     // saving data to localstorage...
     const userData = {
+      id: Math.random().toString(36).substring(2, 10), // simple random id
       fullName: formData.fullName,
       phone: formData.phone,
       email: formData.email,
       password: formData.password,
+      role: "client" as const,
     };
 
-    const userId = Math.random().toString(36).substring(2, 10); // simple random id
-
-    localStorage.setItem(userId, JSON.stringify(userData));
+    addUserToStorage(userData);
     alert("Registration successful! You can now log in.");
 
     setErrors({});
