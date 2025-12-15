@@ -1,0 +1,315 @@
+@use '../../styles/variables' as v;
+
+// --- LAYOUT ---
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: v.$color-bg-main;
+  overflow-x: hidden; // Prevent horizontal scroll on small screens
+}
+
+// --- NAVBAR ---
+.navbar {
+  display: flex;
+  flex-direction: column; // Mobile Default: Stack Logo and Links
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  
+  background: rgba(v.$color-bg-card, 0.9);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  // Tablet & Desktop Overrides
+  @media (min-width: v.$tablet) {
+    flex-direction: row; // Switch to horizontal
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    gap: 0;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: v.$color-text-main;
+    .highlight { color: v.$color-primary; }
+  }
+
+  .navLinks {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    font-size: 0.9rem;
+
+    // Desktop Override
+    @media (min-width: v.$tablet) {
+      gap: 2rem;
+      font-size: 1rem;
+    }
+
+    a {
+      color: v.$color-text-muted;
+      font-weight: 500;
+      transition: color 0.2s;
+      white-space: nowrap;
+      &:hover { color: v.$color-text-main; }
+    }
+
+    .loginBtn {
+      border: 1px solid v.$color-primary;
+      color: v.$color-primary;
+      padding: 0.4rem 1.2rem;
+      border-radius: v.$radius-md;
+      &:hover {
+        background: rgba(v.$color-primary, 0.1);
+      }
+    }
+  }
+}
+
+// --- HERO SECTION ---
+.heroSection {
+  // Mobile Default: Less padding, simple layout
+  padding: 4rem 1rem; 
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background: radial-gradient(circle at 50% 30%, rgba(v.$color-secondary, 0.15) 0%, rgba(v.$color-bg-main, 0) 70%);
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    padding: 8rem 2rem;
+  }
+}
+
+.heroContent {
+  width: 100%;
+  max-width: 800px;
+}
+
+.heroTitle {
+  // Mobile Default: Smaller font
+  font-size: 2.5rem; 
+  line-height: 1.2;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  color: v.$color-text-main;
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    font-size: 4.5rem; // Huge font
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .gradientText {
+    background: linear-gradient(to right, v.$color-primary, v.$color-secondary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.heroSubtitle {
+  // Mobile Default
+  font-size: 1rem;
+  color: v.$color-text-muted;
+  margin-bottom: 2.5rem;
+  line-height: 1.5;
+  padding: 0 1rem;
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    font-size: 1.25rem;
+    margin-bottom: 3rem;
+  }
+}
+
+// Buttons
+.ctaGroup {
+  display: flex;
+  flex-direction: column; // Mobile Default: Stack buttons vertically
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    flex-direction: row; // Horizontal
+    justify-content: center;
+    width: auto;
+  }
+}
+
+.primaryCta, .secondaryCta {
+  padding: 1rem 2rem;
+  border-radius: v.$radius-md;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  display: inline-block;
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    width: auto; // Back to natural width
+  }
+}
+
+.primaryCta {
+  background-color: v.$color-primary;
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(v.$color-primary, 0.4); 
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(v.$color-primary, 0.6);
+  }
+}
+
+.secondaryCta {
+  border: 1px solid v.$color-text-muted;
+  color: v.$color-text-main;
+  font-weight: 600;
+
+  &:hover {
+    border-color: v.$color-text-main;
+    background: rgba(255,255,255,0.05);
+  }
+}
+
+// --- STATS BAR ---
+.statsBar {
+  display: flex;
+  flex-direction: column; // Mobile Default: Vertical Stack
+  gap: 2rem;
+  padding: 3rem 1rem;
+  background-color: v.$color-bg-card;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    flex-direction: row; // Horizontal
+    gap: 4rem;
+    padding: 3rem 0;
+    justify-content: center;
+  }
+}
+
+.statItem {
+  text-align: center;
+  h3 {
+    font-size: 2rem;
+    color: v.$color-text-main;
+    margin-bottom: 0.25rem;
+    
+    @media (min-width: v.$tablet) {
+      font-size: 2.5rem;
+    }
+  }
+  p {
+    color: v.$color-primary;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+}
+
+.divider {
+  display: none;
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    display: block;
+    width: 1px;
+    height: 40px;
+    background-color: rgba(255,255,255,0.1);
+  }
+}
+
+// --- FEATURES ---
+.featuresSection {
+  // Mobile Default
+  padding: 4rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  // Desktop Override
+  @media (min-width: v.$tablet) {
+    padding: 6rem 2rem;
+  }
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  .highlight { color: v.$color-primary; }
+
+  @media (min-width: v.$tablet) {
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  gap: 1.5rem;
+
+  @media (min-width: v.$tablet) {
+    gap: 2rem;
+  }
+}
+
+.card {
+  background: v.$color-bg-card;
+  padding: 1.5rem;
+  border-radius: v.$radius-md;
+  border: 1px solid transparent;
+  transition: border-color 0.3s;
+
+  @media (min-width: v.$tablet) {
+    padding: 2rem;
+  }
+
+  &:hover {
+    border-color: v.$color-secondary;
+  }
+
+  .icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    @media (min-width: v.$tablet) {
+      font-size: 1.5rem;
+    }
+  }
+  
+  p {
+    color: v.$color-text-muted;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+// --- FOOTER ---
+.footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: auto;
+  color: v.$color-text-muted;
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
