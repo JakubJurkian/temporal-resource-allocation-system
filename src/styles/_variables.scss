@@ -10,6 +10,7 @@ $color-accent:    #FF0099; // Badges, Alerts, "Sale"
 // Text
 $color-text-main: #FFFFFF;
 $color-text-dim:  #94A3B8; 
+$color-text-muted: $color-text-dim; // alias for legacy references
 
 // Neutrals (Backgrounds, text, borders - Slate)
 $gray-50: #f8fafc; // App background
