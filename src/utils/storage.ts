@@ -7,6 +7,7 @@ const MOCK_ADMIN: User = {
   password: "password123",
   role: "admin",
   phone: "+48 000 000 000",
+  city: "Warsaw",
 };
 
 const MOCK_CLIENT: User = {
@@ -16,6 +17,7 @@ const MOCK_CLIENT: User = {
   password: "password123",
   role: "user",
   phone: "+48 111 111 111",
+  city: "Gdansk",
 };
 
 export const initializeStorage = () => {

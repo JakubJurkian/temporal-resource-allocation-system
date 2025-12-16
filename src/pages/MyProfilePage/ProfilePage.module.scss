@@ -318,3 +318,37 @@
     }
   }
 }
+
+// --- SELECT CONTROL ---
+.selectControl {
+  position: relative;
+}
+
+.selectControl select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e6ed;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0f172a 0%, #0b1020 100%);
+  color: #e8ecf5;
+  font-weight: 600;
+  appearance: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.selectControl select:focus {
+  outline: none;
+  border-color: #6ab7ff;
+  box-shadow: 0 0 0 3px rgba(106, 183, 255, 0.25);
+}
+
+.selectControl::after {
+  content: "▾";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9fb4d7;
+  pointer-events: none;
+  font-size: 12px;
+}
