@@ -1,0 +1,333 @@
+@use "../../styles/variables" as v;
+
+// --- LAYOUT ---
+.container {
+  min-height: 100vh;
+  background-color: v.$color-bg-main;
+  color: v.$color-text-main;
+  padding: 0 1.5rem;
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+// Background decorative blob (Reused from Login)
+.glowOrbTop {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-primary, 0.08) 0%,
+    rgba(v.$color-bg-main, 0) 70%
+  );
+  top: -400px;
+  right: -200px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+// --- TOP BAR (Navbar) ---
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 3rem;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: v.$color-text-main;
+    .highlight {
+      color: v.$color-primary;
+    }
+  }
+
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .userName {
+      font-weight: 600;
+      color: v.$color-text-main;
+      display: none; // Hide on mobile
+      @media (min-width: v.$tablet) {
+        display: block;
+      }
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      // Gradient avatar to match brand
+      background: linear-gradient(135deg, v.$color-secondary, darken(v.$color-secondary, 15%));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(v.$color-secondary, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logoutBtn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: v.$color-text-muted;
+      padding: 0.5rem 1rem;
+      border-radius: v.$radius-md;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: v.$danger; // Red for logout
+        color: v.$danger;
+        background: rgba(v.$danger, 0.05);
+      }
+    }
+  }
+}
+
+// --- MAIN CONTENT ---
+.content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 4rem;
+}
+
+.welcomeSection {
+  margin-bottom: 3rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+    
+    @media (min-width: v.$tablet) {
+      font-size: 3rem;
+    }
+
+    .highlight {
+      // Gradient text effect
+      background: linear-gradient(to right, v.$color-primary, v.$color-secondary);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .subtitle {
+    color: v.$color-text-muted;
+    font-size: 1.1rem;
+    max-width: 600px;
+  }
+}
+
+// --- SHARED CARD STYLES ---
+// Using the "Glassmorphism" logic from your Login Page
+@mixin dashboard-card {
+  background: v.$color-bg-card; // Solid dark or semi-transparent
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: v.$radius-lg;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  // Hover Glow Effect
+  &:hover {
+    border-color: rgba(v.$color-primary, 0.3);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// --- STATS GRID ---
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+
+  .statCard {
+    @include dashboard-card;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 160px;
+
+    h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: v.$color-text-muted;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .statValue {
+      font-size: 3rem;
+      font-weight: 800;
+      color: v.$color-text-main;
+      line-height: 1;
+      
+      // Neon number
+      text-shadow: 0 0 20px rgba(v.$color-primary, 0.2);
+
+      .statUnit {
+        font-size: 1rem;
+        color: v.$color-text-muted;
+        font-weight: 500;
+        margin-left: 0.5rem;
+        text-shadow: none;
+      }
+    }
+
+    .statusIndicator {
+      align-self: flex-start;
+      margin-top: auto;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      
+      &.active {
+        background: rgba(v.$success, 0.15);
+        color: v.$success;
+        border: 1px solid rgba(v.$success, 0.2);
+      }
+    }
+  }
+}
+
+// --- ACTIONS GRID ---
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: v.$color-text-main;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  &::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 24px;
+    background: v.$color-primary;
+    border-radius: 2px;
+    box-shadow: 0 0 10px v.$color-primary;
+  }
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  
+  @media (min-width: v.$tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .actionCard {
+    @include dashboard-card;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 2rem;
+
+    .icon {
+      font-size: 2rem;
+      margin-right: 1.5rem;
+      width: 64px;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: v.$radius-md;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .actionInfo {
+      flex: 1;
+      h3 { 
+        margin: 0 0 0.5rem 0; 
+        font-size: 1.25rem; 
+        font-weight: 700;
+        color: v.$color-text-main;
+      }
+      p { 
+        margin: 0; 
+        color: v.$color-text-muted; 
+        font-size: 0.95rem; 
+      }
+    }
+
+    .arrow {
+      color: v.$color-primary;
+      font-weight: 800;
+      font-size: 1.2rem;
+      opacity: 0.5;
+      transform: translateX(-10px);
+      transition: all 0.2s ease;
+    }
+
+    // --- HOVER STATE ---
+    &:hover {
+      background: lighten(v.$color-bg-card, 2%);
+      border-color: v.$color-primary;
+
+      .icon {
+        background: rgba(v.$color-primary, 0.1);
+        border-color: v.$color-primary;
+        color: v.$color-primary;
+        box-shadow: 0 0 15px rgba(v.$color-primary, 0.2);
+      }
+
+      .arrow {
+        opacity: 1;
+        transform: translateX(0);
+        color: v.$color-primary;
+        text-shadow: 0 0 10px v.$color-primary;
+      }
+    }
+
+    // --- PRIMARY ACTION VARIANT ---
+    &.primaryAction {
+      // Subtle gradient border effect
+      position: relative;
+      border-color: rgba(v.$color-primary, 0.3);
+      background: linear-gradient(
+        135deg, 
+        v.$color-bg-card 0%, 
+        rgba(v.$color-primary, 0.05) 100%
+      );
+    }
+    
+    // --- DISABLED VARIANT ---
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      filter: grayscale(1);
+      border-style: dashed;
+    }
+  }
+}
