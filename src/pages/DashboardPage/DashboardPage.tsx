@@ -100,7 +100,7 @@ const DashboardPage = () => {
         <section className={styles.actionsGrid}>
           {/* Action 1: Rent a Bike */}
           <Link
-            to="/rent"
+            to="/rent-bike"
             className={`${styles.actionCard} ${styles.primaryAction}`}
           >
             <div className={styles.icon}>🚲</div>

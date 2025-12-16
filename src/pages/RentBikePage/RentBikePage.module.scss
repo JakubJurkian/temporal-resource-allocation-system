@@ -1,0 +1,187 @@
+@use "../../styles/variables" as v;
+
+.container {
+  min-height: 100vh;
+  background-color: v.$color-bg-main;
+  color: v.$color-text-main;
+  padding: 1.5rem;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    .highlight { color: v.$color-primary; }
+  }
+
+  .closeBtn {
+    font-size: 1.5rem;
+    color: v.$color-text-muted;
+    text-decoration: none;
+    transition: color 0.2s;
+    &:hover { color: v.$danger; }
+  }
+}
+
+.wizardContent {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.stepContainer {
+  animation: fadeIn 0.4s ease-in-out;
+
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .subtitle { color: v.$color-text-muted; margin-bottom: 2rem; }
+}
+
+// --- CITY GRID ---
+.cityGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  .cityCard {
+    background: v.$color-bg-card;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: v.$radius-lg;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: v.$color-primary;
+      background: rgba(v.$color-primary, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .cityIcon { font-size: 2.5rem; }
+    .cityName { font-weight: 700; font-size: 1.1rem; }
+    .cityCount { font-size: 0.8rem; color: v.$color-text-muted; }
+  }
+}
+
+// --- LOADING ---
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(v.$color-primary, 0.1);
+    border-top: 4px solid v.$color-primary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  p { color: v.$color-text-muted; font-weight: 500; }
+}
+
+// --- DATE FORM ---
+.dateForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    label { color: v.$color-text-muted; font-size: 0.9rem; }
+    input {
+      background: v.$color-bg-card;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: v.$color-text-main;
+      padding: 1rem;
+      border-radius: v.$radius-md;
+      color-scheme: dark; // Makes calendar icon dark mode
+      
+      &:focus {
+        outline: none;
+        border-color: v.$color-primary;
+      }
+    }
+  }
+
+  .primaryBtn {
+    background: v.$color-primary;
+    color: #000;
+    padding: 1rem;
+    border-radius: v.$radius-md;
+    font-weight: 700;
+    margin-top: 1rem;
+    transition: transform 0.2s;
+    &:hover { transform: translateY(-2px); }
+  }
+
+  .errorText {
+    color: v.$danger;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+}
+
+// --- BIKE LIST ---
+.backBtn {
+  color: v.$color-text-muted;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  &:hover { color: v.$color-text-main; }
+}
+
+.bikeList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bikeCard {
+  background: v.$color-bg-card;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: v.$radius-md;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .bikeInfo h3 { margin-bottom: 0.25rem; font-size: 1.1rem; }
+  .bikeSpecs {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: v.$color-text-muted;
+  }
+
+  .bookBtn {
+    background: v.$color-secondary;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: v.$radius-sm;
+    font-weight: 600;
+    &:hover { background: lighten(v.$color-secondary, 5%); }
+  }
+}
+
+.noResults {
+  text-align: center;
+  padding: 3rem;
+  color: v.$color-text-muted;
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: v.$radius-md;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
