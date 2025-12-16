@@ -23,7 +23,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (isAuthenticated) {
       // Optional: Redirect based on role
-      const destination = user?.role === "admin" ? "/admin" : "/";
+      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
       navigate(destination, { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
@@ -65,9 +65,8 @@ const LoginPage = () => {
       email: "",
       password: "",
     });
-
     dispatch(loginSuccess(userExists!));
-    navigate("/");
+    navigate("/dashboard", { replace: true });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +78,6 @@ const LoginPage = () => {
       };
     });
   };
-
   return (
     <main className={styles.loginContainer}>
       <div className={styles.glowOrb} aria-hidden="true"></div>

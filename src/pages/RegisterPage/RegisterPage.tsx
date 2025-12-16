@@ -36,7 +36,7 @@ const RegisterPage = () => {
   useEffect(() => {
     if (isAuthenticated) {
       // Optional: Redirect based on role
-      const destination = user?.role === "admin" ? "/admin" : "/";
+      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
       navigate(destination, { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
@@ -116,7 +116,7 @@ const RegisterPage = () => {
       city: "Warsaw", // Reset city to default value
     });
 
-    navigate("/");
+    navigate("/dashboard", { replace: true });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -51,8 +51,14 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       sessionStorage.removeItem('velocity_session');
     },
+    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+        sessionStorage.setItem('velocity_session', JSON.stringify(state.user));
+      }
+    },
   },
 });
 
-export const { loginStart, loginSuccess, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, logout, updateUser } = authSlice.actions;
 export default authSlice.reducer;
