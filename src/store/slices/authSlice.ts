@@ -3,8 +3,9 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 interface User {
   id: string;
   phone: string;
-  name: string;
+  fullName: string;
   email: string;
+  password: string;
 }
 
 interface AuthState {
@@ -32,7 +33,6 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = true;
       state.user = action.payload;
-      localStorage.setItem("velocity_user", JSON.stringify(action.payload));
     },
     loginFailure: (state) => {
       state.isLoading = false;
@@ -41,9 +41,6 @@ const authSlice = createSlice({
     },
     // Action 3: Logout
     logout: (state) => {
-      if (state.user) {
-        localStorage.removeItem(state.user.id);
-      }
       state.user = null;
       state.isAuthenticated = false;
     },

@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.scss";
 import { useState } from "react";
 import { getUsersFromStorage } from "../../utils/storage";
+import { useAppDispatch } from "../../store/hooks";
+import { loginSuccess } from "../../store/slices/authSlice";
 
 interface LoginFormData {
   email: string;
@@ -15,6 +17,7 @@ const LoginPage = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +56,8 @@ const LoginPage = () => {
       email: "",
       password: "",
     });
+    
+    dispatch(loginSuccess(userExists!));
     navigate("/");
   };
 

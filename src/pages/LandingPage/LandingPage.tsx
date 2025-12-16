@@ -1,10 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import styles from "./LandingPage.module.scss";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { logout } from "../../store/slices/authSlice";
 
 const LandingPage = () => {
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  console.log(isAuthenticated);
+
+  const logoutHandle = () => {
+    // Implement logout functionality here
+    dispatch(logout());
+  };
+
   return (
     <div className={styles.pageWrapper}>
-      
       <nav className={styles.navbar}>
         <div className={styles.logo}>
           Velo<span className={styles.highlight}>City</span>
@@ -12,7 +22,16 @@ const LandingPage = () => {
         <div className={styles.navLinks}>
           <Link to="/about">About</Link>
           <Link to="/pricing">Pricing</Link>
-          <Link to="/login" className={styles.loginBtn}>Login</Link>
+          {!isAuthenticated && (
+            <Link to="/login" className={styles.loginBtn}>
+              Login
+            </Link>
+          )}
+          {isAuthenticated && (
+            <button className={styles.loginBtn} onClick={logoutHandle}>
+              Logout
+            </button>
+          )}
         </div>
       </nav>
 
@@ -23,10 +42,11 @@ const LandingPage = () => {
             OWN YOUR <span className={styles.gradientText}>SHIFT</span>.
           </h1>
           <p className={styles.heroSubtitle}>
-            The premium e-bike fleet for professional couriers. 
-            <br />Unlimited battery swaps. Zero maintenance. 100% Profit.
+            The premium e-bike fleet for professional couriers.
+            <br />
+            Unlimited battery swaps. Zero maintenance. 100% Profit.
           </p>
-          
+
           <div className={styles.ctaGroup}>
             <Link to="/wizard" className={styles.primaryCta}>
               Start Riding ⚡
@@ -56,8 +76,10 @@ const LandingPage = () => {
       </section>
 
       <section className={styles.featuresSection}>
-        <h2 className={styles.sectionTitle}>Built for <span className={styles.highlight}>Delivery</span></h2>
-        
+        <h2 className={styles.sectionTitle}>
+          Built for <span className={styles.highlight}>Delivery</span>
+        </h2>
+
         <div className={styles.grid}>
           <div className={styles.card}>
             <div className={styles.icon}>🔋</div>

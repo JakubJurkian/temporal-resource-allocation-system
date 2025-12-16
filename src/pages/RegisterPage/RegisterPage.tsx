@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useState } from "react";
 import { addUserToStorage } from "../../utils/storage";
+import { useAppDispatch } from "../../store/hooks";
+import { loginSuccess } from "../../store/slices/authSlice";
 
 interface RegisterFormData {
   fullName: string;
@@ -14,6 +16,8 @@ interface RegisterFormData {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
   const [formData, setFormData] = useState<RegisterFormData>({
     fullName: "",
@@ -83,6 +87,8 @@ const RegisterPage = () => {
     };
 
     addUserToStorage(userData); // adding user to local storage (faking backend)
+    dispatch(loginSuccess(userData));
+
     alert("Registration successful! You can now log in.");
 
     setErrors({});
