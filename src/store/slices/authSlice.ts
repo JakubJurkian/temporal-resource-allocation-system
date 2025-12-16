@@ -7,32 +7,41 @@ const initialUser = storedSession ? JSON.parse(storedSession) : null;
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: AuthState = {
   user: initialUser,
   isAuthenticated: initialUser ? true : false,
-  isLoading: false,
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
+    setUser: (state, action) => {
+      state.user = {
+        ...action.payload,
+        city: action.payload.city || 'Warsaw',
+      };
+      state.isAuthenticated = true;
+    },
     // Action 1: Start Loading
     loginStart: (state) => {
-      state.isLoading = true;
+      state.loading = true;
     },
     // Action 2: Login Success
     loginSuccess: (state, action: PayloadAction<User>) => {
-      state.isLoading = false;
+      state.loading = false;
       state.isAuthenticated = true;
       state.user = action.payload;
       sessionStorage.setItem('velocity_session', JSON.stringify(action.payload));
     },
     loginFailure: (state) => {
-      state.isLoading = false;
+      state.loading = false;
       state.isAuthenticated = false;
       state.user = null;
     },
