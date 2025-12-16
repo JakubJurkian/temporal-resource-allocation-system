@@ -1,0 +1,320 @@
+@use "../../styles/variables" as v;
+
+// --- LAYOUT UTILS ---
+.container {
+  min-height: 100vh;
+  background-color: v.$color-bg-main;
+  color: v.$color-text-main;
+  padding: 0 1.5rem;
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+// Background Orbs (Dual styling for balance)
+.glowOrbRight {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-primary, 0.08) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  top: -200px;
+  right: -200px;
+  z-index: 0;
+  pointer-events: none;
+}
+.glowOrbLeft {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-secondary, 0.08) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  bottom: -200px;
+  left: -200px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+// --- TOP BAR ---
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 2rem;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: v.$color-text-main;
+    .highlight {
+      color: v.$color-primary;
+    }
+  }
+
+  .navActions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .backLink {
+    color: v.$color-text-muted;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+    &:hover {
+      color: v.$color-text-main;
+    }
+  }
+
+  .logoutBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: v.$color-text-muted;
+    padding: 0.5rem 1rem;
+    border-radius: v.$radius-md;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: v.$danger; // Red for logout
+      color: v.$danger;
+      background: rgba(v.$danger, 0.05);
+    }
+  }
+}
+
+// --- MAIN CONTENT ---
+.content {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 4rem;
+}
+
+// --- PROFILE CARD (Glassmorphism) ---
+.profileCard {
+  background: v.$color-bg-card;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: v.$radius-lg;
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+
+  @media (min-width: v.$tablet) {
+    flex-direction: row; // Side by side on desktop
+    min-height: 500px;
+  }
+}
+
+// --- LEFT COLUMN: AVATAR ---
+.profileHeader {
+  background: rgba(0, 0, 0, 0.2); // Slightly darker side
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  @media (min-width: v.$tablet) {
+    width: 35%; // Take up 35% width
+    border-bottom: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    justify-content: center;
+  }
+
+  .avatarLarge {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, v.$color-primary, v.$color-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 25px rgba(v.$color-primary, 0.3);
+    border: 4px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .userName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: v.$color-text-main;
+    margin-bottom: 0.5rem;
+  }
+
+  .roleBadge {
+    background: rgba(v.$color-primary, 0.1);
+    color: v.$color-primary;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border: 1px solid rgba(v.$color-primary, 0.2);
+    margin-bottom: 1rem;
+  }
+
+  .userId {
+    font-family: monospace;
+    color: v.$color-text-muted;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+}
+
+// --- RIGHT COLUMN: DETAILS ---
+.profileDetails {
+  padding: 2rem;
+  flex: 1;
+
+  @media (min-width: v.$tablet) {
+    padding: 3rem;
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: v.$color-text-main;
+  }
+
+  .editBtn {
+    color: v.$color-primary;
+    border: 1px solid v.$color-primary;
+    padding: 0.5rem 1rem;
+    border-radius: v.$radius-md;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &:hover {
+      background: v.$color-primary;
+      color: #000;
+    }
+  }
+}
+
+// --- FORM STYLES ---
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.85rem;
+    color: v.$color-text-muted;
+    font-weight: 500;
+  }
+
+  // --- VIEW MODE ---
+  .valueDisplay {
+    font-size: 1.1rem;
+    color: v.$color-text-main;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    &.readOnly {
+      display: flex;
+      justify-content: space-between;
+      color: v.$color-text-muted;
+    }
+
+    .lockIcon {
+      opacity: 0.5;
+      font-size: 0.9rem;
+    }
+  }
+
+  // --- EDIT MODE (Input) ---
+  .input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: v.$color-text-main;
+    padding: 0.75rem 1rem;
+    border-radius: v.$radius-md;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: v.$color-primary;
+      box-shadow: 0 0 0 3px rgba(v.$color-primary, 0.15);
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+// --- ACTION BUTTONS ---
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  button {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: v.$radius-md;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .saveBtn {
+    background-color: v.$color-primary;
+    color: #000;
+    box-shadow: 0 0 15px rgba(v.$color-primary, 0.2);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(v.$color-primary, 0.4);
+    }
+  }
+
+  .cancelBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: v.$color-text-main;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
