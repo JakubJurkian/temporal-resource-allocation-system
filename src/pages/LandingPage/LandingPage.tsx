@@ -70,7 +70,7 @@ const LandingPage = () => {
 
       <section className={styles.statsBar}>
         <div className={styles.statItem}>
-          <h3>120 km</h3>
+          <h3>100 km</h3>
           <p>Range / Charge</p>
         </div>
         <div className={styles.divider}></div>
@@ -104,7 +104,7 @@ const LandingPage = () => {
           <div className={styles.card}>
             <div className={styles.icon}>📱</div>
             <h3>Smart App</h3>
-            <p>Track your earnings, book shifts, and unlock bikes via phone.</p>
+            <p>Book shifts & and unlock bikes via phone.</p>
           </div>
         </div>
       </section>

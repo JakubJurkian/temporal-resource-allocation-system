@@ -5,6 +5,9 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import ProfilePage from "./pages/MyProfilePage/ProfilePage";
 import RentBikePage from "./pages/RentBikePage/RentBikePage";
+import AboutPage from "./pages/AboutPage/AboutPage";
+import PricingPage from "./pages/PricingPage/PricingPage";
+import FleetPage from "./pages/FleetPage/FleetPage";
 
 const App = () => {
   return (
@@ -16,6 +19,9 @@ const App = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/rent-bike" element={<RentBikePage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="pricing" element={<PricingPage />} />
+        <Route path="fleet" element={<FleetPage />} />
       </Routes>
     </Router>
   );

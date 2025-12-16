@@ -6,13 +6,13 @@
   flex-direction: column;
   min-height: 100vh;
   background-color: v.$color-bg-main;
-  overflow-x: hidden; // Prevent horizontal scroll on small screens
+  overflow-x: hidden;
 }
 
 // --- NAVBAR ---
 .navbar {
   display: flex;
-  flex-direction: column; // Mobile Default: Stack Logo and Links
+  flex-direction: column;
   gap: 1rem;
   align-items: center;
   padding: 1rem;
@@ -24,9 +24,8 @@
   z-index: 100;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-  // Tablet & Desktop Overrides
   @media (min-width: v.$tablet) {
-    flex-direction: row; // Switch to horizontal
+    flex-direction: row;
     justify-content: space-between;
     padding: 1.5rem 2rem;
     gap: 0;
@@ -47,7 +46,6 @@
     align-items: center;
     font-size: 0.9rem;
 
-    // Desktop Override
     @media (min-width: v.$tablet) {
       gap: 2rem;
       font-size: 1rem;
@@ -81,7 +79,6 @@
 
 // --- HERO SECTION ---
 .heroSection {
-  // Mobile Default: Less padding, simple layout
   padding: 4rem 1rem;
   display: flex;
   justify-content: center;
@@ -92,7 +89,6 @@
     rgba(v.$color-bg-main, 0) 70%
   );
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
     padding: 8rem 2rem;
   }
@@ -104,16 +100,14 @@
 }
 
 .heroTitle {
-  // Mobile Default: Smaller font
   font-size: 2.5rem;
   line-height: 1.2;
   font-weight: 900;
   margin-bottom: 1rem;
   color: v.$color-text-main;
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
-    font-size: 4.5rem; // Huge font
+    font-size: 4.5rem;
     line-height: 1.1;
     margin-bottom: 1.5rem;
   }
@@ -127,14 +121,12 @@
 }
 
 .heroSubtitle {
-  // Mobile Default
   font-size: 1rem;
   color: v.$color-text-muted;
   margin-bottom: 2.5rem;
   line-height: 1.5;
   padding: 0 1rem;
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
     font-size: 1.25rem;
     margin-bottom: 3rem;
@@ -144,14 +136,13 @@
 // Buttons
 .ctaGroup {
   display: flex;
-  flex-direction: column; // Mobile Default: Stack buttons vertically
+  flex-direction: column;
   gap: 1rem;
   align-items: center;
   width: 100%;
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
-    flex-direction: row; // Horizontal
+    flex-direction: row;
     justify-content: center;
     width: auto;
   }
@@ -166,9 +157,8 @@
   text-align: center;
   display: inline-block;
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
-    width: auto; // Back to natural width
+    width: auto;
   }
 }
 
@@ -199,16 +189,15 @@
 // --- STATS BAR ---
 .statsBar {
   display: flex;
-  flex-direction: column; // Mobile Default: Vertical Stack
+  flex-direction: column;
   gap: 2rem;
   padding: 3rem 1rem;
   background-color: v.$color-bg-card;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
-    flex-direction: row; // Horizontal
+    flex-direction: row;
     gap: 4rem;
     padding: 3rem 0;
     justify-content: center;
@@ -235,26 +224,12 @@
   }
 }
 
-.divider {
-  display: none;
-
-  // Desktop Override
-  @media (min-width: v.$tablet) {
-    display: block;
-    width: 1px;
-    height: 40px;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-}
-
 // --- FEATURES ---
 .featuresSection {
-  // Mobile Default
   padding: 4rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 
-  // Desktop Override
   @media (min-width: v.$tablet) {
     padding: 6rem 2rem;
   }
@@ -276,10 +251,11 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
 
   @media (min-width: v.$tablet) {
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
 }
