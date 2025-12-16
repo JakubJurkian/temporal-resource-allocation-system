@@ -92,7 +92,7 @@ const RegisterPage = () => {
     // saving data to localstorage...
     const userData = {
       id: Math.random().toString(36).substring(2, 10), // simple random id
-      name: formData.fullName,
+      fullName: formData.fullName,
       phone: formData.phone,
       email: formData.email,
       password: formData.password,
