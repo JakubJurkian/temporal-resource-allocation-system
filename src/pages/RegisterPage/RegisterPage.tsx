@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addUserToStorage } from "../../utils/storage";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 
 interface RegisterFormData {
@@ -17,6 +17,7 @@ interface RegisterFormData {
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -27,6 +28,14 @@ const RegisterPage = () => {
     confirmPassword: "",
     agreeOnTerms: false,
   });
+
+    useEffect(() => {
+      if (isAuthenticated) {
+        // Optional: Redirect based on role
+        const destination = user?.role === "admin" ? "/admin" : "/";
+        navigate(destination, { replace: true });
+      }
+    }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,7 +92,7 @@ const RegisterPage = () => {
       phone: formData.phone,
       email: formData.email,
       password: formData.password,
-      role: "client" as const,
+      role: "user" as const,
     };
 
     addUserToStorage(userData); // adding user to local storage (faking backend)

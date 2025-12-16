@@ -28,9 +28,9 @@ const LandingPage = () => {
             </Link>
           )}
           {isAuthenticated && (
-            <button className={styles.loginBtn} onClick={logoutHandle}>
+            <div className={styles.loginBtn} onClick={logoutHandle}>
               Logout
-            </button>
+            </div>
           )}
         </div>
       </nav>

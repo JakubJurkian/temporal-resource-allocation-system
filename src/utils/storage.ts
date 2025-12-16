@@ -14,7 +14,7 @@ const MOCK_CLIENT: User = {
   fullName: "Client User",
   email: "client@velocity.com",
   password: "password123",
-  role: "client",
+  role: "user",
   phone: "+48 111 111 111",
 };
 
