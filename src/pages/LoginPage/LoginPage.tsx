@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getUsersFromStorage } from "../../utils/storage";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 
 interface LoginFormData {
@@ -18,6 +18,15 @@ const LoginPage = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Optional: Redirect based on role
+      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
+      navigate(destination, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,9 +65,8 @@ const LoginPage = () => {
       email: "",
       password: "",
     });
-    
     dispatch(loginSuccess(userExists!));
-    navigate("/");
+    navigate("/dashboard", { replace: true });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +78,6 @@ const LoginPage = () => {
       };
     });
   };
-  
   return (
     <main className={styles.loginContainer}>
       <div className={styles.glowOrb} aria-hidden="true"></div>

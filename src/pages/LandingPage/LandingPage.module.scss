@@ -1,4 +1,4 @@
-@use '../../styles/variables' as v;
+@use "../../styles/variables" as v;
 
 // --- LAYOUT ---
 .pageWrapper {
@@ -16,7 +16,7 @@
   gap: 1rem;
   align-items: center;
   padding: 1rem;
-  
+
   background: rgba(v.$color-bg-card, 0.9);
   backdrop-filter: blur(10px);
   position: sticky;
@@ -36,7 +36,9 @@
     font-size: 1.5rem;
     font-weight: 800;
     color: v.$color-text-main;
-    .highlight { color: v.$color-primary; }
+    .highlight {
+      color: v.$color-primary;
+    }
   }
 
   .navLinks {
@@ -56,7 +58,9 @@
       font-weight: 500;
       transition: color 0.2s;
       white-space: nowrap;
-      &:hover { color: v.$color-text-main; }
+      &:hover {
+        color: v.$color-text-main;
+      }
     }
 
     .loginBtn {
@@ -64,9 +68,13 @@
       color: v.$color-primary;
       padding: 0.4rem 1.2rem;
       border-radius: v.$radius-md;
+      font-weight: 500;
+      transition: color 0.2s;
       &:hover {
         background: rgba(v.$color-primary, 0.1);
+        color: v.$color-text-main;
       }
+      cursor: pointer;
     }
   }
 }
@@ -74,11 +82,15 @@
 // --- HERO SECTION ---
 .heroSection {
   // Mobile Default: Less padding, simple layout
-  padding: 4rem 1rem; 
+  padding: 4rem 1rem;
   display: flex;
   justify-content: center;
   text-align: center;
-  background: radial-gradient(circle at 50% 30%, rgba(v.$color-secondary, 0.15) 0%, rgba(v.$color-bg-main, 0) 70%);
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(v.$color-secondary, 0.15) 0%,
+    rgba(v.$color-bg-main, 0) 70%
+  );
 
   // Desktop Override
   @media (min-width: v.$tablet) {
@@ -93,7 +105,7 @@
 
 .heroTitle {
   // Mobile Default: Smaller font
-  font-size: 2.5rem; 
+  font-size: 2.5rem;
   line-height: 1.2;
   font-weight: 900;
   margin-bottom: 1rem;
@@ -145,7 +157,8 @@
   }
 }
 
-.primaryCta, .secondaryCta {
+.primaryCta,
+.secondaryCta {
   padding: 1rem 2rem;
   border-radius: v.$radius-md;
   width: 100%;
@@ -163,7 +176,7 @@
   background-color: v.$color-primary;
   color: #000;
   font-weight: 700;
-  box-shadow: 0 0 15px rgba(v.$color-primary, 0.4); 
+  box-shadow: 0 0 15px rgba(v.$color-primary, 0.4);
   transition: transform 0.2s;
 
   &:hover {
@@ -179,7 +192,7 @@
 
   &:hover {
     border-color: v.$color-text-main;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -190,8 +203,8 @@
   gap: 2rem;
   padding: 3rem 1rem;
   background-color: v.$color-bg-card;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
   // Desktop Override
   @media (min-width: v.$tablet) {
@@ -208,7 +221,7 @@
     font-size: 2rem;
     color: v.$color-text-main;
     margin-bottom: 0.25rem;
-    
+
     @media (min-width: v.$tablet) {
       font-size: 2.5rem;
     }
@@ -230,7 +243,7 @@
     display: block;
     width: 1px;
     height: 40px;
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -251,7 +264,9 @@
   text-align: center;
   font-size: 2rem;
   margin-bottom: 3rem;
-  .highlight { color: v.$color-primary; }
+  .highlight {
+    color: v.$color-primary;
+  }
 
   @media (min-width: v.$tablet) {
     font-size: 2.5rem;
@@ -261,7 +276,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 
   @media (min-width: v.$tablet) {
@@ -288,7 +303,7 @@
     font-size: 2rem;
     margin-bottom: 1rem;
   }
-  
+
   h3 {
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
@@ -296,7 +311,7 @@
       font-size: 1.5rem;
     }
   }
-  
+
   p {
     color: v.$color-text-muted;
     font-size: 0.95rem;
@@ -311,5 +326,5 @@
   margin-top: auto;
   color: v.$color-text-muted;
   font-size: 0.8rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }

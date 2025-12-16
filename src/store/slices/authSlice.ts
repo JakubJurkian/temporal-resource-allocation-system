@@ -1,12 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { User } from "../../types/User";
 
-interface User {
-  id: string;
-  phone: string;
-  fullName: string;
-  email: string;
-  password: string;
-}
+const storedSession = sessionStorage.getItem('velocity_session');
+const initialUser = storedSession ? JSON.parse(storedSession) : null;
 
 interface AuthState {
   user: User | null;
@@ -15,8 +11,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
-  isAuthenticated: false,
+  user: initialUser,
+  isAuthenticated: initialUser ? true : false,
   isLoading: false,
 };
 
@@ -33,6 +29,7 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = true;
       state.user = action.payload;
+      sessionStorage.setItem('velocity_session', JSON.stringify(action.payload));
     },
     loginFailure: (state) => {
       state.isLoading = false;
@@ -43,6 +40,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      sessionStorage.removeItem('velocity_session');
     },
   },
 });
