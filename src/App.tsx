@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import ProfilePage from "./pages/MyProfilePage/ProfilePage";
+import RentBikePage from "./pages/RentBikePage/RentBikePage";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/rent-bike" element={<RentBikePage />} />
       </Routes>
     </Router>
   );
