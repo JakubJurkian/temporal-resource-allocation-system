@@ -58,7 +58,7 @@ const LandingPage = () => {
           </p>
 
           <div className={styles.ctaGroup}>
-            <Link to="/wizard" className={styles.primaryCta}>
+            <Link to="/register" className={styles.primaryCta}>
               Start Riding ⚡
             </Link>
             <Link to="/fleet" className={styles.secondaryCta}>
@@ -71,7 +71,7 @@ const LandingPage = () => {
       <section className={styles.statsBar}>
         <div className={styles.statItem}>
           <h3>100 km</h3>
-          <p>Range / Charge</p>
+          <p>Max Range / Charge</p>
         </div>
         <div className={styles.divider}></div>
         <div className={styles.statItem}>

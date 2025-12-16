@@ -239,19 +239,21 @@ const RegisterPage = () => {
 
           <div className={styles.inputGroup}>
             <label htmlFor="city">City</label>
-            <select
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleCityChange}
-              required
-            >
-              {cities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
+            <div className={styles.selectControl}>
+              <select
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleCityChange}
+                required
+              >
+                {cities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className={styles.termsGroup}>
