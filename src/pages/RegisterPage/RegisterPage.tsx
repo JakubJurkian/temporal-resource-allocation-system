@@ -12,6 +12,7 @@ interface RegisterFormData {
   password: string;
   confirmPassword: string;
   agreeOnTerms: boolean | string;
+  city: 'Warsaw' | 'Gdansk' | 'Poznan' | 'Wroclaw';
 }
 
 const RegisterPage = () => {
@@ -27,15 +28,18 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
     agreeOnTerms: false,
+    city: "Warsaw", // Add city with default value
   });
 
-    useEffect(() => {
-      if (isAuthenticated) {
-        // Optional: Redirect based on role
-        const destination = user?.role === "admin" ? "/admin" : "/dashboard";
-        navigate(destination, { replace: true });
-      }
-    }, [isAuthenticated, user, navigate]);
+  const cities = ["Warsaw", "Gdansk", "Poznan", "Wroclaw"];
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Optional: Redirect based on role
+      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
+      navigate(destination, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,11 +92,12 @@ const RegisterPage = () => {
     // saving data to localstorage...
     const userData = {
       id: Math.random().toString(36).substring(2, 10), // simple random id
-      fullName: formData.fullName,
+      name: formData.fullName,
       phone: formData.phone,
       email: formData.email,
       password: formData.password,
       role: "user" as const,
+      city: formData.city,
     };
 
     addUserToStorage(userData); // adding user to local storage (faking backend)
@@ -108,6 +113,7 @@ const RegisterPage = () => {
       password: "",
       confirmPassword: "",
       agreeOnTerms: false,
+      city: "Warsaw", // Reset city to default value
     });
 
     navigate("/dashboard", { replace: true });
@@ -121,6 +127,10 @@ const RegisterPage = () => {
         [name]: type === "checkbox" ? checked : value,
       };
     });
+  };
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, city: e.target.value as 'Warsaw' | 'Gdansk' | 'Poznan' | 'Wroclaw' });
   };
 
   return (
@@ -225,6 +235,23 @@ const RegisterPage = () => {
                 </span>
               )}
             </div>
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="city">City</label>
+            <select
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleCityChange}
+              required
+            >
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className={styles.termsGroup}>
