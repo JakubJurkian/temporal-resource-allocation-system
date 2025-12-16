@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { updateUser, logout } from "../../store/slices/authSlice";
 import styles from "./ProfilePage.module.scss";
 
+const cities = ["Warsaw", "Gdansk", "Poznan", "Wroclaw"];
+
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     fullName: user?.fullName || "",
     phone: user?.phone || "",
+    city: user?.city || "Warsaw",
   });
 
   const handleLogout = () => {
@@ -21,7 +24,9 @@ const ProfilePage = () => {
     navigate("/login");
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -43,6 +48,7 @@ const ProfilePage = () => {
     setFormData({
       fullName: user?.fullName || "",
       phone: user?.phone || "",
+      city: user?.city || "Warsaw",
     });
     setIsEditing(false);
   };
@@ -82,6 +88,7 @@ const ProfilePage = () => {
             <h1 className={styles.userName}>{user.fullName}</h1>
             <span className={styles.roleBadge}>{user.role.toUpperCase()}</span>
             <p className={styles.userId}>ID: {user.id}</p>
+            <p className={styles.valueDisplay}>City: {user.city}</p>
           </aside>
 
           {/* RIGHT COLUMN: Details Form */}
@@ -128,6 +135,30 @@ const ProfilePage = () => {
                   />
                 ) : (
                   <div className={styles.valueDisplay}>{user.phone}</div>
+                )}
+              </div>
+
+              {/* City */}
+              <div className={styles.inputGroup}>
+                <label>City</label>
+                {isEditing ? (
+                  <div className={styles.selectControl}>
+                    <select
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className={styles.input}
+                      required
+                    >
+                      {cities.map((city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className={styles.valueDisplay}>{user.city}</div>
                 )}
               </div>
 
