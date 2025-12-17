@@ -3,8 +3,8 @@ import type { User } from "../types/User";
 const MOCK_ADMIN: User = {
   id: "admin_1",
   fullName: "Admin User",
-  email: "admin@velocity.com",
-  password: "password123",
+  email: "admin@test.com",
+  password: "123456",
   role: "admin",
   phone: "+48 000 000 000",
   city: "Warsaw",
@@ -13,14 +13,14 @@ const MOCK_ADMIN: User = {
 const MOCK_CLIENT: User = {
   id: "client_1",
   fullName: "Client User",
-  email: "client@velocity.com",
-  password: "password123",
+  email: "client@test.com",
+  password: "123456",
   role: "user",
   phone: "+48 111 111 111",
   city: "Gdansk",
 };
 
-export const initializeStorage = () => {
+export const initializeUsers = () => {
   const users = localStorage.getItem("velocity_users");
   if (!users) {
     localStorage.setItem(

@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { store } from "./store";
 import App from "./App";
+import { store } from "./store";
+import { initializeUsers } from "./utils/userStorage";
+import { initializeFleet } from "./utils/fleetStorage";
 import "./styles/globals.scss";
-import { initializeStorage } from "./utils/storage";
 
-initializeStorage();
+initializeUsers();
+initializeFleet();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useEffect, useState } from "react";
-import { addUserToStorage } from "../../utils/storage";
+import { addUserToStorage } from "../../utils/userStorage";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 
