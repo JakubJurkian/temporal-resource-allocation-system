@@ -3,6 +3,7 @@ import styles from "./LandingPage.module.scss";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
 import { useEffect } from "react";
+import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 const LandingPage = () => {
   const dispatch = useAppDispatch();
@@ -12,40 +13,37 @@ const LandingPage = () => {
   console.log(isAuthenticated);
 
   useEffect(() => {
-        if (isAuthenticated) {
-          // Optional: Redirect based on role
-          const destination = user?.role === "admin" ? "/admin" : "/dashboard";
-          navigate(destination, { replace: true });
-        }
-      }, [isAuthenticated, user, navigate]);
+    if (isAuthenticated) {
+      // Optional: Redirect based on role
+      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
+      navigate(destination, { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const logoutHandle = () => {
     dispatch(logout());
   };
 
-  return (
-    <div className={styles.pageWrapper}>
-      <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          Velo<span className={styles.highlight}>City</span>
+  const navLinks = (
+    <div className={styles.navLinks}>
+      <Link to="/about">About</Link>
+      <Link to="/pricing">Pricing</Link>
+      {!isAuthenticated && (
+        <Link to="/login" className={styles.loginBtn}>
+          Login
+        </Link>
+      )}
+      {isAuthenticated && (
+        <div className={styles.loginBtn} onClick={logoutHandle}>
+          Logout
         </div>
-        <div className={styles.navLinks}>
-          <Link to="/about">About</Link>
-          <Link to="/pricing">Pricing</Link>
-          {!isAuthenticated && (
-            <Link to="/login" className={styles.loginBtn}>
-              Login
-            </Link>
-          )}
-          {isAuthenticated && (
-            <div className={styles.loginBtn} onClick={logoutHandle}>
-              Logout
-            </div>
-          )}
-        </div>
-      </nav>
+      )}
+    </div>
+  );
 
-      <header className={styles.heroSection}>
+  return (
+    <LandingPageLayout showBackBtn={false} headerActions={navLinks}>
+      <section className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
             OWN THE <span className={styles.gradientText}>NIGHT</span>. <br />
@@ -66,7 +64,7 @@ const LandingPage = () => {
             </Link>
           </div>
         </div>
-      </header>
+      </section>
 
       <section className={styles.statsBar}>
         <div className={styles.statItem}>
@@ -112,7 +110,7 @@ const LandingPage = () => {
       <footer className={styles.footer}>
         <p>© 2025 VeloCity Systems. Ride Safe.</p>
       </footer>
-    </div>
+    </LandingPageLayout>
   );
 };
 

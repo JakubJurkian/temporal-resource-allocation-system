@@ -1,0 +1,43 @@
+@use "../../styles/variables" as v;
+
+.container {
+  min-height: 100vh;
+  background-color: v.$color-bg-main;
+  color: v.$color-text-main;
+  padding: 1.5rem;
+  overflow-x: hidden;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  height: 40px;
+  margin: 0 auto 3rem auto;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    .highlight { color: v.$color-primary; }
+  }
+
+  .closeBtn {
+    color: v.$color-text-muted;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    &:hover { color: v.$color-text-main; }
+  }
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}

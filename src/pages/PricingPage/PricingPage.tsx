@@ -1,19 +1,10 @@
 import { Link } from "react-router-dom";
+import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 import styles from "./PricingPage.module.scss";
 
 const PricingPage = () => {
   return (
-    <div className={styles.container}>
-      <header className={styles.topBar}>
-        <div className={styles.logo}>
-          Velo<span className={styles.highlight}>City</span>
-        </div>
-        <Link to="/" className={styles.backLink}>
-          ← Back Home
-        </Link>
-      </header>
-
-      <main className={styles.content}>
+    <LandingPageLayout backLink="/">
         <div className={styles.header}>
           <h1>Flexible Rental Plans.</h1>
           <p>The longer you ride, the less you pay per day.</p>
@@ -96,8 +87,7 @@ const PricingPage = () => {
           <br />
           The minimum rental period is 3 days.
         </p>
-      </main>
-    </div>
+      </LandingPageLayout>
   );
 };
 
