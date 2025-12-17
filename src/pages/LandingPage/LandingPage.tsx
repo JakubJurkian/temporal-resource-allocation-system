@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
 import { useEffect } from "react";
 import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
+import LandingBtn from "../../components/LandingBtn/LandingBtn";
 
 const LandingPage = () => {
   const dispatch = useAppDispatch();
@@ -56,12 +57,10 @@ const LandingPage = () => {
           </p>
 
           <div className={styles.ctaGroup}>
-            <Link to="/register" className={styles.primaryCta}>
-              Start Riding ⚡
-            </Link>
-            <Link to="/fleet" className={styles.secondaryCta}>
+            <LandingBtn primary />
+            <LandingBtn primary={false} to="/fleet">
               View Fleet
-            </Link>
+            </LandingBtn>
           </div>
         </div>
       </section>

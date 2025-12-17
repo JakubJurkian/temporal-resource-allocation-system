@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
 import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 import styles from "./PricingPage.module.scss";
+import LandingBtn from "../../components/LandingBtn/LandingBtn";
 
 const PricingPage = () => {
   return (
@@ -27,9 +27,7 @@ const PricingPage = () => {
               Security Deposit: <strong>200 PLN</strong>
             </div>
 
-            <Link to="/register" className={styles.ctaBtn}>
-              Start Riding
-            </Link>
+            <LandingBtn primary={false} />
           </div>
 
           {/* TIER 2: MEDIUM TERM (8-14 Days) */}
@@ -50,12 +48,7 @@ const PricingPage = () => {
               Security Deposit: <strong>200 PLN</strong>
             </div>
 
-            <Link
-              to="/register"
-              className={`${styles.ctaBtn} ${styles.primary}`}
-            >
-              Start Riding
-            </Link>
+            <LandingBtn primary={true} />
           </div>
 
           {/* TIER 3: LONG TERM (15-21 Days) */}
@@ -75,9 +68,7 @@ const PricingPage = () => {
               Security Deposit: <strong>200 PLN</strong>
             </div>
 
-            <Link to="/register" className={styles.ctaBtn}>
-              Start Riding
-            </Link>
+            <LandingBtn primary={false} />
           </div>
         </div>
 
