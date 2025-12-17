@@ -1,15 +1,9 @@
-import { Link } from "react-router-dom";
 import styles from "./AboutPage.module.scss";
+import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 const AboutPage = () => {
   return (
-    <div className={styles.container}>
-      <header className={styles.topBar}>
-        <div className={styles.logo}>Velo<span className={styles.highlight}>City</span></div>
-        <Link to="/" className={styles.backLink}>← Back Home</Link>
-      </header>
-
-      <main className={styles.content}>
+    <LandingPageLayout>
         {/* --- Hero Section --- */}
         <section className={styles.hero}>
           <div className={styles.glowOrb} aria-hidden="true"></div>
@@ -59,7 +53,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* --- NEW: Contact Section --- */}
+        {/* Contact Section --- */}
         <section className={styles.contactSection}>
           <h2>Get in Touch</h2>
           <p className={styles.contactSubtitle}>
@@ -103,8 +97,7 @@ const AboutPage = () => {
           </div>
         </section>
 
-      </main>
-    </div>
+      </LandingPageLayout>
   );
 };
 

@@ -1,19 +1,10 @@
-import { Link } from "react-router-dom";
+import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 import styles from "./PricingPage.module.scss";
+import LandingBtn from "../../components/LandingBtn/LandingBtn";
 
 const PricingPage = () => {
   return (
-    <div className={styles.container}>
-      <header className={styles.topBar}>
-        <div className={styles.logo}>
-          Velo<span className={styles.highlight}>City</span>
-        </div>
-        <Link to="/" className={styles.backLink}>
-          ← Back Home
-        </Link>
-      </header>
-
-      <main className={styles.content}>
+    <LandingPageLayout backLink="/">
         <div className={styles.header}>
           <h1>Flexible Rental Plans.</h1>
           <p>The longer you ride, the less you pay per day.</p>
@@ -36,9 +27,7 @@ const PricingPage = () => {
               Security Deposit: <strong>200 PLN</strong>
             </div>
 
-            <Link to="/register" className={styles.ctaBtn}>
-              Start Riding
-            </Link>
+            <LandingBtn primary={false} />
           </div>
 
           {/* TIER 2: MEDIUM TERM (8-14 Days) */}
@@ -59,12 +48,7 @@ const PricingPage = () => {
               Security Deposit: <strong>200 PLN</strong>
             </div>
 
-            <Link
-              to="/register"
-              className={`${styles.ctaBtn} ${styles.primary}`}
-            >
-              Start Riding
-            </Link>
+            <LandingBtn primary={true} />
           </div>
 
           {/* TIER 3: LONG TERM (15-21 Days) */}
@@ -84,9 +68,7 @@ const PricingPage = () => {
               Security Deposit: <strong>200 PLN</strong>
             </div>
 
-            <Link to="/register" className={styles.ctaBtn}>
-              Start Riding
-            </Link>
+            <LandingBtn primary={false} />
           </div>
         </div>
 
@@ -96,8 +78,7 @@ const PricingPage = () => {
           <br />
           The minimum rental period is 3 days.
         </p>
-      </main>
-    </div>
+      </LandingPageLayout>
   );
 };
 

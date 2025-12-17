@@ -150,37 +150,6 @@
       background: rgba(255,255,255,0.1);
       margin-bottom: 1.5rem;
     }
-
-    .ctaBtn {
-      display: block;
-      width: 100%;
-      text-align: center;
-      padding: 1rem;
-      border-radius: v.$radius-md;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
-      color: v.$color-text-main;
-      font-weight: 600;
-      transition: all 0.2s;
-      text-decoration: none;
-
-      &:hover {
-        background: rgba(255,255,255,0.05);
-        border-color: #fff;
-      }
-
-      &.primary {
-        background: v.$color-primary;
-        color: #000;
-        border: 1px solid v.$color-primary;
-        box-shadow: 0 0 15px rgba(v.$color-primary, 0.3);
-        
-        &:hover {
-          background: lighten(v.$color-primary, 5%);
-          box-shadow: 0 0 25px rgba(v.$color-primary, 0.5);
-        }
-      }
-    }
   }
 }
 
