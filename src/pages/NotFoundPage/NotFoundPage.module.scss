@@ -1,0 +1,40 @@
+@use "../../styles/variables" as v;
+.errorContainer {
+  text-align: center;
+}
+
+.errorCode {
+  font-size: 8rem;
+  line-height: 1;
+  font-weight: 900;
+  margin: 0;
+  color: transparent;
+  // Outline text effect
+  -webkit-text-stroke: 2px v.$color-primary;
+  text-shadow: 0 0 20px rgba(v.$color-primary, 0.3);
+  letter-spacing: -5px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.messageBox {
+  margin: 2rem 0;
+
+  .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    animation: dash 1s ease-out forwards;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: v.$color-text-main;
+  }
+
+  p {
+    color: v.$color-text-muted;
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+}

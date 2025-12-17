@@ -8,6 +8,7 @@ import RentBikePage from "./pages/RentBikePage/RentBikePage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import PricingPage from "./pages/PricingPage/PricingPage";
 import FleetPage from "./pages/FleetPage/FleetPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="about" element={<AboutPage />} />
         <Route path="pricing" element={<PricingPage />} />
         <Route path="fleet" element={<FleetPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
