@@ -13,10 +13,12 @@ import ContactPage from "./pages/ContactPage/ContactPage";
 
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
+import ScrollToTop from "./components/Utils/ScrollToTop";
 
 const App = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Public routes */}
         <Route element={<PublicOnlyRoute />}>
