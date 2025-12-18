@@ -15,7 +15,7 @@ export const LandingPageLayout = ({
   children,
   showBackBtn = true,
   backLink = "/",
-  btnText = "← Back Home",
+  btnText = "← Back",
   headerActions,
 }: PageLayoutProps) => {
   return (
