@@ -2,12 +2,10 @@
 
 // --- LAYOUT UTILS ---
 .container {
-  min-height: 100vh;
-  background-color: v.$color-bg-main;
-  color: v.$color-text-main;
-  padding: 0 1.5rem;
-  position: relative;
+  min-height: 100dvh; // dynamic viewport height prevents scroll lock in modern browsers
+  height: 100%;
   overflow-x: hidden;
+  overflow-y: auto; // allow vertical scroll within the page container
   display: flex;
   flex-direction: column;
 }
@@ -26,6 +24,8 @@
   right: -200px;
   z-index: 0;
   pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0); // GPU hint to reduce paint cost during scroll
 }
 .glowOrbLeft {
   position: absolute;
@@ -40,6 +40,8 @@
   left: -200px;
   z-index: 0;
   pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0); // GPU hint to reduce paint cost during scroll
 }
 
 // --- TOP BAR ---
@@ -113,7 +115,8 @@
   background: v.$color-bg-card;
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: v.$radius-lg;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px); // slightly lighter blur to reduce scroll jank
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
