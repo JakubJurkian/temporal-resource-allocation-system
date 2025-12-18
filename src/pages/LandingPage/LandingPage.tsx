@@ -94,10 +94,6 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-
-      <footer className={styles.footer}>
-        <p>© 2025 VeloCity Systems. Ride Safe.</p>
-      </footer>
     </LandingPageLayout>
   );
 };

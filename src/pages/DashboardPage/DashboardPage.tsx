@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
 import styles from "./DashboardPage.module.scss";
+import Footer from "../../components/Footer/Footer";
 
 // Fake Data
 const MOCK_STATS = {
@@ -119,16 +120,7 @@ const DashboardPage = () => {
           </div>
         </section>
       </div>
-      <footer className={styles.footer}>
-        <div className={styles.footerLinks}>
-          <Link to="/about">About VeloCity</Link>
-          <Link to="/pricing">Pricing</Link>
-          <Link to="/contact">Help Center</Link>
-        </div>
-        <p className={styles.copyright}>
-          © {new Date().getFullYear()} VeloCity Inc. All rights reserved.
-        </p>
-      </footer>
+      <Footer />
     </main>
   );
 };

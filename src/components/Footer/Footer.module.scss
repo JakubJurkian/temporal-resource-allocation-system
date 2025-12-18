@@ -1,0 +1,36 @@
+@use "../../styles/variables" as v;
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); // Subtle divider
+  text-align: center;
+  position: relative;
+  z-index: 1;
+
+  .footerLinks {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+
+    a {
+      color: v.$color-text-muted;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        color: v.$color-primary; // Neon hover effect
+        text-shadow: 0 0 10px rgba(v.$color-primary, 0.4);
+      }
+    }
+  }
+
+  .copyright {
+    color: v.$color-text-muted;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+}

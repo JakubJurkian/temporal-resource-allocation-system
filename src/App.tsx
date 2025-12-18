@@ -9,6 +9,7 @@ import AboutPage from "./pages/AboutPage/AboutPage";
 import PricingPage from "./pages/PricingPage/PricingPage";
 import FleetPage from "./pages/FleetPage/FleetPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import ContactPage from "./pages/ContactPage/ContactPage";
 
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
@@ -26,7 +27,9 @@ const App = () => {
         <Route path="about" element={<AboutPage />} />
         <Route path="pricing" element={<PricingPage />} />
         <Route path="fleet" element={<FleetPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<NotFoundPage />} />
+
         {/* Protected routes */}
         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
           <Route path="/dashboard" element={<DashboardPage />} />

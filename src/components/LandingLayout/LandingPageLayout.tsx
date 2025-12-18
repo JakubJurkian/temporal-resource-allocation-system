@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import styles from "./LandingPageLayout.module.scss";
+import Footer from "../Footer/Footer";
 
 interface PageLayoutProps {
   children: ReactNode; // the Composition Magic
@@ -37,6 +38,7 @@ export const LandingPageLayout = ({
 
       {/* Dynamic Content */}
       <main className={styles.content}>{children}</main>
+      <Footer />
     </div>
   );
 };

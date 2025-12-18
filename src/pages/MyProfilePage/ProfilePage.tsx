@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { updateUser, logout } from "../../store/slices/authSlice";
 import styles from "./ProfilePage.module.scss";
+import Footer from "../../components/Footer/Footer";
 
 const cities = ["Warsaw", "Gdansk", "Poznan", "Wroclaw"];
 
@@ -190,6 +191,7 @@ const ProfilePage = () => {
           </section>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };
