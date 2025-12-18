@@ -1,25 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./LandingPage.module.scss";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
-import { useEffect } from "react";
 import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 import LandingBtn from "../../components/LandingBtn/LandingBtn";
 
 const LandingPage = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const user = useAppSelector((state) => state.auth.user);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   console.log(isAuthenticated);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Optional: Redirect based on role
-      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
-      navigate(destination, { replace: true });
-    }
-  }, [isAuthenticated, user, navigate]);
 
   const logoutHandle = () => {
     dispatch(logout());

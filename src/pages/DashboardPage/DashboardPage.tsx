@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
 import styles from "./DashboardPage.module.scss";
-import { useEffect } from "react";
 
 // Fake Data
 const MOCK_STATS = {
@@ -15,18 +14,7 @@ const MOCK_STATS = {
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Optional: Redirect based on role
-      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
-      navigate(destination, { replace: true });
-    }
-    if (!isAuthenticated) {
-      navigate("/", { replace: true });
-    }
-  }, [isAuthenticated, user, navigate]);
+  const { user } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -131,6 +119,16 @@ const DashboardPage = () => {
           </div>
         </section>
       </div>
+      <footer className={styles.footer}>
+        <div className={styles.footerLinks}>
+          <Link to="/about">About VeloCity</Link>
+          <Link to="/pricing">Pricing</Link>
+          <Link to="/contact">Help Center</Link>
+        </div>
+        <p className={styles.copyright}>
+          © {new Date().getFullYear()} VeloCity Inc. All rights reserved.
+        </p>
+      </footer>
     </main>
   );
 };

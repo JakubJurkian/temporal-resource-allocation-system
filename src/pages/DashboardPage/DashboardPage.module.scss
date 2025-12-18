@@ -69,7 +69,11 @@
       width: 42px;
       height: 42px;
       // Gradient avatar to match brand
-      background: linear-gradient(135deg, v.$color-secondary, darken(v.$color-secondary, 15%));
+      background: linear-gradient(
+        135deg,
+        v.$color-secondary,
+        darken(v.$color-secondary, 15%)
+      );
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -117,14 +121,18 @@
     font-weight: 800;
     margin-bottom: 0.5rem;
     line-height: 1.1;
-    
+
     @media (min-width: v.$tablet) {
       font-size: 3rem;
     }
 
     .highlight {
       // Gradient text effect
-      background: linear-gradient(to right, v.$color-primary, v.$color-secondary);
+      background: linear-gradient(
+        to right,
+        v.$color-primary,
+        v.$color-secondary
+      );
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -184,7 +192,7 @@
       font-weight: 800;
       color: v.$color-text-main;
       line-height: 1;
-      
+
       // Neon number
       text-shadow: 0 0 20px rgba(v.$color-primary, 0.2);
 
@@ -205,7 +213,7 @@
       border-radius: 99px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      
+
       &.active {
         background: rgba(v.$success, 0.15);
         color: v.$success;
@@ -224,9 +232,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   &::before {
-    content: '';
+    content: "";
     display: block;
     width: 4px;
     height: 24px;
@@ -240,7 +248,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
-  
+
   @media (min-width: v.$tablet) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -268,16 +276,16 @@
 
     .actionInfo {
       flex: 1;
-      h3 { 
-        margin: 0 0 0.5rem 0; 
-        font-size: 1.25rem; 
+      h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.25rem;
         font-weight: 700;
         color: v.$color-text-main;
       }
-      p { 
-        margin: 0; 
-        color: v.$color-text-muted; 
-        font-size: 0.95rem; 
+      p {
+        margin: 0;
+        color: v.$color-text-muted;
+        font-size: 0.95rem;
       }
     }
 
@@ -316,12 +324,12 @@
       position: relative;
       border-color: rgba(v.$color-primary, 0.3);
       background: linear-gradient(
-        135deg, 
-        v.$color-bg-card 0%, 
+        135deg,
+        v.$color-bg-card 0%,
         rgba(v.$color-primary, 0.05) 100%
       );
     }
-    
+
     // --- DISABLED VARIANT ---
     &.disabled {
       opacity: 0.5;
@@ -329,5 +337,40 @@
       filter: grayscale(1);
       border-style: dashed;
     }
+  }
+}
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); // Subtle divider
+  text-align: center;
+  position: relative;
+  z-index: 1;
+
+  .footerLinks {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+
+    a {
+      color: v.$color-text-muted;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        color: v.$color-primary; // Neon hover effect
+        text-shadow: 0 0 10px rgba(v.$color-primary, 0.4);
+      }
+    }
+  }
+
+  .copyright {
+    color: v.$color-text-muted;
+    font-size: 0.8rem;
+    opacity: 0.6;
   }
 }

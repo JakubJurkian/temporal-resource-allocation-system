@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addUserToStorage } from "../../utils/userStorage";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch} from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 
 interface RegisterFormData {
@@ -18,7 +18,6 @@ interface RegisterFormData {
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -32,14 +31,6 @@ const RegisterPage = () => {
   });
 
   const cities = ["Warsaw", "Gdansk", "Poznan", "Wroclaw"];
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Optional: Redirect based on role
-      const destination = user?.role === "admin" ? "/admin" : "/dashboard";
-      navigate(destination, { replace: true });
-    }
-  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
