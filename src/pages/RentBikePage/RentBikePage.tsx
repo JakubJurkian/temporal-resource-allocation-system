@@ -16,13 +16,10 @@ const RentBikePage = () => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
 
-  // 1. AUTO-DETECT CITY
-  // If user has no city in profile, default to 'Warsaw'
-  const userCity = user!.city || "Warsaw"; 
+  const userCity = user!.city
 
   // Wizard State (Starts at Step 1: Dates)
   const [step, setStep] = useState<1 | 2 | 3>(1); 
-//   const [loading, setLoading] = useState(false);
   
   // Date State
   const [dates, setDates] = useState({ start: "", end: "" });
@@ -62,7 +59,6 @@ const RentBikePage = () => {
   // --- STEP 2: SIMULATE API CALL ---
   useEffect(() => {
     if (step === 2) {
-    //   setLoading(true);
       
       const timer = setTimeout(() => {
         // FILTERING ALGORITHM

@@ -1,13 +1,6 @@
-export interface Reservation {
-  id: string;
-  bikeId: string;
-  userId: string;
-  startDate: string;
-  endDate: string;
-  status: "confirmed" | "cancelled";
-}
+import type { Reservation } from "../types/Reservation";
 
-// collisino detection algo for bike reservations
+// collision detection algo for bike reservations
 export const isBikeAvailable = (
   bikeId: string,
   requestedStart: string,

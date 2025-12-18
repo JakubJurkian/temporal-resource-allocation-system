@@ -147,7 +147,6 @@
 }
 
 // --- SHARED CARD STYLES ---
-// Using the "Glassmorphism" logic from your Login Page
 @mixin dashboard-card {
   background: v.$color-bg-card; // Solid dark or semi-transparent
   border: 1px solid rgba(255, 255, 255, 0.05);
