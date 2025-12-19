@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../../styles/variables" as v;
 
 // --- LAYOUT ---
@@ -72,7 +73,7 @@
       background: linear-gradient(
         135deg,
         v.$color-secondary,
-        darken(v.$color-secondary, 15%)
+        color.adjust(v.$color-secondary, $lightness: -15%)
       );
       border-radius: 50%;
       display: flex;
@@ -299,7 +300,7 @@
 
     // --- HOVER STATE ---
     &:hover {
-      background: lighten(v.$color-bg-card, 2%);
+      background: color.adjust(v.$color-bg-card, $lightness: 2%);
       border-color: v.$color-primary;
 
       .icon {
