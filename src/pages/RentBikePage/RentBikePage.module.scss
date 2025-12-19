@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../../styles/variables" as v;
 
 // --- 1. MAIN LAYOUT ---
@@ -254,7 +255,7 @@
   transition: all 0.2s ease;
   
   &:hover {
-    background: lighten(v.$color-bg-card, 3%);
+    background: color.adjust(v.$color-bg-card, $lightness: 3%);
     border-color: rgba(v.$color-primary, 0.3);
     transform: translateY(-2px);
   }
@@ -291,7 +292,7 @@
     transition: background 0.2s;
 
     &:hover {
-      background: lighten(v.$color-secondary, 10%);
+      background: color.adjust(v.$color-secondary, $lightness: 10%);
       box-shadow: 0 0 15px rgba(v.$color-secondary, 0.4);
     }
   }
