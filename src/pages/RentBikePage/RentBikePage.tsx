@@ -3,20 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import styles from "./RentBikePage.module.scss";
 import { isBikeAvailable } from "../../utils/bookingHelper";
-
-// --- MOCK DATA ---
-const BIKES = [
-  { id: 'b1', model: 'Speedster X1', city: 'Warsaw', battery: 100, price: 50 },
-  { id: 'b2', model: 'City Cruiser', city: 'Warsaw', battery: 85, price: 40 },
-  { id: 'b3', model: 'Mountain King', city: 'Krakow', battery: 90, price: 60 },
-  { id: 'b4', model: 'Port Runner', city: 'Gdansk', battery: 70, price: 45 },
-];
+import type { BikeInstance, BikeModel } from "../../types/Fleet";
 
 const RentBikePage = () => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
 
   const userCity = user!.city
+  const BIKES = localStorage.getItem("velocity_fleet")
+    ? JSON.parse(localStorage.getItem("velocity_fleet")!)
+    : [];
+  console.log(BIKES);
 
   // Wizard State (Starts at Step 1: Dates)
   const [step, setStep] = useState<1 | 2 | 3>(1); 
@@ -62,8 +59,8 @@ const RentBikePage = () => {
       
       const timer = setTimeout(() => {
         // FILTERING ALGORITHM
-        const cityBikes = BIKES.filter(b => b.city === userCity);
-        const freeBikes = cityBikes.filter(bike => 
+        const cityBikes = BIKES.filter((b: BikeInstance) => b.city === userCity);
+        const freeBikes = cityBikes.filter((bike: BikeInstance) => 
           isBikeAvailable(bike.id, dates.start, dates.end)
         );
 
@@ -74,7 +71,7 @@ const RentBikePage = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [step, userCity, dates]);
+  }, [step, userCity, dates, BIKES]);
 
   const handleBook = (bikeId: string) => {
     alert(`Success! Bike ${bikeId} booked in ${userCity}.`);
@@ -162,13 +159,13 @@ const RentBikePage = () => {
                   <button onClick={() => setStep(1)} className={styles.retryBtn}>Try different dates</button>
                 </div>
               ) : (
-                availableBikes.map(bike => (
+                availableBikes.map((bike: BikeModel) => (
                   <div key={bike.id} className={styles.bikeCard}>
                     <div className={styles.bikeInfo}>
-                      <h3>{bike.model}</h3>
+                      <h3>{bike.name}</h3>
                       <div className={styles.specs}>
-                        <span className={styles.spec}>🔋 {bike.battery}%</span>
-                        <span className={styles.spec}>⚡ {bike.price} PLN/d</span>
+                        {/* <span className={styles.spec}>🔋 {bike.battery}%</span>
+                        <span className={styles.spec}>⚡ {bike.price} PLN/d</span> */}
                       </div>
                     </div>
                     <button 
