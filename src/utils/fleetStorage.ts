@@ -1,42 +1,84 @@
-import type { FleetBike } from "../types/Fleet";
+import type { BikeModel, BikeInstance } from "../types/Fleet";
 
-const INITIAL_FLEET: FleetBike[] = [
-  // WARSAW
-  { id: 'w1', city: 'Warsaw', model: "Sprint Courier S1", category: "Agility", description: "Lightweight and agile.", amount: 25, stats: { speed: 45, range: 80, capacity: 40 }, imageEmoji: "🛵" },
-  { id: 'w2', city: 'Warsaw', model: "Endurance Pro 2.0", category: "Long-Shift", description: "Dual-battery system.", amount: 15, stats: { speed: 35, range: 100, capacity: 60 }, imageEmoji: "🔋" },
-  { id: 'w3', city: 'Warsaw', model: "Cargo King XL", category: "Heavy Duty", description: "Front insulated box.", amount: 8, stats: { speed: 25, range: 60, capacity: 100 }, imageEmoji: "🍕" },
-
-  // GDANSK
-  { id: 'g1', city: 'Gdansk', model: "Sprint Courier S1", category: "Agility", description: "Lightweight and agile.", amount: 12, stats: { speed: 45, range: 80, capacity: 40 }, imageEmoji: "🛵" },
-  { id: 'g2', city: 'Gdansk', model: "Endurance Pro 2.0", category: "Long-Shift", description: "Dual-battery system.", amount: 20, stats: { speed: 35, range: 100, capacity: 60 }, imageEmoji: "🔋" },
-  { id: 'g3', city: 'Gdansk', model: "Cargo King XL", category: "Heavy Duty", description: "Front insulated box.", amount: 4, stats: { speed: 25, range: 60, capacity: 100 }, imageEmoji: "🍕" },
-  
-  // KRAKOW
-  { id: 'k1', city: 'Krakow', model: "Sprint Courier S1", category: "Agility", description: "Lightweight and agile.", amount: 18, stats: { speed: 45, range: 80, capacity: 40 }, imageEmoji: "🛵" },
-  { id: 'k2', city: 'Krakow', model: "Endurance Pro 2.0", category: "Long-Shift", description: "Dual-battery system.", amount: 10, stats: { speed: 35, range: 100, capacity: 60 }, imageEmoji: "🔋" },
-
-  // WROCLAW
-  { id: 'wr1', city: 'Wroclaw', model: "Sprint Courier S1", category: "Agility", description: "Lightweight and agile.", amount: 0, stats: { speed: 45, range: 80, capacity: 40 }, imageEmoji: "🛵" },
-  { id: 'wr3', city: 'Wroclaw', model: "Cargo King XL", category: "Heavy Duty", description: "Front insulated box.", amount: 6, stats: { speed: 25, range: 60, capacity: 100 }, imageEmoji: "🍕" },
+// HARDCODED MODELS (Catalog)
+const MODELS: BikeModel[] = [
+  {
+    id: "s1",
+    name: "Sprint Courier S1",
+    category: "Agility",
+    stats: { speed: 45, range: 80, capacity: 40 },
+    imageEmoji: "🛵",
+  },
+  {
+    id: "xl",
+    name: "Cargo King XL",
+    category: "Heavy Duty",
+    stats: { speed: 25, range: 60, capacity: 100 },
+    imageEmoji: "🍕",
+  },
+  {
+    id: "ep2",
+    name: "Endurance Pro 2.0",
+    category: "Dual-battery system",
+    stats: { speed: 35, range: 100, capacity: 60 },
+    imageEmoji: "🔋",
+  },
 ];
 
-// --- CORE FUNCTIONS ---
+// CONFIG FOR GENERATION
+const FLEET_CONFIG = [
+  { modelId: "s1", city: "Warsaw", amount: 15 },
+  { modelId: "en2", city: "Warsaw", amount: 8 },
+  { modelId: "xl", city: "Warsaw", amount: 5 },
+
+  { modelId: "s1", city: "Gdansk", amount: 8 },
+  { modelId: "en2", city: "Gdansk", amount: 5 },
+  { modelId: "xl", city: "Gdansk", amount: 2 },
+
+  { modelId: "s1", city: "Krakow", amount: 12 },
+  { modelId: "en2", city: "Krakow", amount: 4 },
+  { modelId: "xl", city: "Krakow", amount: 2 },
+
+  { modelId: "s1", city: "Wroclaw", amount: 8 },
+  { modelId: "en2", city: "Wroclaw", amount: 6 },
+  { modelId: "xl", city: "Wroclaw", amount: 3 },
+];
 
 export const initializeFleet = () => {
-  const fleet = localStorage.getItem('velocity_fleet');
-  if (!fleet) {
-    localStorage.setItem(
-      'velocity_fleet',
-      JSON.stringify(INITIAL_FLEET)
-    );
-    console.log("Storage initialized with Initial Fleet");
+  // Save Models to Storage (So it can be edited in Admin Panel)
+  if (!localStorage.getItem("velocity_models")) {
+    localStorage.setItem("velocity_models", JSON.stringify(MODELS));
+  }
+
+  // Generate Instances if missing
+  if (!localStorage.getItem("velocity_fleet")) {
+    const instances: BikeInstance[] = [];
+
+    FLEET_CONFIG.forEach((cfg) => {
+      for (let i = 1; i <= cfg.amount; i++) {
+        instances.push({
+          id: `${cfg.city.substring(0, 3).toLowerCase()}-${
+            cfg.modelId
+          }-${String(i).padStart(2, "0")}`, // id: war-s1-01
+          modelId: cfg.modelId, // <--- LINK TO MODEL
+          city: cfg.city,
+          status: "available",
+        });
+      }
+    });
+
+    localStorage.setItem("velocity_fleet", JSON.stringify(instances));
   }
 };
 
+// GETTERS
 
-export const getFleet = (): FleetBike[] => {
-  const stored = localStorage.getItem('velocity_fleet');
-  if (stored) return JSON.parse(stored);
-  localStorage.setItem('velocity_fleet', JSON.stringify(INITIAL_FLEET));
-  return INITIAL_FLEET;
+export const getModels = (): BikeModel[] => {
+  const data = localStorage.getItem("velocity_models");
+  return data ? JSON.parse(data) : MODELS;
+};
+
+export const getFleet = (): BikeInstance[] => {
+  const data = localStorage.getItem("velocity_fleet");
+  return data ? JSON.parse(data) : [];
 };

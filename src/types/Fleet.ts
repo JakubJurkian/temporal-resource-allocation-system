@@ -1,16 +1,20 @@
-export interface BikeStats {
-  speed: number;
-  range: number;
-  capacity: number;
+// 1. The blueprint for bikes
+export interface BikeModel {
+  id: string;
+  name: string;
+  category: string;
+  stats: {
+    speed: number;
+    range: number;
+    capacity: number;
+  };
+  imageEmoji: string;
 }
 
-export interface FleetBike {
-  id: string; // This is the MODEL ID (e.g., 'w1' for Warsaw Sprint Courier)
-  model: string;
-  category: string;
-  description: string;
+// 2. The Physical Bike (The real asset)
+export interface BikeInstance {
+  id: string; // UNIQUE: e.g., 'waw-s1-04'
+  modelId: string; // Link back to blueprint
   city: string;
-  amount: number; // Total physical bikes of this model available in the fleet
-  stats: BikeStats;
-  imageEmoji: string;
+  status: "available" | "rented" | "maintenance";
 }

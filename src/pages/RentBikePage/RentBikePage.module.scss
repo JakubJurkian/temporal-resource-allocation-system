@@ -38,7 +38,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    
+
     &:hover {
       color: v.$danger; // Or red
       background: rgba(255, 255, 255, 0.05);
@@ -102,7 +102,7 @@
   .bannerText {
     display: flex;
     flex-direction: column;
-    
+
     .label {
       font-size: 0.75rem;
       color: v.$color-text-muted;
@@ -111,7 +111,7 @@
       font-weight: 600;
       margin-bottom: 2px;
     }
-    
+
     .city {
       font-size: 1.25rem;
       font-weight: 800;
@@ -185,7 +185,7 @@
       transform: translateY(-2px);
       box-shadow: 0 0 25px rgba(v.$color-primary, 0.5);
     }
-    
+
     &:active {
       transform: translateY(0);
     }
@@ -200,7 +200,7 @@
   justify-content: center;
   height: 50vh;
   animation: fadeIn 0.5s ease;
-  
+
   .spinner {
     width: 60px;
     height: 60px;
@@ -211,7 +211,7 @@
     margin-bottom: 1.5rem;
     box-shadow: 0 0 20px rgba(v.$color-primary, 0.2);
   }
-  
+
   p {
     color: v.$color-text-muted;
     font-weight: 500;
@@ -230,7 +230,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  
+
   &:hover {
     color: v.$color-primary;
     text-decoration: underline;
@@ -250,10 +250,11 @@
   border-radius: v.$radius-lg;
   padding: 1.25rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: color.adjust(v.$color-bg-card, $lightness: 3%);
     border-color: rgba(v.$color-primary, 0.3);
@@ -275,7 +276,7 @@
     color: v.$color-text-muted;
 
     .spec {
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       padding: 2px 8px;
       border-radius: 4px;
     }
@@ -285,6 +286,7 @@
     background: v.$color-secondary; // Purple/Secondary brand color
     color: #fff;
     padding: 0.6rem 1.2rem;
+    margin-top: 1rem;
     border-radius: v.$radius-md;
     font-weight: 600;
     border: none;
@@ -328,18 +330,143 @@
   }
 }
 
-// --- ANIMATIONS ---
-@keyframes spin { 
-  0% { transform: rotate(0deg); } 
-  100% { transform: rotate(360deg); } 
+// --- STEP 4: CONFIRMATION & SUMMARY ---
+
+.summaryCard {
+  background: rgba(255, 255, 255, 0.03); // Subtle glass effect
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: v.$radius-lg;
+  padding: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+  .summaryRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    font-size: 1rem;
+
+    .label {
+      color: v.$color-text-muted;
+      font-weight: 500;
+    }
+
+    .value {
+      color: v.$color-text-main;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: right;
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 20%,
+      rgba(255, 255, 255, 0.1) 80%,
+      transparent 100%
+    );
+    margin: 1.5rem 0;
+  }
+
+  // Specific styles for the "Total Price" row
+  .totalRow {
+    margin-bottom: 0;
+    margin-top: 1.5rem;
+    align-items: flex-end; // Align text to bottom line
+
+    .label {
+      font-size: 1.1rem;
+      color: v.$color-text-main;
+    }
+
+    .totalValue {
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 800;
+      color: v.$color-primary; // Neon Green
+      text-shadow: 0 0 20px rgba(v.$color-primary, 0.25);
+    }
+  }
 }
 
-@keyframes fadeIn { 
-  from { opacity: 0; transform: translateY(10px); } 
-  to { opacity: 1; transform: translateY(0); } 
+// The big "Confirm & Pay" button
+.confirmBtn {
+  width: 100%;
+  background: v.$color-primary;
+  color: #000;
+  padding: 1.2rem;
+  border-radius: v.$radius-md;
+  font-size: 1.2rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(v.$color-primary, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(v.$color-primary, 0.5);
+    background: lighten(v.$color-primary, 5%);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 0 10px rgba(v.$color-primary, 0.3);
+  }
+}
+
+@media (max-width: 600px) {
+  .summaryCard {
+    padding: 1.5rem;
+
+    .totalRow {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+
+      .totalValue {
+        align-self: flex-end;
+      }
+    }
+  }
+}
+
+// --- ANIMATIONS ---
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
