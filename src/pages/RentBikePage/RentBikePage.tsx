@@ -10,7 +10,6 @@ const MODELS = getModels();
 
 const RentBikePage = () => {
   const user = useAppSelector((state) => state.auth.user);
-
   const userCity = user!.city;
 
   // Wizard State (Starts at Step 1: Dates)
@@ -154,7 +153,7 @@ const RentBikePage = () => {
       </header>
 
       <main className={styles.wizardContent}>
-        {/* --- STEP 1: DATE SELECTION (Now the first step) --- */}
+        {/* --- STEP 1: DATE SELECTION --- */}
         {step === 1 && (
           <div className={styles.stepContainer}>
             {/* Context Banner */}
@@ -242,7 +241,6 @@ const RentBikePage = () => {
                 availableBikes.map((bike: BikeModel) => (
                   <div key={bike.id} className={styles.bikeCard}>
                     <div className={styles.bikeInfo}>
-                      {/* Name + Emoji */}
                       <h3>
                         {bike.name}
                         <span style={{ marginLeft: "8px", fontSize: "1.2em" }}>

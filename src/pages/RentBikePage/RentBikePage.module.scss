@@ -250,8 +250,9 @@
   border-radius: v.$radius-lg;
   padding: 1.25rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
   transition: all 0.2s ease;
 
   &:hover {
@@ -285,6 +286,7 @@
     background: v.$color-secondary; // Purple/Secondary brand color
     color: #fff;
     padding: 0.6rem 1.2rem;
+    margin-top: 1rem;
     border-radius: v.$radius-md;
     font-weight: 600;
     border: none;
@@ -422,7 +424,6 @@
   }
 }
 
-// Mobile Adjustments
 @media (max-width: 600px) {
   .summaryCard {
     padding: 1.5rem;
