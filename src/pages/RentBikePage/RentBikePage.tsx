@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import styles from "./RentBikePage.module.scss";
 import { isBikeAvailable } from "../../utils/bookingHelper";
@@ -9,7 +9,6 @@ import { getModels } from "../../utils/fleetStorage";
 const MODELS = getModels();
 
 const RentBikePage = () => {
-  const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
 
   const userCity = user!.city;
@@ -120,14 +119,14 @@ const RentBikePage = () => {
   };
 
   const getDynamicPrice = (days: number) => {
-    const BASE_RATE = 50; // Standard price per day in PLN
+    const BASE_RATE = 25; // Standard price per day in PLN
     let discount = 0;
 
     // Apply discounts based on duration
-    if (days >= 15) {
-      discount = 0.3; // 30% off for 15+ days
-    } else if (days >= 8) {
-      discount = 0.15; // 15% off for 8+ days
+    if (days > 7 && days <= 14) {
+      discount = 0.2; // 20% off
+    } else if (days > 14 && days <= 21) {
+      discount = 0.4; // 40% off
     }
 
     // Calculate final daily rate
