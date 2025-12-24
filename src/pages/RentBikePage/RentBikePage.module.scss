@@ -424,6 +424,124 @@
   }
 }
 
+// --- STEP 5: PAYMENT FORM ---
+
+.paymentForm {
+  margin-top: 1rem;
+  animation: fadeIn 0.4s ease;
+}
+
+.cardContainer {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: v.$radius-lg;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .row {
+    display: flex;
+    gap: 1rem;
+    .inputGroup {
+      flex: 1;
+    }
+  }
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: v.$color-text-muted;
+      font-weight: 600;
+    }
+
+    input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 0.8rem;
+      border-radius: v.$radius-md;
+      font-size: 1rem;
+      transition: all 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: v.$color-primary;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.payBtn {
+  width: 100%;
+  background: v.$color-primary;
+  color: #000;
+  padding: 1.2rem;
+  border-radius: v.$radius-md;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(v.$color-primary, 0.4);
+  }
+
+  &:disabled {
+    background: #4b5563; // Grey
+    cursor: not-allowed;
+    color: #9ca3af;
+  }
+}
+
+.miniSpinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.errorBanner {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  padding: 1rem;
+  border-radius: v.$radius-md;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  text-align: center;
+  font-weight: 600;
+}
+
+.successBanner {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  padding: 1rem;
+  border-radius: v.$radius-md;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  text-align: center;
+  font-weight: 600;
+}
+
 @media (max-width: 600px) {
   .summaryCard {
     padding: 1.5rem;

@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
-import styles from "./RentBikePage.module.scss";
+import { getModels } from "../../utils/fleetStorage";
+import { processPayment } from "../../utils/paymentHelper";
 import { isBikeAvailable } from "../../utils/bookingHelper";
 import type { BikeInstance, BikeModel } from "../../types/Fleet";
-import { getModels } from "../../utils/fleetStorage";
+import styles from "./RentBikePage.module.scss";
 
 const MODELS = getModels();
 
 const RentBikePage = () => {
+  const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
   const userCity = user!.city;
-
   // Wizard State (Starts at Step 1: Dates)
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-
-  // Date State
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [dates, setDates] = useState({ start: "", end: "" });
   const [dateError, setDateError] = useState("");
   const [availableBikes, setAvailableBikes] = useState<BikeModel[]>([]);
@@ -24,7 +23,7 @@ const RentBikePage = () => {
     return stored ? JSON.parse(stored) : [];
   });
 
-  // --- STEP 1 -> 2: SEARCH ---
+  // Step 1 - dates
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setDateError("");
@@ -99,8 +98,9 @@ const RentBikePage = () => {
     setStep(4);
   };
 
-  const handleConfirmPay = () => {
-    return;
+  const handleProceedToPayment = () => {
+    setPaymentStatus("idle"); // Reset payment state
+    setStep(5);
   };
 
   const getRentalDays = () => {
@@ -139,6 +139,52 @@ const RentBikePage = () => {
       oldRate: discount > 0 ? BASE_RATE : null,
       discountLabel: discount > 0 ? `-${discount * 100}%` : null,
     };
+  };
+
+  const [paymentStatus, setPaymentStatus] = useState<
+    "idle" | "processing" | "success" | "error"
+  >("idle");
+  // const [book, setBook] = useState({
+  //   userId: null,
+  //   bikeId: null,
+  //   startDate: null,
+  //   endDate: null,
+  //   payment: null,
+  // });
+
+  const handleFinalPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chosenBikeModel) return;
+
+    setPaymentStatus("processing"); // 1. STATE: WAITING
+
+    try {
+      // ASYNC SIMULATION (The Requirement)
+      await processPayment();
+
+      // STATE: SUCCESS
+      setPaymentStatus("success");
+
+      // UPDATE RESERVATION STATUS (The Requirement)
+      // const totalCost = getDynamicPrice(getRentalDays()).total;
+      // addReservation({
+      //   userId: user?.id,
+      //   bikeId: chosenBike?.id,
+      //   model: chosenBikeModel.name,
+      //   city: userCity,
+      //   startDate: dates.start,
+      //   endDate: dates.end,
+      //   totalCost: totalCost,
+      //   status: "confirmed",
+      // });
+
+      // Redirect
+      setTimeout(() => navigate("/dashboard"), 2000);
+    } catch (error) {
+      console.log(error);
+      // 5. STATE: REJECTION
+      setPaymentStatus("error");
+    }
   };
 
   return (
@@ -376,9 +422,107 @@ const RentBikePage = () => {
               </div>
             </div>
 
-            <button className={styles.confirmBtn} onClick={handleConfirmPay}>
+            <button
+              className={styles.confirmBtn}
+              onClick={handleProceedToPayment}
+            >
               Confirm & Pay 💳
             </button>
+          </div>
+        )}
+        {step === 5 && chosenBikeModel && (
+          <div className={styles.stepContainer}>
+            <button
+              onClick={() => setStep(4)}
+              className={styles.backBtn}
+              disabled={
+                paymentStatus === "processing" || paymentStatus === "success"
+              }
+            >
+              ← Back to Summary
+            </button>
+
+            <h1>Secure Checkout</h1>
+            <p className={styles.subtitle}>
+              Enter your card details to finalize.
+            </p>
+
+            <form onSubmit={handleFinalPayment} className={styles.paymentForm}>
+              {/* CARD UI */}
+              <div className={styles.cardContainer}>
+                <div className={styles.inputGroup}>
+                  <label>Cardholder Name</label>
+                  <input
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                    disabled={paymentStatus === "processing"}
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Card Number</label>
+                  <input
+                    type="text"
+                    placeholder="0000 0000 0000 0000"
+                    maxLength={19}
+                    required
+                    disabled={paymentStatus === "processing"}
+                  />
+                </div>
+
+                <div className={styles.row}>
+                  <div className={styles.inputGroup}>
+                    <label>Expiry</label>
+                    <input
+                      type="text"
+                      placeholder="MM/YY"
+                      maxLength={5}
+                      required
+                      disabled={paymentStatus === "processing"}
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>CVC</label>
+                    <input
+                      type="text"
+                      placeholder="123"
+                      maxLength={3}
+                      required
+                      disabled={paymentStatus === "processing"}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* STATUS MESSAGES */}
+              {paymentStatus === "error" && (
+                <div className={styles.errorBanner}>
+                  ⚠️ Transaction declined. Bank rejected the operation.
+                </div>
+              )}
+
+              {paymentStatus === "success" && (
+                <div className={styles.successBanner}>
+                  ✅ Payment Successful! Redirecting...
+                </div>
+              )}
+
+              {/* PAY BUTTON */}
+              <button
+                type="submit"
+                className={styles.payBtn}
+                disabled={
+                  paymentStatus === "processing" || paymentStatus === "success"
+                }
+              >
+                {paymentStatus === "processing" ? (
+                  <span className={styles.miniSpinner}></span>
+                ) : (
+                  `Pay ${getDynamicPrice(getRentalDays()).total} PLN`
+                )}
+              </button>
+            </form>
           </div>
         )}
       </main>
