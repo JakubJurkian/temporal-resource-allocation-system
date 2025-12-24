@@ -415,7 +415,7 @@
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 30px rgba(v.$color-primary, 0.5);
-    background: lighten(v.$color-primary, 5%);
+    background: color.adjust(v.$color-primary, $lightness: 5%);
   }
 
   &:active {

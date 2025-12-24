@@ -4,7 +4,13 @@ import { useAppSelector } from "../../store/hooks";
 import { getModels } from "../../utils/fleetStorage";
 import { processPayment } from "../../utils/paymentHelper";
 import { isBikeAvailable } from "../../utils/bookingHelper";
+import { getDynamicPrice, getRentalDays } from "../../utils/rentalCalculations";
 import type { BikeInstance, BikeModel } from "../../types/Fleet";
+import StepDateSelection from "./components/StepDateSelection";
+import StepLoading from "./components/StepLoading";
+import StepBikeSelection from "./components/StepBikeSelection";
+import StepSummary from "./components/StepSummary";
+import StepPayment from "./components/StepPayment";
 import styles from "./RentBikePage.module.scss";
 
 const MODELS = getModels();
@@ -15,22 +21,34 @@ const RentBikePage = () => {
   const userCity = user!.city;
   // Wizard State (Starts at Step 1: Dates)
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
-  const [dates, setDates] = useState({ start: "", end: "" });
-  const [dateError, setDateError] = useState("");
+  const [dates, setDates] = useState<{ start: string; end: string }>({
+    start: "",
+    end: "",
+  });
   const [availableBikes, setAvailableBikes] = useState<BikeModel[]>([]);
   const [bikes] = useState<BikeInstance[]>(() => {
     const stored = localStorage.getItem("velocity_fleet");
     return stored ? JSON.parse(stored) : [];
   });
+  const [chosenBike, setChosenBike] = useState<BikeInstance | null>(null);
+  const [chosenBikeModel, setChosenBikeModel] = useState<BikeModel | null>(
+    null
+  );
+  const [paymentStatus, setPaymentStatus] = useState<
+    "idle" | "processing" | "success" | "error"
+  >("idle");
 
   // Step 1 - dates
-  const handleSearch = (e: React.FormEvent) => {
+  const handleBikeSearch = (
+    e: React.FormEvent,
+    setError: (msg: string) => void
+  ) => {
     e.preventDefault();
-    setDateError("");
+    setError("");
 
     // Validate inputs
     if (!dates.start || !dates.end) {
-      setDateError("Please select both dates.");
+      setError("Please select both dates.");
       return;
     }
 
@@ -40,12 +58,12 @@ const RentBikePage = () => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 3) {
-      setDateError("Minimum rental period is 3 days.");
+      setError("Minimum rental period is 3 days.");
       return;
     }
 
     if (end < start) {
-      setDateError("End date cannot be before start date.");
+      setError("End date cannot be before start date.");
       return;
     }
 
@@ -53,7 +71,7 @@ const RentBikePage = () => {
     setStep(2);
   };
 
-  // --- STEP 2: SIMULATE API CALL ---
+  // Step 2 - simulate API call
   useEffect(() => {
     if (step === 2) {
       const timer = setTimeout(() => {
@@ -82,10 +100,6 @@ const RentBikePage = () => {
     }
   }, [step, userCity, dates, bikes]);
 
-  const [chosenBike, setChosenBike] = useState<BikeInstance | null>(null);
-  const [chosenBikeModel, setChosenBikeModel] = useState<BikeModel | null>(
-    null
-  );
   const handleBook = (modelId: string) => {
     const x = bikes.find((b: BikeInstance) => {
       if (b.modelId === modelId) return true;
@@ -94,6 +108,7 @@ const RentBikePage = () => {
       if (b.id === modelId) return true;
     })!;
     setChosenBike(x);
+    console.log(chosenBike);
     setChosenBikeModel(y);
     setStep(4);
   };
@@ -103,60 +118,11 @@ const RentBikePage = () => {
     setStep(5);
   };
 
-  const getRentalDays = () => {
-    if (!dates.start || !dates.end) return 0;
-
-    const start = new Date(dates.start);
-    const end = new Date(dates.end);
-
-    // Calculate difference in milliseconds
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-
-    // Convert to days and add 1 (to make it inclusive)
-    // Example: Mon to Mon = 8 days, not 7
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-  };
-
-  const getDynamicPrice = (days: number) => {
-    const BASE_RATE = 25; // Standard price per day in PLN
-    let discount = 0;
-
-    // Apply discounts based on duration
-    if (days > 7 && days <= 14) {
-      discount = 0.2; // 20% off
-    } else if (days > 14 && days <= 21) {
-      discount = 0.4; // 40% off
-    }
-
-    // Calculate final daily rate
-    const dailyRate = Math.round(BASE_RATE * (1 - discount));
-
-    return {
-      dailyRate: dailyRate,
-      total: dailyRate * days,
-
-      // UI Helpers: Only show "Old Rate" if a discount was applied
-      oldRate: discount > 0 ? BASE_RATE : null,
-      discountLabel: discount > 0 ? `-${discount * 100}%` : null,
-    };
-  };
-
-  const [paymentStatus, setPaymentStatus] = useState<
-    "idle" | "processing" | "success" | "error"
-  >("idle");
-  // const [book, setBook] = useState({
-  //   userId: null,
-  //   bikeId: null,
-  //   startDate: null,
-  //   endDate: null,
-  //   payment: null,
-  // });
-
   const handleFinalPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chosenBikeModel) return;
 
-    setPaymentStatus("processing"); // 1. STATE: WAITING
+    setPaymentStatus("processing"); // STATE: WAITING
 
     try {
       // ASYNC SIMULATION (The Requirement)
@@ -182,7 +148,7 @@ const RentBikePage = () => {
       setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
       console.log(error);
-      // 5. STATE: REJECTION
+      // STATE: REJECTION
       setPaymentStatus("error");
     }
   };
@@ -201,329 +167,43 @@ const RentBikePage = () => {
       <main className={styles.wizardContent}>
         {/* --- STEP 1: DATE SELECTION --- */}
         {step === 1 && (
-          <div className={styles.stepContainer}>
-            {/* Context Banner */}
-            <div className={styles.locationBanner}>
-              <span className={styles.pinIcon}>📍</span>
-              <div className={styles.bannerText}>
-                <span className={styles.label}>Browsing fleet in</span>
-                <span className={styles.city}>{userCity}</span>
-              </div>
-            </div>
-
-            <h1>When do you need it?</h1>
-            <p className={styles.subtitle}>
-              Select your rental dates (min. 3 days).
-            </p>
-
-            <form onSubmit={handleSearch} className={styles.dateForm}>
-              <div className={styles.inputGroup}>
-                <label>Start Date</label>
-                <input
-                  type="date"
-                  value={dates.start}
-                  onChange={(e) =>
-                    setDates({ ...dates, start: e.target.value })
-                  }
-                  min={new Date().toISOString().split("T")[0]}
-                  className={styles.input}
-                />
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label>End Date</label>
-                <input
-                  type="date"
-                  value={dates.end}
-                  onChange={(e) => setDates({ ...dates, end: e.target.value })}
-                  className={styles.input}
-                />
-              </div>
-
-              {dateError && (
-                <div className={styles.errorBox}>⚠️ {dateError}</div>
-              )}
-
-              <button type="submit" className={styles.primaryBtn}>
-                Find Bikes ➜
-              </button>
-            </form>
-          </div>
+          <StepDateSelection
+            dates={dates}
+            setDates={setDates}
+            city={userCity}
+            onSubmit={handleBikeSearch}
+          />
         )}
 
         {/* --- STEP 2: LOADING --- */}
-        {step === 2 && (
-          <div className={styles.loadingContainer}>
-            <div className={styles.spinner}></div>
-            <p>Checking availability in {userCity}...</p>
-          </div>
-        )}
+        {step === 2 && <StepLoading city={userCity} />}
 
         {/* --- STEP 3: RESULTS --- */}
         {step === 3 && (
-          <div className={styles.stepContainer}>
-            <button onClick={() => setStep(1)} className={styles.backBtn}>
-              ← Change Dates
-            </button>
-
-            <h1>Available Bikes</h1>
-            <p className={styles.subtitle}>
-              Found {availableBikes.length} bike
-              {availableBikes.length === 1 ? "" : "s"} for your dates.
-            </p>
-
-            <div className={styles.bikeList}>
-              {availableBikes.length === 0 ? (
-                <div className={styles.noResults}>
-                  <p>😔 No bikes available in {userCity} for these dates.</p>
-                  <button
-                    onClick={() => setStep(1)}
-                    className={styles.retryBtn}
-                  >
-                    Try different dates
-                  </button>
-                </div>
-              ) : (
-                availableBikes.map((bike: BikeModel) => (
-                  <div key={bike.id} className={styles.bikeCard}>
-                    <div className={styles.bikeInfo}>
-                      <h3>
-                        {bike.name}
-                        <span style={{ marginLeft: "8px", fontSize: "1.2em" }}>
-                          {bike.imageEmoji}
-                        </span>
-                      </h3>
-
-                      <div className={styles.specs}>
-                        <span className={styles.spec} title="Category">
-                          🏷️ {bike.category}
-                        </span>
-                        <span className={styles.spec} title="Max Speed">
-                          ⚡ {bike.stats.speed} km/h
-                        </span>
-                        <span className={styles.spec} title="Range">
-                          🛣️ {bike.stats.range} km
-                        </span>
-                        <span className={styles.spec} title="Cargo Capacity">
-                          📦 {bike.stats.capacity} kg
-                        </span>
-                      </div>
-                    </div>
-
-                    <button
-                      className={styles.bookBtn}
-                      onClick={() => handleBook(bike.id)}
-                    >
-                      Book
-                    </button>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
+          <StepBikeSelection
+            availableBikes={availableBikes}
+            setStep={setStep}
+            onClick={handleBook}
+            city={userCity}
+          />
         )}
         {/* --- STEP 4: SUMMARY & CONFIRM --- */}
         {step === 4 && chosenBikeModel && (
-          <div className={styles.stepContainer}>
-            <button onClick={() => setStep(3)} className={styles.backBtn}>
-              ← Back to Bikes
-            </button>
-
-            <h1>Confirm Booking</h1>
-            <p className={styles.subtitle}>
-              Please review your reservation details.
-            </p>
-
-            <div className={styles.summaryCard}>
-              {/* Bike Details */}
-              <div className={styles.summaryRow}>
-                <span className={styles.label}>Bike Model</span>
-                <span className={styles.value}>
-                  {chosenBikeModel.name}{" "}
-                  <span style={{ fontSize: "1.2em" }}>
-                    {chosenBikeModel.imageEmoji}
-                  </span>
-                </span>
-              </div>
-              <div className={styles.summaryRow}>
-                <span className={styles.label}>Category</span>
-                <span className={styles.value}>{chosenBikeModel.category}</span>
-              </div>
-
-              <div className={styles.divider}></div>
-
-              {/* Rental Dates */}
-              <div className={styles.summaryRow}>
-                <span className={styles.label}>Dates</span>
-                <span className={styles.value}>
-                  {dates.start} — {dates.end}
-                </span>
-              </div>
-              <div className={styles.summaryRow}>
-                <span className={styles.label}>Duration</span>
-                <span className={styles.value}>{getRentalDays()} days</span>
-              </div>
-
-              <div className={styles.divider}></div>
-
-              {/* --- DETAILED PRICING BREAKDOWN --- */}
-              {/* 1. Daily Rate Row with Discount Logic */}
-              <div
-                className={styles.summaryRow}
-                style={{ alignItems: "center" }}
-              >
-                <span className={styles.label}>Daily Rate</span>
-
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
-                  {/* Show Old Rate if discount exists */}
-                  {getDynamicPrice(getRentalDays()).oldRate && (
-                    <span
-                      style={{
-                        textDecoration: "line-through",
-                        color: "#6b7280",
-                        fontSize: "0.9rem",
-                      }}
-                    >
-                      {getDynamicPrice(getRentalDays()).oldRate} PLN
-                    </span>
-                  )}
-
-                  {/* Final Daily Rate */}
-                  <span className={styles.value}>
-                    {getDynamicPrice(getRentalDays()).dailyRate} PLN
-                  </span>
-
-                  {/* Discount Badge */}
-                  {getDynamicPrice(getRentalDays()).discountLabel && (
-                    <span
-                      style={{
-                        backgroundColor: "#7c3aed", // Purple/Secondary
-                        color: "white",
-                        fontSize: "0.75rem",
-                        padding: "2px 6px",
-                        borderRadius: "4px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {getDynamicPrice(getRentalDays()).discountLabel}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* 2. Total Calculation Row */}
-              <div className={`${styles.summaryRow} ${styles.totalRow}`}>
-                <span className={styles.label}>Total Price</span>
-                <span className={styles.totalValue}>
-                  {getDynamicPrice(getRentalDays()).total} PLN
-                </span>
-              </div>
-            </div>
-
-            <button
-              className={styles.confirmBtn}
-              onClick={handleProceedToPayment}
-            >
-              Confirm & Pay 💳
-            </button>
-          </div>
+          <StepSummary
+            setStep={setStep}
+            chosenBikeModel={chosenBikeModel}
+            dates={dates}
+            onClick={handleProceedToPayment}
+          />
         )}
+        {/* --- STEP 5: PAYMENT PROCESS --- */}
         {step === 5 && chosenBikeModel && (
-          <div className={styles.stepContainer}>
-            <button
-              onClick={() => setStep(4)}
-              className={styles.backBtn}
-              disabled={
-                paymentStatus === "processing" || paymentStatus === "success"
-              }
-            >
-              ← Back to Summary
-            </button>
-
-            <h1>Secure Checkout</h1>
-            <p className={styles.subtitle}>
-              Enter your card details to finalize.
-            </p>
-
-            <form onSubmit={handleFinalPayment} className={styles.paymentForm}>
-              {/* CARD UI */}
-              <div className={styles.cardContainer}>
-                <div className={styles.inputGroup}>
-                  <label>Cardholder Name</label>
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    required
-                    disabled={paymentStatus === "processing"}
-                  />
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <label>Card Number</label>
-                  <input
-                    type="text"
-                    placeholder="0000 0000 0000 0000"
-                    maxLength={19}
-                    required
-                    disabled={paymentStatus === "processing"}
-                  />
-                </div>
-
-                <div className={styles.row}>
-                  <div className={styles.inputGroup}>
-                    <label>Expiry</label>
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      maxLength={5}
-                      required
-                      disabled={paymentStatus === "processing"}
-                    />
-                  </div>
-                  <div className={styles.inputGroup}>
-                    <label>CVC</label>
-                    <input
-                      type="text"
-                      placeholder="123"
-                      maxLength={3}
-                      required
-                      disabled={paymentStatus === "processing"}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* STATUS MESSAGES */}
-              {paymentStatus === "error" && (
-                <div className={styles.errorBanner}>
-                  ⚠️ Transaction declined. Bank rejected the operation.
-                </div>
-              )}
-
-              {paymentStatus === "success" && (
-                <div className={styles.successBanner}>
-                  ✅ Payment Successful! Redirecting...
-                </div>
-              )}
-
-              {/* PAY BUTTON */}
-              <button
-                type="submit"
-                className={styles.payBtn}
-                disabled={
-                  paymentStatus === "processing" || paymentStatus === "success"
-                }
-              >
-                {paymentStatus === "processing" ? (
-                  <span className={styles.miniSpinner}></span>
-                ) : (
-                  `Pay ${getDynamicPrice(getRentalDays()).total} PLN`
-                )}
-              </button>
-            </form>
-          </div>
+          <StepPayment
+            setStep={setStep}
+            onSubmit={handleFinalPayment}
+            paymentStatus={paymentStatus}
+            price={getDynamicPrice(getRentalDays(dates)).total}
+          />
         )}
       </main>
     </div>
