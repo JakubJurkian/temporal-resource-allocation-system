@@ -6,6 +6,7 @@ import { processPayment } from "../../utils/paymentHelper";
 import { isBikeAvailable } from "../../utils/bookingHelper";
 import type { BikeInstance, BikeModel } from "../../types/Fleet";
 import styles from "./RentBikePage.module.scss";
+import StepDateSelection from "./components/StepDateSelection";
 
 const MODELS = getModels();
 
@@ -16,21 +17,35 @@ const RentBikePage = () => {
   // Wizard State (Starts at Step 1: Dates)
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [dates, setDates] = useState({ start: "", end: "" });
-  const [dateError, setDateError] = useState("");
   const [availableBikes, setAvailableBikes] = useState<BikeModel[]>([]);
   const [bikes] = useState<BikeInstance[]>(() => {
     const stored = localStorage.getItem("velocity_fleet");
     return stored ? JSON.parse(stored) : [];
   });
+  const [chosenBike, setChosenBike] = useState<BikeInstance | null>(null);
+  const [chosenBikeModel, setChosenBikeModel] = useState<BikeModel | null>(
+    null
+  );
+  const [paymentStatus, setPaymentStatus] = useState<
+    "idle" | "processing" | "success" | "error"
+  >("idle");
+
+  // const [book, setBook] = useState({
+  //   userId: null,
+  //   bikeId: null,
+  //   startDate: null,
+  //   endDate: null,
+  //   payment: null,
+  // });
 
   // Step 1 - dates
-  const handleSearch = (e: React.FormEvent) => {
+  const handleBikeSearch = (e: React.FormEvent, setError: (msg: string) => void) => {
     e.preventDefault();
-    setDateError("");
+    setError("");
 
     // Validate inputs
     if (!dates.start || !dates.end) {
-      setDateError("Please select both dates.");
+      setError("Please select both dates.");
       return;
     }
 
@@ -40,12 +55,12 @@ const RentBikePage = () => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 3) {
-      setDateError("Minimum rental period is 3 days.");
+      setError("Minimum rental period is 3 days.");
       return;
     }
 
     if (end < start) {
-      setDateError("End date cannot be before start date.");
+      setError("End date cannot be before start date.");
       return;
     }
 
@@ -53,7 +68,7 @@ const RentBikePage = () => {
     setStep(2);
   };
 
-  // --- STEP 2: SIMULATE API CALL ---
+  // Step 2 - simulate API call
   useEffect(() => {
     if (step === 2) {
       const timer = setTimeout(() => {
@@ -82,10 +97,6 @@ const RentBikePage = () => {
     }
   }, [step, userCity, dates, bikes]);
 
-  const [chosenBike, setChosenBike] = useState<BikeInstance | null>(null);
-  const [chosenBikeModel, setChosenBikeModel] = useState<BikeModel | null>(
-    null
-  );
   const handleBook = (modelId: string) => {
     const x = bikes.find((b: BikeInstance) => {
       if (b.modelId === modelId) return true;
@@ -141,17 +152,6 @@ const RentBikePage = () => {
     };
   };
 
-  const [paymentStatus, setPaymentStatus] = useState<
-    "idle" | "processing" | "success" | "error"
-  >("idle");
-  // const [book, setBook] = useState({
-  //   userId: null,
-  //   bikeId: null,
-  //   startDate: null,
-  //   endDate: null,
-  //   payment: null,
-  // });
-
   const handleFinalPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chosenBikeModel) return;
@@ -201,54 +201,12 @@ const RentBikePage = () => {
       <main className={styles.wizardContent}>
         {/* --- STEP 1: DATE SELECTION --- */}
         {step === 1 && (
-          <div className={styles.stepContainer}>
-            {/* Context Banner */}
-            <div className={styles.locationBanner}>
-              <span className={styles.pinIcon}>📍</span>
-              <div className={styles.bannerText}>
-                <span className={styles.label}>Browsing fleet in</span>
-                <span className={styles.city}>{userCity}</span>
-              </div>
-            </div>
-
-            <h1>When do you need it?</h1>
-            <p className={styles.subtitle}>
-              Select your rental dates (min. 3 days).
-            </p>
-
-            <form onSubmit={handleSearch} className={styles.dateForm}>
-              <div className={styles.inputGroup}>
-                <label>Start Date</label>
-                <input
-                  type="date"
-                  value={dates.start}
-                  onChange={(e) =>
-                    setDates({ ...dates, start: e.target.value })
-                  }
-                  min={new Date().toISOString().split("T")[0]}
-                  className={styles.input}
-                />
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label>End Date</label>
-                <input
-                  type="date"
-                  value={dates.end}
-                  onChange={(e) => setDates({ ...dates, end: e.target.value })}
-                  className={styles.input}
-                />
-              </div>
-
-              {dateError && (
-                <div className={styles.errorBox}>⚠️ {dateError}</div>
-              )}
-
-              <button type="submit" className={styles.primaryBtn}>
-                Find Bikes ➜
-              </button>
-            </form>
-          </div>
+          <StepDateSelection
+            dates={dates}
+            setDates={setDates}
+            city={userCity}
+            onSubmit={handleBikeSearch}
+          />
         )}
 
         {/* --- STEP 2: LOADING --- */}
