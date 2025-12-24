@@ -4,16 +4,15 @@ import { useAppSelector } from "../../store/hooks";
 import styles from "./RentBikePage.module.scss";
 import { isBikeAvailable } from "../../utils/bookingHelper";
 import type { BikeInstance, BikeModel } from "../../types/Fleet";
+import { getModels } from "../../utils/fleetStorage";
+
+const MODELS = getModels();
 
 const RentBikePage = () => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
 
   const userCity = user!.city
-  const BIKES = localStorage.getItem("velocity_fleet")
-    ? JSON.parse(localStorage.getItem("velocity_fleet")!)
-    : [];
-  console.log(BIKES);
 
   // Wizard State (Starts at Step 1: Dates)
   const [step, setStep] = useState<1 | 2 | 3>(1); 
@@ -21,7 +20,11 @@ const RentBikePage = () => {
   // Date State
   const [dates, setDates] = useState({ start: "", end: "" });
   const [dateError, setDateError] = useState("");
-  const [availableBikes, setAvailableBikes] = useState<typeof BIKES>([]);
+  const [availableBikes, setAvailableBikes] = useState<BikeModel[]>([]);
+  const [bikes] = useState<BikeInstance[]>(() => {
+    const stored = localStorage.getItem("velocity_fleet")
+    return stored ? JSON.parse(stored) : [];
+  });
 
   // --- STEP 1 -> 2: SEARCH ---
   const handleSearch = (e: React.FormEvent) => {
@@ -59,19 +62,27 @@ const RentBikePage = () => {
       
       const timer = setTimeout(() => {
         // FILTERING ALGORITHM
-        const cityBikes = BIKES.filter((b: BikeInstance) => b.city === userCity);
+        const cityBikes = bikes.filter((b: BikeInstance) => b.city === userCity);
         const freeBikes = cityBikes.filter((bike: BikeInstance) => 
           isBikeAvailable(bike.id, dates.start, dates.end)
         );
 
-        setAvailableBikes(freeBikes);
+        const catalogFreeBikes = MODELS.map((b: BikeModel) => {
+          // if some bike in freeBikes has modelId prop equal to b.id
+          const res = freeBikes.filter((freeB: BikeInstance) => {
+            if(freeB.modelId === b.id) return true;
+          });
+          if(res.length > 0) return b;
+        }).filter(Boolean) as BikeModel[];
+        setAvailableBikes(catalogFreeBikes);
+        
         // setLoading(false);
         setStep(3); // Show results
       }, 1000); // 1 second delay
 
       return () => clearTimeout(timer);
     }
-  }, [step, userCity, dates, BIKES]);
+  }, [step, userCity, dates, bikes]);
 
   const handleBook = (bikeId: string) => {
     alert(`Success! Bike ${bikeId} booked in ${userCity}.`);
@@ -149,7 +160,7 @@ const RentBikePage = () => {
             
             <h1>Available Bikes</h1>
             <p className={styles.subtitle}>
-              Found {availableBikes.length} bikes for your dates.
+              Found {availableBikes.length} bike{availableBikes.length === 1 ? '' : 's'} for your dates.
             </p>
 
             <div className={styles.bikeList}>

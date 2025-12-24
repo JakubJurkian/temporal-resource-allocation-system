@@ -27,9 +27,21 @@ const MODELS: BikeModel[] = [
 
 // CONFIG FOR GENERATION
 const FLEET_CONFIG = [
-  { modelId: "s1", city: "Warsaw", amount: 5 },
-  { modelId: "xl", city: "Warsaw", amount: 2 },
-  { modelId: "s1", city: "Gdansk", amount: 3 },
+  { modelId: "s1", city: "Warsaw", amount: 15 },
+  { modelId: "en2", city: "Warsaw", amount: 8 },
+  { modelId: "xl", city: "Warsaw", amount: 5 },
+
+  { modelId: "s1", city: "Gdansk", amount: 8 },
+  { modelId: "en2", city: "Gdansk", amount: 5 },
+  { modelId: "xl", city: "Gdansk", amount: 2 },
+
+  { modelId: "s1", city: "Krakow", amount: 12 },
+  { modelId: "en2", city: "Krakow", amount: 4 },
+  { modelId: "xl", city: "Krakow", amount: 2 },
+
+  { modelId: "s1", city: "Wroclaw", amount: 8 },
+  { modelId: "en2", city: "Wroclaw", amount: 6 },
+  { modelId: "xl", city: "Wroclaw", amount: 3 },
 ];
 
 export const initializeFleet = () => {
