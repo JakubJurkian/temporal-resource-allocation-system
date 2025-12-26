@@ -424,7 +424,7 @@
   }
 }
 
-// --- STEP 5: PAYMENT FORM ---
+// Payment Form
 
 .paymentForm {
   margin-top: 1rem;
@@ -555,6 +555,9 @@
         align-self: flex-end;
       }
     }
+  }
+  .row {
+    flex-direction: column;
   }
 }
 
