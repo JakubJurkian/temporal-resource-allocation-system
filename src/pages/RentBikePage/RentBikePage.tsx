@@ -106,16 +106,59 @@ const RentBikePage = () => {
   }, [step, userCity, dates, bikes]);
 
   const handleBook = (modelId: string) => {
-    const x = bikes.find((b: BikeInstance) => {
-      if (b.modelId === modelId) return true;
-    })!;
-    const y = MODELS.find((b: BikeModel) => {
-      if (b.id === modelId) return true;
-    })!;
-    setChosenBike(x);
-    console.log(chosenBike);
-    setChosenBikeModel(y);
-    setStep(4);
+    // Get raw reservations
+    const storedData = localStorage.getItem("velocity_reservations");
+    const allReservations = storedData ? JSON.parse(storedData) : [];
+
+    // Define User's requested timeframe (timestamps for easy comparison)
+    const userStart = new Date(dates.start).getTime();
+    const userEnd = new Date(dates.end).getTime();
+
+    // Filter: Find ONLY reservations that conflict with these dates
+    const conflictingReservations = allReservations.filter(
+      (res: Reservation) => {
+        // Safety check: Ignore cancelled bookings
+        if (res.status === "cancelled") return false;
+
+        const resStart = new Date(res.startDate).getTime();
+        const resEnd = new Date(res.endDate).getTime();
+
+        // THE OVERLAP FORMULA:
+        // A booking overlaps if it starts before your request ends...
+        // ...AND ends after your request starts.
+        return userStart <= resEnd && userEnd >= resStart;
+      }
+    );
+
+    // 4. Create a Set of IDs that are effectively "Blocked" for this user
+    const blockedBikeIds = new Set(
+      conflictingReservations.map((res: Reservation) => res.bikeId)
+    );
+
+    // Find the first physical instance that matches the model AND is not blocked
+    const availableInstance = bikes.find(
+      (bike) =>
+        bike.modelId === modelId &&
+        !blockedBikeIds.has(bike.id) &&
+        bike.city === userCity &&
+        bike.status === "active"
+    );
+
+    // Get Model Details (Metadata)
+    const selectedModel = MODELS.find(
+      (model: BikeModel) => model.id === modelId
+    );
+
+    // Update State
+    if (availableInstance && selectedModel) {
+      setChosenBike(availableInstance);
+      setChosenBikeModel(selectedModel);
+      setStep(4);
+    } else {
+      console.error(
+        "Critical Error: No bike instance found, even though availability check passed earlier."
+      );
+    }
   };
 
   const handleProceedToPayment = () => {
