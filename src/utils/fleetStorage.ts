@@ -62,7 +62,7 @@ export const initializeFleet = () => {
           }-${String(i).padStart(2, "0")}`, // id: war-s1-01
           modelId: cfg.modelId, // <--- LINK TO MODEL
           city: cfg.city,
-          status: "available",
+          status: "active",
         });
       }
     });

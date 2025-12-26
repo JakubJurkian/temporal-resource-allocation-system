@@ -3,7 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import { getModels } from "../../utils/fleetStorage";
 import { processPayment } from "../../utils/paymentHelper";
-import { isBikeAvailable } from "../../utils/bookingHelper";
+import {
+  addReservation,
+  generateReservationId,
+  isBikeAvailable,
+} from "../../utils/bookingHelper";
 import { getDynamicPrice, getRentalDays } from "../../utils/rentalCalculations";
 import type { BikeInstance, BikeModel } from "../../types/Fleet";
 import StepDateSelection from "./components/StepDateSelection";
@@ -12,6 +16,7 @@ import StepBikeSelection from "./components/StepBikeSelection";
 import StepSummary from "./components/StepSummary";
 import StepPayment from "./components/StepPayment";
 import styles from "./RentBikePage.module.scss";
+import type { Reservation } from "../../types/Reservation";
 
 const MODELS = getModels();
 
@@ -132,19 +137,17 @@ const RentBikePage = () => {
       setPaymentStatus("success");
 
       // UPDATE RESERVATION STATUS (The Requirement)
-      // const totalCost = getDynamicPrice(getRentalDays()).total;
-      // addReservation({
-      //   userId: user?.id,
-      //   bikeId: chosenBike?.id,
-      //   model: chosenBikeModel.name,
-      //   city: userCity,
-      //   startDate: dates.start,
-      //   endDate: dates.end,
-      //   totalCost: totalCost,
-      //   status: "confirmed",
-      // });
-
-      // Redirect
+      const totalCost = getDynamicPrice(getRentalDays(dates)).total;
+      const newReservation: Reservation = {
+        id: generateReservationId(),
+        userId: user!.id!,
+        bikeId: chosenBike!.id,
+        startDate: dates.start,
+        endDate: dates.end,
+        totalCost: totalCost,
+        status: "confirmed",
+      };
+      addReservation(newReservation);
       setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
       console.log(error);
