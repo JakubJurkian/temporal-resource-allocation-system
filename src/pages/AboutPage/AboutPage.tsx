@@ -1,9 +1,8 @@
 import styles from "./AboutPage.module.scss";
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 const AboutPage = () => {
   return (
-    <LandingPageLayout>
+    <>
       {/* --- Hero Section --- */}
       <section className={styles.hero}>
         <div className={styles.glowOrb} aria-hidden="true"></div>
@@ -65,7 +64,7 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-    </LandingPageLayout>
+    </>
   );
 };
 

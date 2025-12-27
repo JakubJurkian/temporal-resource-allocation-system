@@ -1,9 +1,8 @@
 import styles from "./ContactPage.module.scss";
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 export default function ContactPage() {
   return (
-    <LandingPageLayout>
+    <>
       <section className={styles.contactSection}>
         <h2>Get in Touch</h2>
         <p className={styles.contactSubtitle}>
@@ -44,6 +43,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-    </LandingPageLayout>
+    </>
   );
 }

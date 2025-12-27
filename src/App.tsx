@@ -11,6 +11,7 @@ import FleetPage from "./pages/FleetPage/FleetPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import ContactPage from "./pages/ContactPage/ContactPage";
 
+import MainLayout from "./components/MainLayout/MainLayout";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
 import ScrollToTop from "./components/Utils/ScrollToTop";
@@ -21,16 +22,18 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         {/* Public routes */}
-        <Route element={<PublicOnlyRoute />}>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/fleet" element={<FleetPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+        <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        <Route path="about" element={<AboutPage />} />
-        <Route path="pricing" element={<PricingPage />} />
-        <Route path="fleet" element={<FleetPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<NotFoundPage />} />
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>

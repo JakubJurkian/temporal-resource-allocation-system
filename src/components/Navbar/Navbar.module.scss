@@ -1,0 +1,60 @@
+@use "../../styles/variables" as v;
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 3rem;
+  background: v.$color-bg-main; 
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: v.$color-text-main;
+  text-decoration: none;
+
+  span {
+    color: v.$color-primary;
+  }
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  font-size: 0.9rem;
+
+  @media (min-width: v.$tablet) {
+    gap: 2rem;
+    font-size: 1rem;
+  }
+
+  a {
+    color: v.$color-text-muted;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    white-space: nowrap;
+    
+    &:hover {
+      color: v.$color-text-main;
+    }
+  }
+
+  .loginBtn {
+    border: 1px solid v.$color-primary;
+    color: v.$color-primary;
+    padding: 0.4rem 1.2rem;
+    border-radius: v.$radius-md;
+    font-weight: 500;
+    transition: all 0.2s; // Changed to 'all' for smoother hover
+    text-decoration: none;
+
+    &:hover {
+      background: rgba(v.$color-primary, 0.1);
+      color: v.$color-text-main;
+    }
+    cursor: pointer;
+  }
+}

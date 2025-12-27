@@ -1,38 +1,9 @@
-import { Link } from "react-router-dom";
 import styles from "./LandingPage.module.scss";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { logout } from "../../store/slices/authSlice";
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 import LandingBtn from "../../components/LandingBtn/LandingBtn";
 
 const LandingPage = () => {
-  const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-  console.log(isAuthenticated);
-
-  const logoutHandle = () => {
-    dispatch(logout());
-  };
-
-  const navLinks = (
-    <div className={styles.navLinks}>
-      <Link to="/about">About</Link>
-      <Link to="/pricing">Pricing</Link>
-      {!isAuthenticated && (
-        <Link to="/login" className={styles.loginBtn}>
-          Login
-        </Link>
-      )}
-      {isAuthenticated && (
-        <div className={styles.loginBtn} onClick={logoutHandle}>
-          Logout
-        </div>
-      )}
-    </div>
-  );
-
   return (
-    <LandingPageLayout showBackBtn={false} headerActions={navLinks}>
+    <>
       <section className={styles.heroSection}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
@@ -94,7 +65,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-    </LandingPageLayout>
+    </>
   );
 };
 

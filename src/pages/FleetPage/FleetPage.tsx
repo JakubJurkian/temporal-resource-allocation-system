@@ -1,5 +1,4 @@
 import styles from "./FleetPage.module.scss";
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 const FleetPage = () => {
   // Realistic mock data for FOOD DELIVERY context
@@ -34,7 +33,7 @@ const FleetPage = () => {
   ];
 
   return (
-    <LandingPageLayout backLink="/">
+    <>
       <div className={styles.header}>
         <h1>Delivery Fleet.</h1>
         <p>
@@ -102,7 +101,7 @@ const FleetPage = () => {
           </article>
         ))}
       </div>
-    </LandingPageLayout>
+    </>
   );
 };
 
