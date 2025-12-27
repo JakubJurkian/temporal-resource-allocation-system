@@ -13,7 +13,7 @@ const AboutPage = () => {
         <p className={styles.lead}>
           We are VeloCity. We believe the future of urban transport is silent,
           clean, and incredibly fast. Our mission is to replace 100,000 car
-          trips with e-bike rides by 2026.
+          trips with e-bike rides by 2027.
         </p>
       </section>
 

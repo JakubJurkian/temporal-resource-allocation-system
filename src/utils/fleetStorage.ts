@@ -57,7 +57,7 @@ const FLEET_CONFIG: FleetConfigItem[] = [
 ];
 
 export const initializeFleet = () => {
-  // Save Models to Storage (So it can be edited in Admin Panel)
+  // Save Models to Storage
   if (!localStorage.getItem("velocity_models")) {
     localStorage.setItem("velocity_models", JSON.stringify(MODELS));
   }
