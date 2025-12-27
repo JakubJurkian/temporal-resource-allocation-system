@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
-import { getUserReservations } from "../../utils/bookingHelper";
+import { cancelReservation, getUserReservations } from "../../utils/bookingHelper";
 import { getModels } from "../../utils/fleetStorage";
 import type { Reservation } from "../../types/Reservation";
 import styles from "./RentalsPage.module.scss";
@@ -22,6 +22,7 @@ const HistoryPage = () => {
 
   useEffect(() => {
     if (user?.id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setReservations(getUserReservations(user.id));
       setModels(getModels());
     }
@@ -33,6 +34,32 @@ const HistoryPage = () => {
     const modelCode = bikeId.split("-")[1];
     const model = models.find((m) => m.id === modelCode);
     return model ? model.name : bikeId;
+  };
+
+  const handleCancel = (reservationId: string) => {
+    // confirm action
+    if (!window.confirm("Are you sure you want to cancel this reservation?"))
+      return;
+
+    const success = cancelReservation(reservationId);
+
+    if (success && user) {
+      // Refresh the list immediately to show the "Cancelled" status
+      setReservations(getUserReservations(user.id!));
+    } else {
+      alert("Could not cancel reservation. It might be in the past.");
+    }
+  };
+
+  // LOGIC: When to show the button?
+  const isCancellable = (res: Reservation) => {
+    if (res.status !== "confirmed") return false; // Can't cancel if already cancelled
+
+    const tripDate = new Date(res.startDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Ignore time, compare dates only
+
+    return tripDate >= today; // Allow cancelling up until the day of
   };
 
   if (!reservations.length) {
@@ -92,6 +119,16 @@ const HistoryPage = () => {
                 <span className={styles.price}>{res.totalCost} PLN</span>
               </div>
             </div>
+            {isCancellable(res) && (
+              <div className={styles.cardFooter}>
+                <button
+                  className={styles.cancelBtn}
+                  onClick={() => handleCancel(res.id)}
+                >
+                  Cancel Reservation
+                </button>
+              </div>
+            )}
           </article>
         ))}
       </div>

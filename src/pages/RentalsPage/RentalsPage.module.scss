@@ -235,3 +235,28 @@
     margin-bottom: 1rem;
   }
 }
+
+.cardFooter {
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cancelBtn {
+  background: transparent;
+  border: 1px solid v.$danger;
+  color: v.$danger;
+  padding: 0.5rem 1rem;
+  border-radius: v.$radius-md;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: v.$danger;
+    color: #fff;
+  }
+}
