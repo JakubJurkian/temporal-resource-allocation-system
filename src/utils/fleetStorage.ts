@@ -25,22 +25,28 @@ const MODELS: BikeModel[] = [
   },
 ];
 
+type FleetConfigItem = {
+  modelId: "s1" | "xl" | "ep2";
+  city: string;
+  amount: number;
+};
+
 // CONFIG FOR GENERATION
-const FLEET_CONFIG = [
+const FLEET_CONFIG: FleetConfigItem[] = [
   { modelId: "s1", city: "Warsaw", amount: 15 },
-  { modelId: "en2", city: "Warsaw", amount: 8 },
+  { modelId: "ep2", city: "Warsaw", amount: 8 },
   { modelId: "xl", city: "Warsaw", amount: 5 },
 
   { modelId: "s1", city: "Gdansk", amount: 8 },
-  { modelId: "en2", city: "Gdansk", amount: 5 },
+  { modelId: "ep2", city: "Gdansk", amount: 5 },
   { modelId: "xl", city: "Gdansk", amount: 2 },
 
   { modelId: "s1", city: "Krakow", amount: 12 },
-  { modelId: "en2", city: "Krakow", amount: 4 },
+  { modelId: "ep2", city: "Krakow", amount: 4 },
   { modelId: "xl", city: "Krakow", amount: 2 },
 
   { modelId: "s1", city: "Wroclaw", amount: 8 },
-  { modelId: "en2", city: "Wroclaw", amount: 6 },
+  { modelId: "ep2", city: "Wroclaw", amount: 6 },
   { modelId: "xl", city: "Wroclaw", amount: 3 },
 ];
 
@@ -72,13 +78,22 @@ export const initializeFleet = () => {
 };
 
 // GETTERS
-
 export const getModels = (): BikeModel[] => {
-  const data = localStorage.getItem("velocity_models");
-  return data ? JSON.parse(data) : MODELS;
+  try {
+    const data = localStorage.getItem("velocity_models");
+    return data ? JSON.parse(data) : MODELS;
+  } catch (error) {
+    console.error("Local storage corrupted, falling back to defaults", error);
+    return MODELS;
+  }
 };
 
 export const getFleet = (): BikeInstance[] => {
-  const data = localStorage.getItem("velocity_fleet");
-  return data ? JSON.parse(data) : [];
+  try {
+    const data = localStorage.getItem("velocity_fleet");
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error("Fleet storage corrupted", error);
+    return [];
+  }
 };
