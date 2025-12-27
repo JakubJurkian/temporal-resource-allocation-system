@@ -1,40 +1,13 @@
+import { useState } from "react";
+import { getModels } from "../../utils/fleetStorage";
 import styles from "./FleetPage.module.scss";
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 const FleetPage = () => {
-  // Realistic mock data for FOOD DELIVERY context
-  const bikes = [
-    {
-      id: 1,
-      model: "Sprint Courier S1",
-      category: "Agility",
-      description:
-        "The choice for city centers. Lightweight and agile enough to weave through traffic jams. Perfect for backpack delivery.",
-      stats: { speed: 45, range: 80, capacity: 40 }, // High speed/agility, low cargo (backpack only)
-      imageEmoji: "🛵",
-    },
-    {
-      id: 2,
-      model: "Endurance Pro 2.0",
-      category: "Long-Shift",
-      description:
-        "Built for the 10-hour shift warrior. Dual-battery system ensures you never run out of juice during the dinner rush.",
-      stats: { speed: 35, range: 100, capacity: 60 }, // Huge range, average speed
-      imageEmoji: "🔋",
-    },
-    {
-      id: 3,
-      model: "Cargo King XL",
-      category: "Heavy Duty",
-      description:
-        "Large grocery order? 10 Pizzas? No problem. Features a front insulated box and heavy-duty rear rack.",
-      stats: { speed: 25, range: 60, capacity: 100 }, // Low speed, Max cargo
-      imageEmoji: "🍕",
-    },
-  ];
+  const [bikes] = useState(() => getModels());
+  // Lazy init: reads LS only ONCE, on mount
 
   return (
-    <LandingPageLayout backLink="/">
+    <>
       <div className={styles.header}>
         <h1>Delivery Fleet.</h1>
         <p>
@@ -56,7 +29,7 @@ const FleetPage = () => {
 
             {/* Info Side */}
             <div className={styles.info}>
-              <h2>{bike.model}</h2>
+              <h2>{bike.name}</h2>
               <p className={styles.desc}>{bike.description}</p>
 
               <div className={styles.statsContainer}>
@@ -77,7 +50,7 @@ const FleetPage = () => {
                 <div className={styles.statRow}>
                   <span className={styles.label}>Range</span>
                   <div className={styles.barTrack}>
-                    {/* Scaled based on max range approx 150km */}
+                    {/* Scaled based on max range approx 100km */}
                     <div
                       className={styles.barFill}
                       style={{ width: `${(bike.stats.range / 100) * 100}%` }}
@@ -86,7 +59,7 @@ const FleetPage = () => {
                   <span className={styles.value}>{bike.stats.range} km</span>
                 </div>
 
-                {/* Stat: Capacity (Changed from Comfort) */}
+                {/* Stat: Capacity */}
                 <div className={styles.statRow}>
                   <span className={styles.label}>Capacity</span>
                   <div className={styles.barTrack}>
@@ -102,7 +75,7 @@ const FleetPage = () => {
           </article>
         ))}
       </div>
-    </LandingPageLayout>
+    </>
   );
 };
 

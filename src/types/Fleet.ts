@@ -3,6 +3,7 @@ export interface BikeModel {
   id: string;
   name: string;
   category: string;
+  description: string;
   stats: {
     speed: number;
     range: number;

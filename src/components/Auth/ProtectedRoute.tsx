@@ -1,18 +1,17 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 interface ProtectedRouteProps {
-  allowedRoles: string[]; // e.g., ["admin", "user"]
+  allowedRoles: ["admin", "user"];
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const location = useLocation();
-  // select current auth state
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   // Not Logged In? -> Send to Login
   // "state={{ from: location }}" lets redirect them back after login
   if (!isAuthenticated || !user) {
-    return <Navigate to="/" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   // Logged In, but Wrong Role? -> Send to Unauthorized

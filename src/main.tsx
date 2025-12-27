@@ -7,8 +7,18 @@ import { initializeUsers } from "./utils/userStorage";
 import { initializeFleet } from "./utils/fleetStorage";
 import "./styles/globals.scss";
 
-initializeUsers();
-initializeFleet();
+// initialize data for localStorage
+const bootstrapApp = () => {
+  try {
+    initializeUsers();
+    initializeFleet();
+  } catch (error) {
+    console.error("Failed to initialize app data:", error);
+  }
+};
+bootstrapApp();
+// With try/catch, the whole app does not crash, the user will see rendered JSX.
+// It's a good practice to control global side-effects.
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

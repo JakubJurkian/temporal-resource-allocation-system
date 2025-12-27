@@ -11,9 +11,11 @@ import FleetPage from "./pages/FleetPage/FleetPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import ContactPage from "./pages/ContactPage/ContactPage";
 
+import MainLayout from "./components/MainLayout/MainLayout";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
 import ScrollToTop from "./components/Utils/ScrollToTop";
+import RentalsPage from "./pages/RentalsPage/RentalsPage";
 
 const App = () => {
   return (
@@ -21,22 +23,26 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         {/* Public routes */}
-        <Route element={<PublicOnlyRoute />}>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/fleet" element={<FleetPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+        {/* Public ONLY routes */}
+        <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        <Route path="about" element={<AboutPage />} />
-        <Route path="pricing" element={<PricingPage />} />
-        <Route path="fleet" element={<FleetPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<NotFoundPage />} />
 
         {/* Protected routes */}
-        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["admin", "user"]} />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/rent-bike" element={<RentBikePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/my-rentals" element={<RentalsPage />} />
         </Route>
       </Routes>
     </Router>

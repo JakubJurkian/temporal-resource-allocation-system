@@ -1,10 +1,9 @@
 import styles from "./AboutPage.module.scss";
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 
 const AboutPage = () => {
   return (
-    <LandingPageLayout>
-      {/* --- Hero Section --- */}
+    <>
+      {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.glowOrb} aria-hidden="true"></div>
         <h1>
@@ -18,7 +17,7 @@ const AboutPage = () => {
         </p>
       </section>
 
-      {/* --- Stats Grid --- */}
+      {/* Stats Grid */}
       <section className={styles.statsGrid}>
         <div className={styles.statCard}>
           <span className={styles.statNumber}>2.5M</span>
@@ -38,7 +37,7 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* --- Values Section --- */}
+      {/* Values Section */}
       <section className={styles.valuesSection}>
         <h2>Our Core Values</h2>
         <div className={styles.valueRow}>
@@ -65,7 +64,7 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-    </LandingPageLayout>
+    </>
   );
 };
 

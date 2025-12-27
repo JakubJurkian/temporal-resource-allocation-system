@@ -1,0 +1,14 @@
+@use "../../styles/variables" as v;
+
+.container {
+  min-height: 100vh;
+  background-color: v.$color-bg-main;
+  color: v.$color-text-main;
+  padding: 1.5rem;
+}
+
+.content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}

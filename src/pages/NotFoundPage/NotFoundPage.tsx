@@ -1,9 +1,8 @@
-import { LandingPageLayout } from "../../components/LandingLayout/LandingPageLayout";
 import styles from "./NotFoundPage.module.scss";
 
 export default function NotFoundPage() {
   return (
-    <LandingPageLayout>
+    <>
       <div className={styles.errorContainer}>
         <h1 className={styles.errorCode}>404</h1>
 
@@ -16,6 +15,6 @@ export default function NotFoundPage() {
           </p>
         </div>
       </div>
-    </LandingPageLayout>
+    </>
   );
 }

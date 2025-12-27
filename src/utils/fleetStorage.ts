@@ -7,12 +7,16 @@ const MODELS: BikeModel[] = [
     name: "Sprint Courier S1",
     category: "Agility",
     stats: { speed: 45, range: 80, capacity: 40 },
+    description:
+      "The choice for city centers. Lightweight and agile enough to weave through traffic jams. Perfect for backpack delivery.",
     imageEmoji: "🛵",
   },
   {
     id: "xl",
     name: "Cargo King XL",
     category: "Heavy Duty",
+    description:
+      "Large grocery order? 10 Pizzas? No problem. Features a front insulated box and heavy-duty rear rack.",
     stats: { speed: 25, range: 60, capacity: 100 },
     imageEmoji: "🍕",
   },
@@ -20,27 +24,35 @@ const MODELS: BikeModel[] = [
     id: "ep2",
     name: "Endurance Pro 2.0",
     category: "Dual-battery system",
+    description:
+      "Built for the 10-hour shift warrior. Dual-battery system ensures you never run out of juice during the dinner rush.",
     stats: { speed: 35, range: 100, capacity: 60 },
     imageEmoji: "🔋",
   },
 ];
 
+type FleetConfigItem = {
+  modelId: "s1" | "xl" | "ep2";
+  city: string;
+  amount: number;
+};
+
 // CONFIG FOR GENERATION
-const FLEET_CONFIG = [
+const FLEET_CONFIG: FleetConfigItem[] = [
   { modelId: "s1", city: "Warsaw", amount: 15 },
-  { modelId: "en2", city: "Warsaw", amount: 8 },
+  { modelId: "ep2", city: "Warsaw", amount: 8 },
   { modelId: "xl", city: "Warsaw", amount: 5 },
 
   { modelId: "s1", city: "Gdansk", amount: 8 },
-  { modelId: "en2", city: "Gdansk", amount: 5 },
+  { modelId: "ep2", city: "Gdansk", amount: 5 },
   { modelId: "xl", city: "Gdansk", amount: 2 },
 
   { modelId: "s1", city: "Krakow", amount: 12 },
-  { modelId: "en2", city: "Krakow", amount: 4 },
+  { modelId: "ep2", city: "Krakow", amount: 4 },
   { modelId: "xl", city: "Krakow", amount: 2 },
 
   { modelId: "s1", city: "Wroclaw", amount: 8 },
-  { modelId: "en2", city: "Wroclaw", amount: 6 },
+  { modelId: "ep2", city: "Wroclaw", amount: 6 },
   { modelId: "xl", city: "Wroclaw", amount: 3 },
 ];
 
@@ -72,13 +84,22 @@ export const initializeFleet = () => {
 };
 
 // GETTERS
-
 export const getModels = (): BikeModel[] => {
-  const data = localStorage.getItem("velocity_models");
-  return data ? JSON.parse(data) : MODELS;
+  try {
+    const data = localStorage.getItem("velocity_models");
+    return data ? JSON.parse(data) : MODELS;
+  } catch (error) {
+    console.error("Local storage corrupted, falling back to defaults", error);
+    return MODELS;
+  }
 };
 
 export const getFleet = (): BikeInstance[] => {
-  const data = localStorage.getItem("velocity_fleet");
-  return data ? JSON.parse(data) : [];
+  try {
+    const data = localStorage.getItem("velocity_fleet");
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error("Fleet storage corrupted", error);
+    return [];
+  }
 };

@@ -1,24 +1,5 @@
 @use "../../styles/variables" as v;
 
-.container {
-  min-height: 100vh;
-  background-color: v.$color-bg-main;
-  color: v.$color-text-main;
-  padding: 1.5rem;
-}
-
-.topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto 4rem auto;
-  .logo { font-size: 1.5rem; font-weight: 800; .highlight { color: v.$color-primary; } }
-  .backLink { color: v.$color-text-muted; transition: color 0.2s; &:hover { color: v.$color-text-main; } }
-}
-
-.content { max-width: 900px; margin: 0 auto; }
-
 .header {
   text-align: center; margin-bottom: 4rem;
   h1 { font-size: 3rem; margin-bottom: 0.5rem; }
@@ -40,7 +21,7 @@
 
   &:hover { transform: translateY(-3px); border-color: rgba(v.$color-primary, 0.3); }
 
-  @media (min-width: 768px) {
+  @media (min-width: v.$tablet) {
     flex-direction: row;
     min-height: 300px;
   }
