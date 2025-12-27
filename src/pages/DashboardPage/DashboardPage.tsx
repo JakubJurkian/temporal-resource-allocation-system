@@ -96,23 +96,25 @@ const DashboardPage = () => {
 
         {/* --- Stats Grid --- */}
         <section className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <h3>Active Rentals</h3>
-            <div className={styles.statValue}>
-              {activeRentals}
-              <span className={styles.statUnit}>
-                {activeRentals === 1 ? "bike" : "bikes"}
-              </span>
+          <Link to="/my-rentals">
+            <div className={styles.statCard}>
+              <h3>Rentals</h3>
+              <div className={styles.statValue}>
+                {activeRentals}
+                <span className={styles.statUnit}>
+                  {activeRentals === 1 ? "bike" : "bikes"}
+                </span>
+              </div>
+              {/* Show 'Ongoing' only if there are active rentals */}
+              <div
+                className={`${styles.statusIndicator} ${
+                  activeRentals > 0 ? styles.active : ""
+                }`}
+              >
+                {activeRentals > 0 ? "Ongoing" : "No active rides"}
+              </div>
             </div>
-            {/* Show 'Ongoing' only if there are active rentals */}
-            <div
-              className={`${styles.statusIndicator} ${
-                activeRentals > 0 ? styles.active : ""
-              }`}
-            >
-              {activeRentals > 0 ? "Ongoing" : "No active rides"}
-            </div>
-          </div>
+          </Link>
 
           <div className={styles.statCard}>
             <h3>Fleet Status</h3>

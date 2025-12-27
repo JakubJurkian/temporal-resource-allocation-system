@@ -75,3 +75,21 @@ export const generateReservationId = (): string => {
   const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `${prefix}-${randomPart}`;
 };
+
+export const getUserReservations = (userId: string): Reservation[] => {
+  try {
+    const data = localStorage.getItem("velocity_reservations");
+    if (!data) return [];
+
+    const allReservations: Reservation[] = JSON.parse(data);
+
+    return allReservations
+      .filter((r) => r.userId === userId)
+      .sort(
+        (a, b) =>
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+      );
+  } catch (e) {
+    return [];
+  }
+};

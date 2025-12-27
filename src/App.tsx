@@ -15,6 +15,7 @@ import MainLayout from "./components/MainLayout/MainLayout";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
 import ScrollToTop from "./components/Utils/ScrollToTop";
+import RentalsPage from "./pages/RentalsPage/RentalsPage";
 
 const App = () => {
   return (
@@ -37,10 +38,11 @@ const App = () => {
         </Route>
 
         {/* Protected routes */}
-        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["admin", "user"]} />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/rent-bike" element={<RentBikePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/my-rentals" element={<RentalsPage />} />
         </Route>
       </Routes>
     </Router>

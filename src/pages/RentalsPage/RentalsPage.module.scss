@@ -1,0 +1,237 @@
+@use "../../styles/variables" as v;
+
+// --- LAYOUT UTILS ---
+.container {
+  min-height: 100dvh; // dynamic viewport height prevents scroll lock in modern browsers
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto; // allow vertical scroll within the page container
+  display: flex;
+  flex-direction: column;
+}
+
+// Background Orbs (Dual styling for balance)
+.glowOrbRight {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-primary, 0.08) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  top: -200px;
+  right: -200px;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0); // GPU hint to reduce paint cost during scroll
+}
+.glowOrbLeft {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-secondary, 0.08) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  bottom: -200px;
+  left: -200px;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0); // GPU hint to reduce paint cost during scroll
+}
+
+// --- TOP BAR ---
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 2rem;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: v.$color-text-main;
+    .highlight {
+      color: v.$color-primary;
+    }
+  }
+
+  .navActions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .backLink {
+    color: v.$color-text-muted;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+    &:hover {
+      color: v.$color-text-main;
+    }
+  }
+
+  .logoutBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: v.$color-text-muted;
+    padding: 0.5rem 1rem;
+    border-radius: v.$radius-md;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: v.$danger; // Red for logout
+      color: v.$danger;
+      background: rgba(v.$danger, 0.05);
+    }
+  }
+}
+
+// --- MAIN CONTENT ---
+.content {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 4rem;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  p {
+    color: v.$color-text-muted;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @media (min-width: v.$tablet) {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+.card {
+  background: v.$color-bg-card;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: v.$radius-lg;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  // Status Coloring Border
+  &.confirmed {
+    border-left: 4px solid v.$success;
+  }
+  &.cancelled {
+    border-left: 4px solid v.$danger;
+    opacity: 0.7;
+  }
+  &.completed {
+    border-left: 4px solid v.$color-text-muted;
+  }
+}
+
+.statusBadge {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  // Dynamic Text Colors based on parent class
+  .confirmed & {
+    color: v.$success;
+  }
+  .cancelled & {
+    color: v.$danger;
+  }
+}
+
+.cardContent {
+  padding: 1.5rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+
+  .label {
+    color: v.$color-text-muted;
+  }
+
+  .valueHighlight {
+    color: v.$color-primary;
+    font-weight: 600;
+  }
+
+  .mono {
+    font-family: monospace;
+    opacity: 0.6;
+    font-size: 0.85rem;
+  }
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 1rem 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+
+  .price {
+    font-size: 1.25rem;
+    color: v.$color-text-main;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  margin-top: 5rem;
+  opacity: 0.6;
+  .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+}
