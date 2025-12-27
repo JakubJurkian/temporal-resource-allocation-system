@@ -3,10 +3,11 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
 import styles from "./DashboardPage.module.scss";
 import Footer from "../../components/Footer/Footer";
+import { useEffect, useState } from "react";
+import type { Reservation } from "../../types/Reservation";
 
 // Fake Data
 const MOCK_STATS = {
-  activeRentals: 1,
   bikesAvailable: 42,
   totalDistance: "128 km",
   caloriesBurned: "3,200",
@@ -15,12 +16,47 @@ const MOCK_STATS = {
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user } = useAppSelector((state) => state.auth);
+  // Safe access in case auth state isn't ready
+  const user = useAppSelector((state) => state.auth.user);
+
+  // --- HELPER FUNCTION ---
+  const getActiveCount = (userId: string) => {
+    try {
+      const storedData = localStorage.getItem("velocity_reservations");
+      if (!storedData) return 0;
+
+      const parsedData = JSON.parse(storedData);
+      // Filter for THIS user and confirmed status
+      return parsedData.filter(
+        (r: Reservation) => r.userId === userId && r.status === "confirmed"
+      ).length;
+    } catch (e) {
+      console.log(e);
+      return 0;
+    }
+  };
+
+  const [activeRentals, setActiveRentals] = useState<number>(() =>
+    getActiveCount(user?.id || "")
+  );
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/", { replace: true });
   };
+
+  // Sync state if user changes (e.g. re-login scenario)
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const count = getActiveCount(user.id);
+
+    // Safety check prevents infinite loops
+    if (count !== activeRentals) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveRentals(count);
+    }
+  }, [user?.id, activeRentals]);
 
   if (!user) return null;
 
@@ -58,16 +94,23 @@ const DashboardPage = () => {
           <p className={styles.subtitle}>Ready for your next ride?</p>
         </section>
 
-        {/* --- Stats Grid (Fake Data) --- */}
+        {/* --- Stats Grid --- */}
         <section className={styles.statsGrid}>
           <div className={styles.statCard}>
             <h3>Active Rentals</h3>
             <div className={styles.statValue}>
-              {MOCK_STATS.activeRentals}
-              <span className={styles.statUnit}>bike</span>
+              {activeRentals}
+              <span className={styles.statUnit}>
+                {activeRentals === 1 ? "bike" : "bikes"}
+              </span>
             </div>
-            <div className={`${styles.statusIndicator} ${styles.active}`}>
-              Ongoing
+            {/* Show 'Ongoing' only if there are active rentals */}
+            <div
+              className={`${styles.statusIndicator} ${
+                activeRentals > 0 ? styles.active : ""
+              }`}
+            >
+              {activeRentals > 0 ? "Ongoing" : "No active rides"}
             </div>
           </div>
 
