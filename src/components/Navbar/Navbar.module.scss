@@ -5,14 +5,13 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 3rem;
-  background: v.$color-bg-main; 
+  background: v.$color-bg-main;
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: 800;
   color: v.$color-text-main;
-  text-decoration: none;
 
   span {
     color: v.$color-primary;
@@ -32,11 +31,10 @@
 
   a {
     color: v.$color-text-muted;
-    text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
     white-space: nowrap;
-    
+
     &:hover {
       color: v.$color-text-main;
     }
@@ -49,7 +47,6 @@
     border-radius: v.$radius-md;
     font-weight: 500;
     transition: all 0.2s; // Changed to 'all' for smoother hover
-    text-decoration: none;
 
     &:hover {
       background: rgba(v.$color-primary, 0.1);

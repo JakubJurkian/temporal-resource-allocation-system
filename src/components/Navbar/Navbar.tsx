@@ -24,20 +24,18 @@ export const Navbar = () => {
 
       {/* Navigation Area */}
       <div className={styles.navLinks}>
-        {/* Public Links (Visible to everyone) */}
-        <Link to="/about">About</Link>
-        <Link to="/pricing">Pricing</Link>
-
         {/* Auth Dependent Links */}
         {!isAuthenticated ? (
-          <Link to="/login" className={styles.loginBtn}>
-            Login
-          </Link>
+          <>
+            <Link to="/about">About</Link>
+            <Link to="/pricing">Pricing</Link>
+            <Link to="/login" className={styles.loginBtn}>
+              Login
+            </Link>
+          </>
         ) : (
           <>
-            {/* Dashboard Link (Optional, if you want it in the header) */}
             <Link to="/dashboard">Dashboard</Link>
-
             <div className={styles.loginBtn} onClick={logoutHandle}>
               Logout
             </div>

@@ -1,55 +1,27 @@
 @use "../../styles/variables" as v;
 
-.container {
-  min-height: 100vh;
-  background-color: v.$color-bg-main;
-  color: v.$color-text-main;
-  padding: 1.5rem;
-  overflow-x: hidden;
-}
-
-.topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto 3rem auto;
-
-  .logo {
-    font-size: 1.5rem;
-    font-weight: 800;
-    .highlight { color: v.$color-primary; }
-  }
-
-  .backLink {
-    color: v.$color-text-muted;
-    text-decoration: none;
-    transition: color 0.2s;
-    &:hover { color: v.$color-text-main; }
-  }
-}
-
-.content {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
 .header {
   text-align: center;
   margin-bottom: 4rem;
-  h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 800; }
-  p { color: v.$color-text-muted; font-size: 1.1rem; }
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+  }
+  p {
+    color: v.$color-text-muted;
+    font-size: 1.1rem;
+  }
 }
 
 .pricingGrid {
   display: grid;
   gap: 2rem;
   grid-template-columns: 1fr;
-  
-  // Responsive Grid
-  @media (min-width: 900px) {
+
+  @media (min-width: v.$tablet) {
     grid-template-columns: repeat(3, 1fr);
-    align-items: flex-start; // Align tops of cards
+    // align-items: flex-start; // Align tops of cards
   }
 
   .card {
@@ -61,7 +33,7 @@
     transition: transform 0.2s, border-color 0.2s;
     display: flex;
     flex-direction: column;
-    
+
     &:hover {
       transform: translateY(-5px);
       border-color: rgba(v.$color-primary, 0.3);
@@ -69,14 +41,20 @@
 
     // Popular Card Styling (Middle one)
     &.popular {
-      background: linear-gradient(180deg, rgba(v.$color-primary, 0.08) 0%, v.$color-bg-card 100%);
+      background: linear-gradient(
+        180deg,
+        rgba(v.$color-primary, 0.08) 0%,
+        v.$color-bg-card 100%
+      );
       border: 1px solid v.$color-primary;
       box-shadow: 0 0 40px rgba(v.$color-primary, 0.1);
-      
-      @media (min-width: 900px) {
+
+      @media (min-width: v.$tablet) {
         transform: scale(1.05); // Make it slightly bigger on desktop
         z-index: 2;
-        &:hover { transform: scale(1.05) translateY(-5px); }
+        &:hover {
+          transform: scale(1.05) translateY(-5px);
+        }
       }
     }
 
@@ -112,14 +90,24 @@
 
     .priceContainer {
       margin-bottom: 1rem;
-      
-      .label { display: block; font-size: 0.8rem; color: v.$color-text-muted; margin-bottom: 0.25rem; }
-      
+
+      .label {
+        display: block;
+        font-size: 0.8rem;
+        color: v.$color-text-muted;
+        margin-bottom: 0.25rem;
+      }
+
       .priceRange {
         font-size: 2rem;
         font-weight: 800;
         color: v.$color-text-main;
-        .currency { font-size: 1rem; font-weight: 400; color: v.$color-text-muted; margin-left: 4px; }
+        .currency {
+          font-size: 1rem;
+          font-weight: 400;
+          color: v.$color-text-muted;
+          margin-left: 4px;
+        }
       }
 
       .discountTag {
@@ -135,19 +123,22 @@
     }
 
     .depositInfo {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       padding: 0.75rem;
       border-radius: v.$radius-md;
       font-size: 0.9rem;
       color: v.$color-text-muted;
       text-align: center;
+      margin-top: auto;
       margin-bottom: 1.5rem;
-      strong { color: v.$color-text-main; }
+      strong {
+        color: v.$color-text-main;
+      }
     }
 
     .divider {
       height: 1px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       margin-bottom: 1.5rem;
     }
   }
