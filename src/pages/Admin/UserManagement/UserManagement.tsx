@@ -7,12 +7,39 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState<User[]>(() => getUsersFromStorage());
 
-  const handleBlockToggle = (userId: string, currentStatus: string) => {
-    const newStatus = currentStatus === "active" ? "blocked" : "active";
-    setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, status: newStatus } : u))
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  const handleBlockToggle = (
+    userId: string,
+    currentStatus: "active" | "blocked"
+  ) => {
+    const newStatus: "active" | "blocked" =
+      currentStatus === "active" ? "blocked" : "active";
+    const updatedUsers = users.map((u) =>
+      u.id === userId ? { ...u, status: newStatus } : u
     );
-    // localStorage.setItem("velocity_users", JSON.stringify(users));
+    setUsers(updatedUsers);
+    localStorage.setItem("velocity_users", JSON.stringify(updatedUsers));
+  };
+
+  const openEditModal = (user: User) => {
+    setEditingUser({ ...user }); // Create a copy so we don't mutate state directly
+    setIsModalOpen(true);
+  };
+
+  const handleSaveUser = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+
+    // Save changes
+    const updatedUsers = users.map((u) =>
+      u.id === editingUser.id ? editingUser : u
+    );
+    setUsers(updatedUsers);
+    localStorage.setItem("velocity_users", JSON.stringify(updatedUsers));
+    setIsModalOpen(false);
+    setEditingUser(null);
   };
 
   const filteredUsers = users.filter(
@@ -104,7 +131,7 @@ const UserManagement = () => {
                   {/* Edit Button */}
                   <button
                     className={styles.actionBtn}
-                    
+                    onClick={() => openEditModal(user)}
                   >
                     Edit
                   </button>
@@ -124,6 +151,109 @@ const UserManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* --- EDIT MODAL --- */}
+      {isModalOpen && editingUser && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h2>Edit User</h2>
+            <form onSubmit={handleSaveUser}>
+              {/* Full Width Row */}
+              <div className={styles.formGroup}>
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  value={editingUser.fullName}
+                  onChange={(e) =>
+                    setEditingUser({ ...editingUser, fullName: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              {/* Mobile: Stacked | Desktop: Side-by-Side */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    value={editingUser.email}
+                    onChange={(e) =>
+                      setEditingUser({ ...editingUser, email: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Phone Number</label>
+                  <input
+                    type="tel"
+                    value={editingUser.phone}
+                    onChange={(e) =>
+                      setEditingUser({ ...editingUser, phone: e.target.value })
+                    }
+                    placeholder="+48..."
+                  />
+                </div>
+              </div>
+
+              {/* Mobile: Stacked | Desktop: Side-by-Side */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label>Role</label>
+                  <select
+                    value={editingUser.role}
+                    onChange={(e) =>
+                      setEditingUser({
+                        ...editingUser,
+                        role: e.target.value as "admin" | "client",
+                      })
+                    }
+                  >
+                    <option value="client">Client</option>
+                    <option value="admin">Administrator</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>City</label>
+                  <select
+                    value={editingUser.city}
+                    onChange={(e) =>
+                      setEditingUser({
+                        ...editingUser,
+                        city: e.target.value as
+                          | "Warsaw"
+                          | "Gdansk"
+                          | "Poznan"
+                          | "Wroclaw",
+                      })
+                    }
+                  >
+                    <option value="Warsaw">Warsaw</option>
+                    <option value="Gdansk">Gdansk</option>
+                    <option value="Poznan">Poznan</option>
+                    <option value="Wroclaw">Wroclaw</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.modalActions}>
+                <button
+                  type="button"
+                  className={styles.secondaryBtn}
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className={styles.primaryBtn}>
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
