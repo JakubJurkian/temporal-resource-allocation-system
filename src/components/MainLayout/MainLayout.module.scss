@@ -1,23 +1,43 @@
 @use "../../styles/variables" as v;
 
-.container {
+.layoutWrapper {
+  position: relative;
   min-height: 100vh;
+  width: 100%;
   background-color: v.$color-bg-main;
   color: v.$color-text-main;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
 }
 
-.content {
+// Orb Container: This acts like a "frame" for the background
+// It sits behind everything and cuts off the overflow of the orbs.
+.orbContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; // <--- The Fix: Clips ONLY the orbs
+  z-index: 0;
+  pointer-events: none; // Clicks pass through to the content
+}
+
+.contentContainer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.mainContent {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 4rem;
-  flex: 1; // This pushes the footer down
+  flex: 1; // Pushes footer down
 }
 
-// Background Orbs (Dual styling for balance)
 .glowOrbRight {
   position: absolute;
   width: 600px;
@@ -29,11 +49,10 @@
   );
   top: -200px;
   right: -200px;
-  z-index: 0;
-  pointer-events: none;
   will-change: transform, opacity;
   transform: translateZ(0);
 }
+
 .glowOrbLeft {
   position: absolute;
   width: 600px;
@@ -45,8 +64,6 @@
   );
   bottom: -200px;
   left: -200px;
-  z-index: 0;
-  pointer-events: none;
   will-change: transform, opacity;
   transform: translateZ(0);
 }
