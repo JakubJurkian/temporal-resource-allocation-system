@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
 import ScrollToTop from "./components/Utils/ScrollToTop";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
+import UserManagement from "./pages/Admin/UserManagement/UserManagement";
 
 const App = () => {
   return (
@@ -36,7 +37,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-
+        <Route path="admin/user-management" element={<UserManagement />} />
         {/* Protected routes */}
         <Route element={<ProtectedRoute allowedRoles={["admin", "user"]} />}>
           <Route path="/dashboard" element={<DashboardPage />} />
