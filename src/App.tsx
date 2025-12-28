@@ -18,6 +18,7 @@ import ScrollToTop from "./components/Utils/ScrollToTop";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
 import UserManagement from "./pages/Admin/UserManagement/UserManagement";
 import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
+import Calendar from "./pages/Admin/Calendar/Calendar";
 
 const App = () => {
   return (
@@ -50,7 +51,7 @@ const App = () => {
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/admin/users" element={<UserManagement />} />
-            {/* <Route path="/admin/calendar" element={<AdminCalendar />} /> */}
+            <Route path="/admin/calendar" element={<Calendar />} />
           </Route>
         </Route>
       </Routes>
