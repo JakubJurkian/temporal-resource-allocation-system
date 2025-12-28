@@ -1,52 +1,41 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import styles from "./DashboardPage.module.scss";
-import { useEffect, useState } from "react";
 import type { Reservation } from "../../types/Reservation";
+import { getFleet } from "../../utils/fleetStorage";
 
-// Fake Data
-const MOCK_STATS = {
-  bikesAvailable: 42,
-  totalDistance: "128 km",
-  caloriesBurned: "3,200",
+const calculateActiveRentals = (userId: string): number => {
+  try {
+    const storedData = localStorage.getItem("velocity_reservations");
+    if (!storedData) return 0;
+
+    const parsedData: Reservation[] = JSON.parse(storedData);
+    return parsedData.filter(
+      (r) => r.userId === userId && r.status === "confirmed"
+    ).length;
+  } catch (error) {
+    console.error("Failed to parse reservations:", error);
+    return 0;
+  }
 };
 
 const DashboardPage = () => {
   const user = useAppSelector((state) => state.auth.user);
+  const userId = user?.id;
+  const userCity = user?.city;
+  const activeFleetCount = useMemo(() => {
+    if (!userId) return 0;
 
-  // --- HELPER FUNCTION ---
-  const getActiveCount = (userId: string) => {
-    try {
-      const storedData = localStorage.getItem("velocity_reservations");
-      if (!storedData) return 0;
+    const bikes = getFleet();
+    return bikes.filter((b) => b.city === userCity && b.status === "active")
+      .length;
+  }, [userId, userCity]);
 
-      const parsedData = JSON.parse(storedData);
-      // Filter for THIS user and confirmed status
-      return parsedData.filter(
-        (r: Reservation) => r.userId === userId && r.status === "confirmed"
-      ).length;
-    } catch (e) {
-      console.log(e);
-      return 0;
-    }
-  };
-
-  const [activeRentals, setActiveRentals] = useState<number>(() =>
-    getActiveCount(user?.id || "")
-  );
-
-  // Sync state if user changes (e.g. re-login scenario)
-  useEffect(() => {
-    if (!user?.id) return;
-
-    const count = getActiveCount(user.id);
-
-    // Safety check prevents infinite loops
-    if (count !== activeRentals) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setActiveRentals(count);
-    }
-  }, [user?.id, activeRentals]);
+  const activeRentals = useMemo(() => {
+    if (userId) return 0;
+    else return calculateActiveRentals(userId!);
+  }, [userId]);
 
   if (!user) return null;
 
@@ -65,35 +54,33 @@ const DashboardPage = () => {
 
       {/* --- Stats Grid --- */}
       <section className={styles.statsGrid}>
-        <Link to="/my-rentals">
-          <div className={styles.statCard}>
-            <h3>Rentals</h3>
-            <div className={styles.statValue}>
-              {activeRentals}
-              <span className={styles.statUnit}>
-                {activeRentals === 1 ? "bike" : "bikes"}
-              </span>
-            </div>
-            {/* Show 'Ongoing' only if there are active rentals */}
-            <div
-              className={`${styles.statusIndicator} ${
-                activeRentals > 0 ? styles.active : ""
-              }`}
-            >
-              {activeRentals > 0 ? "Ongoing" : "No active rides"}
-            </div>
+        <div className={styles.statCard}>
+          <h3>Rentals</h3>
+          <div className={styles.statValue}>
+            {activeRentals}
+            <span className={styles.statUnit}>
+              {activeRentals === 1 ? "bike" : "bikes"}
+            </span>
           </div>
-        </Link>
+          {/* Show 'Ongoing' only if there are active rentals */}
+          <div
+            className={`${styles.statusIndicator} ${
+              activeRentals > 0 ? styles.active : ""
+            }`}
+          >
+            {activeRentals > 0 ? "Ongoing" : "No active rides"}
+          </div>
+        </div>
 
         <div className={styles.statCard}>
           <h3>Fleet Status</h3>
-          <div className={styles.statValue}>{MOCK_STATS.bikesAvailable}</div>
+          <div className={styles.statValue}>{activeFleetCount}</div>
           <p className={styles.statLabel}>E-bikes nearby</p>
         </div>
 
         <div className={styles.statCard}>
           <h3>Your Impact</h3>
-          <div className={styles.statValue}>{MOCK_STATS.totalDistance}</div>
+          <div className={styles.statValue}>128 km</div>
           <p className={styles.statLabel}>Total distance ridden</p>
         </div>
       </section>
@@ -124,14 +111,15 @@ const DashboardPage = () => {
           <div className={styles.arrow}>➜</div>
         </Link>
 
-        {/* Action 3: History (Placeholder) */}
-        <div className={`${styles.actionCard} ${styles.disabled}`}>
+        {/* Action 3: History */}
+        <Link to="/my-rentals" className={styles.actionCard}>
           <div className={styles.icon}>📜</div>
           <div className={styles.actionInfo}>
             <h3>Ride History</h3>
-            <p>Coming soon...</p>
+            <p>View your ride history</p>
           </div>
-        </div>
+          <div className={styles.arrow}>➜</div>
+        </Link>
       </section>
     </>
   );

@@ -1,21 +1,41 @@
-@use "sass:color";
 @use "../../styles/variables" as v;
 
+// --- SHARED MIXINS ---
+@mixin dashboard-card {
+  background: v.$color-bg-card;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: v.$radius-lg;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    border-color: rgba(v.$color-primary, 0.3);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03)
+      ),
+      v.$color-bg-card;
+  }
+}
+
+// --- WELCOME SECTION ---
 .welcomeSection {
   margin-bottom: 3rem;
 
   h1 {
     font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
     line-height: 1.1;
+    margin-bottom: 0.5rem;
 
     @media (min-width: v.$tablet) {
       font-size: 3rem;
     }
 
     .highlight {
-      // Gradient text effect
       background: linear-gradient(
         to right,
         v.$color-primary,
@@ -24,6 +44,7 @@
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      display: inline-block;
     }
   }
 
@@ -31,23 +52,6 @@
     color: v.$color-text-muted;
     font-size: 1.1rem;
     max-width: 600px;
-  }
-}
-
-// --- SHARED CARD STYLES ---
-@mixin dashboard-card {
-  background: v.$color-bg-card; // Solid dark or semi-transparent
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: v.$radius-lg;
-  padding: 1.5rem;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-
-  // Hover Glow Effect
-  &:hover {
-    border-color: rgba(v.$color-primary, 0.3);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -79,8 +83,6 @@
       font-weight: 800;
       color: v.$color-text-main;
       line-height: 1;
-
-      // Neon number
       text-shadow: 0 0 20px rgba(v.$color-primary, 0.2);
 
       .statUnit {
@@ -99,12 +101,15 @@
       padding: 4px 10px;
       border-radius: 99px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+
+      background: rgba(255, 255, 255, 0.05);
+      color: v.$color-text-muted;
+      border: 1px solid rgba(255, 255, 255, 0.1);
 
       &.active {
         background: rgba(v.$success, 0.15);
         color: v.$success;
-        border: 1px solid rgba(v.$success, 0.2);
+        border-color: rgba(v.$success, 0.2);
       }
     }
   }
@@ -187,7 +192,6 @@
 
     // --- HOVER STATE ---
     &:hover {
-      background: color.adjust(v.$color-bg-card, $lightness: 2%);
       border-color: v.$color-primary;
 
       .icon {
@@ -205,10 +209,8 @@
       }
     }
 
-    // --- PRIMARY ACTION VARIANT ---
+    // --- VARIANTS ---
     &.primaryAction {
-      // Subtle gradient border effect
-      position: relative;
       border-color: rgba(v.$color-primary, 0.3);
       background: linear-gradient(
         135deg,
@@ -217,47 +219,10 @@
       );
     }
 
-    // --- DISABLED VARIANT ---
     &.disabled {
       opacity: 0.5;
       pointer-events: none;
       filter: grayscale(1);
-      border-style: dashed;
     }
-  }
-}
-
-.footer {
-  margin-top: 4rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1); // Subtle divider
-  text-align: center;
-  position: relative;
-  z-index: 1;
-
-  .footerLinks {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 1rem;
-
-    a {
-      color: v.$color-text-muted;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.2s;
-
-      &:hover {
-        color: v.$color-primary; // Neon hover effect
-        text-shadow: 0 0 10px rgba(v.$color-primary, 0.4);
-      }
-    }
-  }
-
-  .copyright {
-    color: v.$color-text-muted;
-    font-size: 0.8rem;
-    opacity: 0.6;
   }
 }
