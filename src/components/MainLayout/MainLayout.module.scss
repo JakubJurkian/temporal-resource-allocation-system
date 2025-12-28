@@ -5,10 +5,48 @@
   background-color: v.$color-bg-main;
   color: v.$color-text-main;
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding-bottom: 4rem;
+  flex: 1; // This pushes the footer down
+}
+
+// Background Orbs (Dual styling for balance)
+.glowOrbRight {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-primary, 0.08) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  top: -200px;
+  right: -200px;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+.glowOrbLeft {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-secondary, 0.08) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  bottom: -200px;
+  left: -200px;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }

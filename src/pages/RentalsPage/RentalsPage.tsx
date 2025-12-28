@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
-import { cancelReservation, getUserReservations } from "../../utils/bookingHelper";
+import {
+  cancelReservation,
+  getUserReservations,
+} from "../../utils/bookingHelper";
 import { getModels } from "../../utils/fleetStorage";
 import type { Reservation } from "../../types/Reservation";
 import styles from "./RentalsPage.module.scss";
@@ -73,7 +76,7 @@ const HistoryPage = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <>
       <header className={styles.header}>
         <h1>Ride History</h1>
         <p>Your past and upcoming journeys.</p>
@@ -132,7 +135,7 @@ const HistoryPage = () => {
           </article>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

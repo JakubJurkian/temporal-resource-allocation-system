@@ -5,17 +5,21 @@ import { Navbar } from "../Navbar/Navbar";
 
 const MainLayout = () => {
   return (
-    <div className={styles.container}>
-      {/* reusable Header */}
-      <Navbar />
+    <>
+      <div className={styles.glowOrbRight} aria-hidden="true"></div>
+      <div className={styles.glowOrbLeft} aria-hidden="true"></div>
+      <div className={styles.container}>
+        {/* reusable Header */}
+        <Navbar />
 
-      {/* Dynamic Content */}
-      <main className={styles.content}>
-        <Outlet />
-      </main>
-      {/* Global Footer */}
-      <Footer />
-    </div>
+        {/* Dynamic Content */}
+        <main className={styles.content}>
+          <Outlet />
+        </main>
+        {/* Global Footer */}
+        <Footer />
+      </div>
+    </>
   );
 };
 

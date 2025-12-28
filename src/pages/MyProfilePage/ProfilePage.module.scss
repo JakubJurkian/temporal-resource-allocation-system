@@ -1,115 +1,5 @@
 @use "../../styles/variables" as v;
 
-// --- LAYOUT UTILS ---
-.container {
-  min-height: 100dvh; // dynamic viewport height prevents scroll lock in modern browsers
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto; // allow vertical scroll within the page container
-  display: flex;
-  flex-direction: column;
-}
-
-// Background Orbs (Dual styling for balance)
-.glowOrbRight {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(v.$color-primary, 0.08) 0%,
-    rgba(0, 0, 0, 0) 70%
-  );
-  top: -200px;
-  right: -200px;
-  z-index: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
-  transform: translateZ(0); // GPU hint to reduce paint cost during scroll
-}
-.glowOrbLeft {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(v.$color-secondary, 0.08) 0%,
-    rgba(0, 0, 0, 0) 70%
-  );
-  bottom: -200px;
-  left: -200px;
-  z-index: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
-  transform: translateZ(0); // GPU hint to reduce paint cost during scroll
-}
-
-// --- TOP BAR ---
-.topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem 0;
-  position: relative;
-  z-index: 10;
-  margin-bottom: 2rem;
-
-  .logo {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: v.$color-text-main;
-    .highlight {
-      color: v.$color-primary;
-    }
-  }
-
-  .navActions {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .backLink {
-    color: v.$color-text-muted;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: color 0.2s;
-    &:hover {
-      color: v.$color-text-main;
-    }
-  }
-
-  .logoutBtn {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: v.$color-text-muted;
-    padding: 0.5rem 1rem;
-    border-radius: v.$radius-md;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border-color: v.$danger; // Red for logout
-      color: v.$danger;
-      background: rgba(v.$danger, 0.05);
-    }
-  }
-}
-
-// --- MAIN CONTENT ---
-.content {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 10;
-  padding-bottom: 4rem;
-}
-
 // --- PROFILE CARD (Glassmorphism) ---
 .profileCard {
   background: v.$color-bg-card;
@@ -121,6 +11,7 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+  margin-top: 64px;
 
   @media (min-width: v.$tablet) {
     flex-direction: row; // Side by side on desktop

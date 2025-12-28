@@ -1,15 +1,5 @@
 @use "../../styles/variables" as v;
 
-// --- LAYOUT UTILS ---
-.container {
-  min-height: 100dvh; // dynamic viewport height prevents scroll lock in modern browsers
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto; // allow vertical scroll within the page container
-  display: flex;
-  flex-direction: column;
-}
-
 // Background Orbs (Dual styling for balance)
 .glowOrbRight {
   position: absolute;
