@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useState } from "react";
 import { addUserToStorage } from "../../utils/userStorage";
-import { useAppDispatch} from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 
 interface RegisterFormData {
@@ -12,7 +12,7 @@ interface RegisterFormData {
   password: string;
   confirmPassword: string;
   agreeOnTerms: boolean | string;
-  city: 'Warsaw' | 'Gdansk' | 'Poznan' | 'Wroclaw';
+  city: "Warsaw" | "Gdansk" | "Poznan" | "Wroclaw";
 }
 
 const RegisterPage = () => {
@@ -87,8 +87,10 @@ const RegisterPage = () => {
       phone: formData.phone,
       email: formData.email,
       password: formData.password,
-      role: "user" as const,
+      role: "client" as const,
       city: formData.city,
+      status: "active" as const,
+      joinedDate: new Date().toLocaleDateString("en-CA"),
     };
 
     addUserToStorage(userData); // adding user to local storage (faking backend)
@@ -121,7 +123,10 @@ const RegisterPage = () => {
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({ ...formData, city: e.target.value as 'Warsaw' | 'Gdansk' | 'Poznan' | 'Wroclaw' });
+    setFormData({
+      ...formData,
+      city: e.target.value as "Warsaw" | "Gdansk" | "Poznan" | "Wroclaw",
+    });
   };
 
   return (
