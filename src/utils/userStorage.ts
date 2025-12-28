@@ -8,6 +8,8 @@ const MOCK_ADMIN: User = {
   role: "admin",
   phone: "+48 000 000 000",
   city: "Warsaw",
+  status: "active",
+  joinedDate: "2025-01-15"
 };
 
 const MOCK_CLIENT: User = {
@@ -15,9 +17,11 @@ const MOCK_CLIENT: User = {
   fullName: "Client User",
   email: "client@test.com",
   password: "123456",
-  role: "user",
+  role: "client",
   phone: "+48 111 111 111",
   city: "Gdansk",
+  status: "active",
+  joinedDate: "2025-04-10"
 };
 
 export const initializeUsers = () => {
