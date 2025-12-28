@@ -42,12 +42,14 @@ const App = () => {
         </Route>
         {/* Protected routes */}
         <Route element={<ProtectedRoute allowedRoles={["admin", "client"]} />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route element={<MainLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/my-rentals" element={<RentalsPage />} />
+          </Route>
           <Route path="/rent-bike" element={<RentBikePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/my-rentals" element={<RentalsPage />} />
         </Route>
-      
+
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route element={<MainLayout />}>
             <Route path="/admin/users" element={<UserManagement />} />

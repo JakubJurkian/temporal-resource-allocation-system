@@ -13,6 +13,8 @@
   z-index: 1000;
   width: 100%;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 64px;
 
   // Center the content on large screens
   @media (min-width: 1200px) {
