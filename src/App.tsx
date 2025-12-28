@@ -17,6 +17,7 @@ import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
 import ScrollToTop from "./components/Utils/ScrollToTop";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
 import UserManagement from "./pages/Admin/UserManagement/UserManagement";
+import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/fleet" element={<FleetPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
         {/* Public ONLY routes */}
@@ -37,13 +39,19 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        <Route path="admin/user-management" element={<UserManagement />} />
         {/* Protected routes */}
-        <Route element={<ProtectedRoute allowedRoles={["admin", "user"]} />}>
+        <Route element={<ProtectedRoute allowedRoles={["admin", "client"]} />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/rent-bike" element={<RentBikePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/my-rentals" element={<RentalsPage />} />
+        </Route>
+      
+        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+          <Route element={<MainLayout />}>
+            <Route path="/admin/users" element={<UserManagement />} />
+            {/* <Route path="/admin/calendar" element={<AdminCalendar />} /> */}
+          </Route>
         </Route>
       </Routes>
     </Router>
