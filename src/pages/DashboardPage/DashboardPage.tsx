@@ -25,16 +25,16 @@ const DashboardPage = () => {
   const userId = user?.id;
   const userCity = user?.city;
   const activeFleetCount = useMemo(() => {
-    if (!userId) return 0;
+    if (!userCity) return 0;
 
     const bikes = getFleet();
     return bikes.filter((b) => b.city === userCity && b.status === "active")
       .length;
-  }, [userId, userCity]);
+  }, [userCity]);
 
   const activeRentals = useMemo(() => {
-    if (userId) return 0;
-    else return calculateActiveRentals(userId!);
+    if (!userId) return 0;
+    return calculateActiveRentals(userId);
   }, [userId]);
 
   if (!user) return null;
