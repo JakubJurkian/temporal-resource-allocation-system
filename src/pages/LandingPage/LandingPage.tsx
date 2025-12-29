@@ -51,13 +51,13 @@ const LandingPage = () => {
 
       <section className={styles.statsBar}>
         {stats.map((stat, index) => (
-          <>
+          <div key={stat.label}>
             {index > 0 && <div className={styles.divider}></div>}
-            <div key={stat.label} className={styles.statItem}>
+            <div className={styles.statItem}>
               <h3>{stat.value}</h3>
               <p>{stat.label}</p>
             </div>
-          </>
+          </div>
         ))}
       </section>
 
