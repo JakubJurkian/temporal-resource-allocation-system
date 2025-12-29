@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useState } from "react";
-import { addUserToStorage } from "../../utils/userStorage";
+import { addUserToStorage, getUsersFromStorage } from "../../utils/userStorage";
 import { useAppDispatch } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 
@@ -11,15 +11,27 @@ interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  agreeOnTerms: boolean | string;
+  agreeOnTerms: boolean;
   city: "Warsaw" | "Gdansk" | "Poznan" | "Wroclaw";
+}
+
+interface FormErrors {
+  fullName?: string;
+  phone?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  agreeOnTerms?: string;
 }
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
+  // 1. Add Loading State
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [errors, setErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<RegisterFormData>({
     fullName: "",
     phone: "",
@@ -27,7 +39,7 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
     agreeOnTerms: false,
-    city: "Warsaw", // Add city with default value
+    city: "Warsaw",
   });
 
   const cities = ["Warsaw", "Gdansk", "Poznan", "Wroclaw"];
@@ -35,14 +47,13 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors: Partial<RegisterFormData> = {};
+    const newErrors: FormErrors = {};
 
-    // Validate Full Name
+    // --- VALIDATION STEPS ---
     if (!formData.fullName || formData.fullName.trim().length < 2) {
       newErrors.fullName = "Name must be at least 2 characters.";
     }
 
-    // Validate Phone (Simple Regex: Optional +, then 9-15 digits)
     const phoneRegex = /^\+?[0-9]{9,15}$/;
     if (
       !formData.phone ||
@@ -51,38 +62,47 @@ const RegisterPage = () => {
       newErrors.phone = "Please enter a valid phone number.";
     }
 
-    // Validate Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address.";
     }
 
-    // Validate Password
     if (!formData.password || formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
     }
 
-    // Validate Confirm Password
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
     }
 
-    // Validate Terms
     if (!formData.agreeOnTerms) {
-      newErrors.agreeOnTerms = "You must agree to the terms and conditions.";
+      newErrors.agreeOnTerms = "You must agree to the terms and conditions."; // Note: Use string for error message
     }
 
-    // Check for errors
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      console.log(newErrors);
       return;
     }
 
-    console.log("Submitting valid form:", formData);
-    // saving data to localstorage...
+    // Start Loading & Fake API Delay
+    setIsLoading(true);
+    setErrors({}); // Clear previous errors
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // CRITICAL: Check if Email already exists
+    const existingUsers = getUsersFromStorage();
+    const emailExists = existingUsers.some((u) => u.email === formData.email);
+
+    if (emailExists) {
+      setErrors({ email: "This email is already registered." });
+      setIsLoading(false);
+      return;
+    }
+
+    // Create User Data
     const userData = {
-      id: Math.random().toString(36).substring(2, 10), // simple random id
+      id: Math.random().toString(36).substring(2, 10),
       fullName: formData.fullName,
       phone: formData.phone,
       email: formData.email,
@@ -93,40 +113,27 @@ const RegisterPage = () => {
       joinedDate: new Date().toLocaleDateString("en-CA"),
     };
 
-    addUserToStorage(userData); // adding user to local storage (faking backend)
+    // Save & Login
+    addUserToStorage(userData);
     dispatch(loginSuccess(userData));
 
-    alert("Registration successful! You can now log in.");
-
-    setErrors({});
-    setFormData({
-      fullName: "",
-      phone: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      agreeOnTerms: false,
-      city: "Warsaw", // Reset city to default value
-    });
-
+    // Redirect immediately (No alert needed, smoother UX)
     navigate("/dashboard", { replace: true });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      city: e.target.value as "Warsaw" | "Gdansk" | "Poznan" | "Wroclaw",
-    });
+    setFormData((prev) => ({
+      ...prev,
+      city: e.target.value as RegisterFormData["city"],
+    }));
   };
 
   return (
@@ -147,6 +154,7 @@ const RegisterPage = () => {
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit}>
+          {/* Name & Phone Grid */}
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
               <label htmlFor="fullName">Full Name</label>
@@ -181,6 +189,7 @@ const RegisterPage = () => {
             </div>
           </div>
 
+          {/* Email */}
           <div className={styles.inputGroup}>
             <label htmlFor="email">Email Address</label>
             <input
@@ -197,6 +206,7 @@ const RegisterPage = () => {
             )}
           </div>
 
+          {/* Passwords Grid */}
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
               <label htmlFor="password">Password</label>
@@ -233,6 +243,7 @@ const RegisterPage = () => {
             </div>
           </div>
 
+          {/* City Selection */}
           <div className={styles.inputGroup}>
             <label htmlFor="city">City</label>
             <div className={styles.selectControl}>
@@ -252,27 +263,43 @@ const RegisterPage = () => {
             </div>
           </div>
 
+          {/* Terms Checkbox */}
           <div className={styles.termsGroup}>
             <label className={styles.checkboxContainer}>
               <input
                 type="checkbox"
                 required
                 name="agreeOnTerms"
+                checked={formData.agreeOnTerms}
                 onChange={handleInputChange}
               />
               <span className={styles.checkmark}></span>
               <span className={styles.termsText}>
-                I agree to the <Link to="/terms">Terms of Service</Link> and{" "}
-                <Link to="/privacy">Privacy Policy</Link>.
+                I agree to the <a href="#">Terms of Service</a> and{" "}
+                <a href="#">Privacy Policy</a>.
               </span>
             </label>
             {errors.agreeOnTerms && (
-              <span className={styles.errorText}>{errors.agreeOnTerms}</span>
+              <span className={styles.errorText}>
+                {String(errors.agreeOnTerms)}
+              </span>
             )}
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
-            Create Account ➜
+          {/* Submit Button with Spinner */}
+          <button
+            type="submit"
+            className={styles.submitBtn}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                Creating Account...
+              </>
+            ) : (
+              "Create Account ➜"
+            )}
           </button>
         </form>
 

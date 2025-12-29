@@ -8,67 +8,85 @@ import { loginSuccess } from "../../store/slices/authSlice";
 interface LoginFormData {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
+  
+  // Add Loading State
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
+    rememberMe: false,
   });
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const newErrors: Partial<LoginFormData> = {};
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address.";
     }
 
-    // Validate password
     if (!formData.password || formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters.";
     }
 
-    const users = getUsersFromStorage();
-    const userExists = users.find(
-      (user) =>
-        user.email === formData.email && user.password === formData.password
-    );
-    if (!userExists) {
-      newErrors.password = "Invalid email or password.";
-    }
-
-    // Check for errors
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      console.log(newErrors);
       return;
     }
 
-    setErrors({});
-    setFormData({
-      email: "",
-      password: "",
-    });
-    dispatch(loginSuccess(userExists!));
+    // Start Loading
+    setIsLoading(true);
+    setErrors({}); // Clear old errors
+
+    // Fake Delay
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const users = getUsersFromStorage();
+    const user = users.find((u) => u.email === formData.email);
+    const isValid = user && user.password === formData.password;
+
+    if (!isValid) {
+      setErrors({ password: "Invalid email or password." });
+      setFormData((prev) => ({ ...prev, password: "" }));
+      // Stop Loading on Error
+      setIsLoading(false);
+      return;
+    }
+
+    const storage = formData.rememberMe ? localStorage : sessionStorage;
+    storage.setItem("velocity_user", JSON.stringify(user));
+
+    // remove potential conflicts
+    if (formData.rememberMe) {
+      sessionStorage.removeItem("velocity_user");
+    } else {
+      localStorage.removeItem("velocity_user");
+    }
+
+    setFormData({ email: "", password: "", rememberMe: false });
+    dispatch(loginSuccess(user!));
     navigate("/dashboard", { replace: true });
+    // No need to set isLoading(false) here as we navigate away
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
+
   return (
     <main className={styles.loginContainer}>
       <div className={styles.glowOrb} aria-hidden="true"></div>
@@ -78,29 +96,25 @@ const LoginPage = () => {
           <div className={styles.logo}>
             Velo<span className={styles.highlight}>City</span>
           </div>
-          <h1 id="login-title" className={styles.title}>
-            Welcome Back
-          </h1>
-          <p className={styles.subtitle}>
-            Enter your credentials to access the fleet.
-          </p>
+          <h1 id="login-title" className={styles.title}>Welcome Back</h1>
+          <p className={styles.subtitle}>Enter your credentials to access the fleet.</p>
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit}>
+          {/* Inputs (Email/Password)  */}
           <div className={styles.inputGroup}>
             <label htmlFor="email">Email Address</label>
             <input
               type="email"
               id="email"
               name="email"
+              value={formData.email}
               placeholder="name@velocity.com"
               autoComplete="email"
               required
               onChange={handleInputChange}
             />
-            {errors.email && (
-              <span className={styles.errorText}>{errors.email}</span>
-            )}
+            {errors.email && <span className={styles.errorText}>{errors.email}</span>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -109,36 +123,50 @@ const LoginPage = () => {
               type="password"
               id="password"
               name="password"
+              value={formData.password}
               placeholder="••••••••"
               autoComplete="current-password"
               required
               onChange={handleInputChange}
             />
-            {errors.password && (
-              <span className={styles.errorText}>{errors.password}</span>
-            )}
+            {errors.password && <span className={styles.errorText}>{errors.password}</span>}
           </div>
 
           <div className={styles.formFooter}>
             <label className={styles.checkboxContainer}>
-              <input type="checkbox" name="remember" />
+              <input
+                type="checkbox"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleInputChange}
+              />
               <span className={styles.checkmark}></span>
               Remember me
             </label>
-            <Link to="/forgot-password" className={styles.forgotLink}>
+            <a href="#" className={styles.forgotLink}>
               Forgot Password?
-            </Link>
+            </a>
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
-            Log In ➜
+          {/* Button with Spinner Logic */}
+          <button 
+            type="submit" 
+            className={styles.submitBtn} 
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                Verifying...
+              </>
+            ) : (
+              "Log In ➜"
+            )}
           </button>
         </form>
 
         <footer className={styles.cardFooter}>
-          <p>
-            Don't have an account? <Link to="/register">Register</Link>
-          </p>
+          <p>Don't have an account? <Link to="/register">Register</Link></p>
         </footer>
       </section>
     </main>

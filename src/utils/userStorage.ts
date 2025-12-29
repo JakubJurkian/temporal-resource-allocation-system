@@ -1,8 +1,8 @@
 import type { User } from "../types/User";
 
 const MOCK_ADMIN: User = {
-  id: "admin_1",
-  fullName: "Admin User",
+  id: "1d8e7n4s",
+  fullName: "Piotr Kowalski",
   email: "admin@test.com",
   password: "123456",
   role: "admin",
@@ -13,8 +13,8 @@ const MOCK_ADMIN: User = {
 };
 
 const MOCK_CLIENT: User = {
-  id: "client_1",
-  fullName: "Client User",
+  id: "4e2d7f4n",
+  fullName: "Adam Nowak",
   email: "client@test.com",
   password: "123456",
   role: "client",

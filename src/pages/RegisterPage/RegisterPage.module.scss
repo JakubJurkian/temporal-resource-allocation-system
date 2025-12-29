@@ -1,4 +1,4 @@
-@use '../../styles/variables' as v;
+@use "../../styles/variables" as v;
 
 // --- LAYOUT ---
 .registerContainer {
@@ -18,7 +18,11 @@
   position: absolute;
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(v.$color-secondary, 0.15) 0%, rgba(v.$color-bg-main, 0) 70%); // Using Secondary (Purple) for variety? Or stick to Primary.
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-secondary, 0.15) 0%,
+    rgba(v.$color-bg-main, 0) 70%
+  ); // Using Secondary (Purple) for variety? Or stick to Primary.
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -54,7 +58,9 @@
     font-weight: 800;
     color: v.$color-text-main;
     margin-bottom: 1rem;
-    .highlight { color: v.$color-primary; }
+    .highlight {
+      color: v.$color-primary;
+    }
   }
 
   .title {
@@ -134,7 +140,7 @@
   color: v.$color-text-muted;
   font-size: 0.85rem;
   line-height: 1.4;
-  
+
   input {
     accent-color: v.$color-primary;
     width: 1rem;
@@ -148,7 +154,9 @@
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
-    &:hover { color: v.$color-text-main; }
+    &:hover {
+      color: v.$color-text-main;
+    }
   }
 }
 
@@ -169,6 +177,12 @@
     transform: translateY(-2px);
     box-shadow: 0 0 25px rgba(v.$color-primary, 0.5);
   }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    filter: grayscale(0.3);
+  }
 }
 
 // --- FOOTER ---
@@ -185,7 +199,9 @@
     font-weight: 600;
     margin-left: 0.25rem;
     transition: color 0.2s;
-    &:hover { color: v.$color-primary; }
+    &:hover {
+      color: v.$color-primary;
+    }
   }
 }
 
@@ -240,7 +256,7 @@
     border-radius: v.$radius-md;
     font-size: 1rem;
     font-family: inherit;
-    appearance: none; 
+    appearance: none;
     cursor: pointer;
     transition: all 0.2s ease;
 
