@@ -250,3 +250,77 @@
     color: #fff;
   }
 }
+
+// --- MODAL STYLES ---
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 1.5rem;
+}
+
+.modal {
+  background: v.$color-bg-card; // Ensure variables are imported
+  padding: 2rem;
+  border-radius: v.$radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  h2 {
+    color: v.$color-text-main;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: v.$color-text-muted;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+
+  button {
+    padding: 0.8rem 1.5rem;
+    border-radius: v.$radius-md;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: v.$color-text-muted;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+
+  &:hover {
+    border-color: v.$color-text-main !important;
+    color: v.$color-text-main;
+  }
+}
+
+.dangerBtn {
+  background: rgba(v.$danger, 0.15); // e.g. red
+  color: v.$danger;
+
+  &:hover {
+    background: v.$danger;
+    color: white;
+  }
+}
