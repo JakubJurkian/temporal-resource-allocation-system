@@ -47,9 +47,9 @@ const FLEET_CONFIG: FleetConfigItem[] = [
   { modelId: "ep2", city: "Gdansk", amount: 5 },
   { modelId: "xl", city: "Gdansk", amount: 2 },
 
-  { modelId: "s1", city: "Krakow", amount: 12 },
-  { modelId: "ep2", city: "Krakow", amount: 4 },
-  { modelId: "xl", city: "Krakow", amount: 2 },
+  { modelId: "s1", city: "Poznan", amount: 12 },
+  { modelId: "ep2", city: "Poznan", amount: 4 },
+  { modelId: "xl", city: "Poznan", amount: 2 },
 
   { modelId: "s1", city: "Wroclaw", amount: 8 },
   { modelId: "ep2", city: "Wroclaw", amount: 6 },
