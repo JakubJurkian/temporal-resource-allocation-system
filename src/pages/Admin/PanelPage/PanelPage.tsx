@@ -1,50 +1,78 @@
-import { useEffect, useState } from "react";
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, Legend 
+import { useState } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
-import styles from "./Panelpage.module.scss";
-import { getUserReservations } from "../../../utils/bookingHelper"; // Assuming you have a getAllReservations
+import styles from "./PanelPage.module.scss";
+import { getUserReservations } from "../../../utils/bookingHelper";
 import { getModels } from "../../../utils/fleetStorage";
-import { getMonthlyRevenue, getOccupancyRate, getPopularityStats } from "../../../utils/analyticsHelper";
+import {
+  getMonthlyRevenue,
+  getOccupancyRate,
+  getPopularityStats,
+} from "../../../utils/analyticsHelper";
 import { getUsersFromStorage } from "../../../utils/userStorage";
+import type { Reservation } from "../../../types/Reservation";
+import type { BikeModel } from "../../../types/Fleet";
 
-// Mocking "All Reservations" if you don't have a specific helper for it yet
-// In a real app, you'd fetch ALL reservations, not just one user's.
-const getAllReservations = () => {
+// Helper: robustly fetch reservations
+const getAllReservations = (): Reservation[] => {
+  const centralData = localStorage.getItem("velocity_reservations");
+  if (centralData) {
+    try {
+      const parsed = JSON.parse(centralData);
+      return Array.isArray(parsed) ? (parsed as Reservation[]) : [];
+    } catch {
+      return [];
+    }
+  }
   const users = getUsersFromStorage();
-  // Flatten all users' reservations into one big array
-  // This demonstrates "Array.flatMap" or "reduce"
-  const allRes = users.flatMap(u => getUserReservations(u.id)); 
-  return allRes;
+  return users.flatMap((u) => getUserReservations(u.id!));
 };
 
 const PanelPage = () => {
-  const [revenueData, setRevenueData] = useState<any[]>([]);
-  const [popularityData, setPopularityData] = useState<any[]>([]);
-  const [kpi, setKpi] = useState({ revenue: 0, occupancy: 0, activeRentals: 0 });
-
-  useEffect(() => {
-    // 1. Load Raw Data
+  // CORRECT APPROACH: Lazy Initialization
+  // We pass a function to useState. React runs this ONCE during the initial render.
+  // No useEffect, no re-renders, no cascading updates.
+  const [dashboardData] = useState(() => {
+    // 1. Load Data
     const reservations = getAllReservations();
-    const models = getModels();
+    const models: BikeModel[] = getModels();
 
-    // 2. Process Data (The "Analytic Module" requirement)
+    // 2. Process Analytics
     const revenueChart = getMonthlyRevenue(reservations);
     const popularityChart = getPopularityStats(reservations, models);
-    
+
     // 3. Calculate KPIs
-    const totalRevenue = reservations.reduce((sum, r) => r.status !== 'cancelled' ? sum + r.totalCost : sum, 0);
-    const occupancy = getOccupancyRate(reservations, models.length * 5); // Assuming 5 bikes per model
-    const active = reservations.filter(r => r.status === 'confirmed').length;
+    const totalRevenue = reservations.reduce(
+      (sum, r) => (r.status !== "cancelled" ? sum + r.totalCost : sum),
+      0
+    );
+    const occupancy = getOccupancyRate(reservations, models.length * 5);
+    const active = reservations.filter((r) => r.status === "confirmed").length;
 
-    // 4. Set State
-    setRevenueData(revenueChart);
-    setPopularityData(popularityChart);
-    setKpi({ revenue: totalRevenue, occupancy, activeRentals: active });
-  }, []);
+    // Return the initial state immediately
+    return {
+      revenueData: revenueChart,
+      popularityData: popularityChart,
+      kpi: {
+        revenue: totalRevenue,
+        occupancy: occupancy,
+        activeRentals: active,
+      },
+    };
+  });
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
     <div className={styles.dashboard}>
@@ -57,34 +85,39 @@ const PanelPage = () => {
       <div className={styles.kpiGrid}>
         <div className={styles.card}>
           <h3>Total Revenue</h3>
-          <div className={styles.value}>{kpi.revenue} PLN</div>
+          <div className={styles.value}>{dashboardData.kpi.revenue} PLN</div>
         </div>
         <div className={styles.card}>
           <h3>Occupancy Rate (Month)</h3>
-          <div className={styles.value}>{kpi.occupancy}%</div>
+          <div className={styles.value}>{dashboardData.kpi.occupancy}%</div>
           <div className={styles.subtext}>of total fleet capacity</div>
         </div>
         <div className={styles.card}>
           <h3>Active Rentals</h3>
-          <div className={styles.value}>{kpi.activeRentals}</div>
+          <div className={styles.value}>{dashboardData.kpi.activeRentals}</div>
         </div>
       </div>
 
       {/* CHARTS GRID */}
       <div className={styles.chartsGrid}>
-        
-        {/* CHART 1: Monthly Revenue */}
-        <div className={styles.chartCard}>
+        {/* CHART 1: REVENUE */}
+        <div className={styles.chartCard} style={{ minWidth: 0 }}>
           <h3>Revenue Trend</h3>
-          <div style={{ width: '100%', height: 300 }}>
-            <ResponsiveContainer>
-              <BarChart data={revenueData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+          <div style={{ width: "100%", height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={dashboardData.revenueData}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(255,255,255,0.1)"
+                />
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis stroke="#8884d8" />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1a1a2e', borderColor: '#333' }}
-                  itemStyle={{ color: '#fff' }}
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1a1a2e",
+                    borderColor: "#333",
+                  }}
+                  itemStyle={{ color: "#fff" }}
                 />
                 <Bar dataKey="revenue" fill="#82ca9d" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -92,14 +125,14 @@ const PanelPage = () => {
           </div>
         </div>
 
-        {/* CHART 2: Bike Popularity */}
-        <div className={styles.chartCard}>
+        {/* CHART 2: POPULARITY */}
+        <div className={styles.chartCard} style={{ minWidth: 0 }}>
           <h3>Model Popularity</h3>
-          <div style={{ width: '100%', height: 300 }}>
-            <ResponsiveContainer>
+          <div style={{ width: "100%", height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={popularityData}
+                  data={dashboardData.popularityData}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -107,8 +140,11 @@ const PanelPage = () => {
                   paddingAngle={5}
                   dataKey="count"
                 >
-                  {popularityData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {dashboardData.popularityData.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
