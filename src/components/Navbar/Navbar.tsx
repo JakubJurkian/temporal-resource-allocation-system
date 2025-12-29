@@ -1,4 +1,4 @@
-import { useState } from "react"; // <--- Import this
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
@@ -9,27 +9,41 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
 
-  // 1. State for Mobile Menu
+  // 1. State for Mobile Menu & Scroll
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const isAuthenticated = !!user;
 
+  // 2. Scroll Listener
+  useEffect(() => {
+    const handleScroll = () => {
+      // Change style if scrolled more than 20px
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const logoutHandle = () => {
     dispatch(logout());
-    setIsMenuOpen(false); // Close menu on action
+    setIsMenuOpen(false);
     navigate("/");
   };
 
-  // Close menu when clicking a link (UX best practice)
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className={styles.topBar}>
+    // 3. Dynamic Class: We add .scrolled if user scrolls OR if menu is open
+    <header 
+      className={`${styles.topBar} ${isScrolled || isMenuOpen ? styles.scrolled : ""}`}
+    >
       <Link to="/" className={styles.logo} onClick={closeMenu}>
         Velo<span className={styles.highlight}>City</span>
       </Link>
 
-      {/* 2. Hamburger Icon (Visible only on Mobile) */}
+      {/* Hamburger Icon */}
       <button
         className={`${styles.burger} ${isMenuOpen ? styles.active : ""}`}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -40,26 +54,19 @@ export const Navbar = () => {
         <span />
       </button>
 
-      {/* 3. Navigation Links (Drawer on Mobile, Row on Desktop) */}
+      {/* Navigation Links */}
       <div className={`${styles.navLinks} ${isMenuOpen ? styles.open : ""}`}>
-        {/* Auth Links */}
         {!isAuthenticated ? (
           <>
-            <Link to="/about" onClick={closeMenu}>
-              About
-            </Link>
-            <Link to="/pricing" onClick={closeMenu}>
-              Pricing
-            </Link>
+            <Link to="/about" onClick={closeMenu}>About</Link>
+            <Link to="/pricing" onClick={closeMenu}>Pricing</Link>
             <Link to="/login" className={styles.loginBtn} onClick={closeMenu}>
               Login
             </Link>
           </>
         ) : (
           <>
-            <Link to="/dashboard" onClick={closeMenu}>
-              Dashboard
-            </Link>
+            <Link to="/dashboard" onClick={closeMenu}>Dashboard</Link>
             <div className={styles.userInfo}>
               <span className={styles.userName}>{user?.fullName}</span>
               <div className={styles.avatar}>

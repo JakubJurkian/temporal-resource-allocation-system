@@ -16,9 +16,18 @@
   border-radius: 8px;
   margin-bottom: 64px;
 
+  background: transparent;
+  transition: all 0.3s ease-in-out;
+
   // Center the content on large screens
   @media (min-width: 1200px) {
     padding: 0 calc(50% - 600px); // Trick to keep content max-width 1200
+  }
+  &.scrolled {
+    background: rgba(v.$color-bg-main, 0.95); // Nearly opaque
+    backdrop-filter: blur(10px); // Frosted glass effect
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 }
 
