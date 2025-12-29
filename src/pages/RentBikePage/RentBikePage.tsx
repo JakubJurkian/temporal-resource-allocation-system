@@ -67,6 +67,11 @@ const RentBikePage = () => {
       return;
     }
 
+    if (diffDays > 21) {
+      setError("Maximum rental period is 21 days.");
+      return;
+    }
+
     if (end < start) {
       setError("End date cannot be before start date.");
       return;
