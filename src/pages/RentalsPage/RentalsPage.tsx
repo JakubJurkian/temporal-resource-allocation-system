@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import {
   cancelReservation,
@@ -6,10 +6,9 @@ import {
 } from "../../utils/bookingHelper";
 import { getModels } from "../../utils/fleetStorage";
 import type { Reservation } from "../../types/Reservation";
-import styles from "./RentalsPage.module.scss";
 import type { BikeModel } from "../../types/Fleet";
+import styles from "./RentalsPage.module.scss";
 
-// Helper to format dates cleanly
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short",
@@ -18,51 +17,60 @@ const formatDate = (dateStr: string) => {
   });
 };
 
-const HistoryPage = () => {
+const RentalsPage = () => {
   const user = useAppSelector((state) => state.auth.user);
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [models, setModels] = useState<BikeModel[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>(() => {
+    return user?.id ? getUserReservations(user.id) : [];
+  });
+  const [models] = useState<BikeModel[]>(() => {
+    return getModels();
+  });
 
-  useEffect(() => {
-    if (user?.id) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setReservations(getUserReservations(user.id));
-      setModels(getModels());
-    }
-  }, [user]);
+  // --- MODAL STATE ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedResId, setSelectedResId] = useState<string | null>(null);
 
-  // Helper to get friendly name from ID "war-xl-01" -> "Cargo King XL"
+  // Helper to get friendly name
   const getBikeName = (bikeId: string) => {
-    // Extract middle part: "war-xl-01" -> "xl"
     const modelCode = bikeId.split("-")[1];
     const model = models.find((m) => m.id === modelCode);
     return model ? model.name : bikeId;
   };
 
-  const handleCancel = (reservationId: string) => {
-    // confirm action
-    if (!window.confirm("Are you sure you want to cancel this reservation?"))
-      return;
+  // TRIGGER MODAL
+  const handleCancelClick = (reservationId: string) => {
+    setSelectedResId(reservationId);
+    setIsModalOpen(true);
+  };
 
-    const success = cancelReservation(reservationId);
+  // CONFIRM ACTION
+  const confirmCancel = () => {
+    if (!selectedResId) return;
+
+    const success = cancelReservation(selectedResId);
 
     if (success && user) {
-      // Refresh the list immediately to show the "Cancelled" status
-      setReservations(getUserReservations(user.id!));
+      setReservations(getUserReservations(user.id!)); // Refresh list
+      setIsModalOpen(false); // Close modal
+      setSelectedResId(null);
     } else {
-      alert("Could not cancel reservation. It might be in the past.");
+      // Handle error (optional: add separate error state)
+      setIsModalOpen(false);
     }
   };
 
-  // LOGIC: When to show the button?
-  const isCancellable = (res: Reservation) => {
-    if (res.status !== "confirmed") return false; // Can't cancel if already cancelled
+  // CLOSE MODAL
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedResId(null);
+  };
 
+  const isCancellable = (res: Reservation) => {
+    if (res.status !== "confirmed") return false;
     const tripDate = new Date(res.startDate);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Ignore time, compare dates only
-
-    return tripDate >= today; // Allow cancelling up until the day of
+    today.setHours(0, 0, 0, 0);
+    return tripDate >= today;
   };
 
   if (!reservations.length) {
@@ -88,7 +96,6 @@ const HistoryPage = () => {
             key={res.id}
             className={`${styles.card} ${styles[res.status]}`}
           >
-            {/* Status Badge */}
             <div className={styles.statusBadge}>
               {res.status === "confirmed" && "✅ Confirmed"}
               {res.status === "cancelled" && "❌ Cancelled"}
@@ -122,11 +129,13 @@ const HistoryPage = () => {
                 <span className={styles.price}>{res.totalCost} PLN</span>
               </div>
             </div>
+
+            {/* Show Cancel button only if cancellable */}
             {isCancellable(res) && (
               <div className={styles.cardFooter}>
                 <button
                   className={styles.cancelBtn}
-                  onClick={() => handleCancel(res.id)}
+                  onClick={() => handleCancelClick(res.id)}
                 >
                   Cancel Reservation
                 </button>
@@ -135,8 +144,30 @@ const HistoryPage = () => {
           </article>
         ))}
       </div>
+
+      {/* --- CONFIRMATION MODAL --- */}
+      {isModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h2>Cancel Reservation?</h2>
+            <p>
+              Are you sure you want to cancel this reservation?
+              <br />
+              This action cannot be undone.
+            </p>
+            <div className={styles.modalActions}>
+              <button className={styles.secondaryBtn} onClick={closeModal}>
+                No, Keep it
+              </button>
+              <button className={styles.dangerBtn} onClick={confirmCancel}>
+                Yes, Cancel it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
-export default HistoryPage;
+export default RentalsPage;
