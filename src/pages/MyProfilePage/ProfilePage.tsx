@@ -9,13 +9,17 @@ const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
-  // Local state for editing mode
   const [isEditing, setIsEditing] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: user?.fullName || "",
     phone: user?.phone || "",
     city: user?.city || "Warsaw",
+    email: user?.email || "",
   });
+
+  // Check permissions
+  const isAdmin = user?.role === "admin";
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -29,7 +33,6 @@ const ProfilePage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (user) {
-      // Dispatch update to Redux & LocalStorage
       dispatch(updateUser({ ...formData }));
       setIsEditing(false);
       alert("Profile updated successfully!");
@@ -37,11 +40,11 @@ const ProfilePage = () => {
   };
 
   const handleCancel = () => {
-    // Reset form to original Redux state
     setFormData({
       fullName: user?.fullName || "",
       phone: user?.phone || "",
       city: user?.city || "Warsaw",
+      email: user?.email || "",
     });
     setIsEditing(false);
   };
@@ -51,7 +54,6 @@ const ProfilePage = () => {
   return (
     <>
       <div className={styles.profileCard}>
-        {/* LEFT COLUMN: Avatar & Role */}
         <aside className={styles.profileHeader}>
           <div className={styles.avatarLarge}>
             {user.fullName.charAt(0).toUpperCase()}
@@ -59,10 +61,8 @@ const ProfilePage = () => {
           <h1 className={styles.userName}>{user.fullName}</h1>
           <span className={styles.roleBadge}>{user.role.toUpperCase()}</span>
           <p className={styles.userId}>ID: {user.id}</p>
-          <p className={styles.valueDisplay}>City: {user.city}</p>
         </aside>
 
-        {/* RIGHT COLUMN: Details Form */}
         <section className={styles.profileDetails}>
           <div className={styles.sectionHeader}>
             <h2>Account Details</h2>
@@ -77,7 +77,6 @@ const ProfilePage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className={styles.formGrid}>
-            {/* Full Name */}
             <div className={styles.inputGroup}>
               <label>Full Name</label>
               {isEditing ? (
@@ -93,7 +92,6 @@ const ProfilePage = () => {
               )}
             </div>
 
-            {/* Phone */}
             <div className={styles.inputGroup}>
               <label>Phone Number</label>
               {isEditing ? (
@@ -109,7 +107,7 @@ const ProfilePage = () => {
               )}
             </div>
 
-            {/* City */}
+            {/* City (Editable for everyone) */}
             <div className={styles.inputGroup}>
               <label>City</label>
               {isEditing ? (
@@ -133,16 +131,28 @@ const ProfilePage = () => {
               )}
             </div>
 
-            {/* Email (Always Read-Only) */}
+            {/* 2. EMAIL LOGIC: Only Admin can edit */}
             <div className={styles.inputGroup}>
               <label>Email Address</label>
-              <div className={`${styles.valueDisplay} ${styles.readOnly}`}>
-                {user.email}
-                <span className={styles.lockIcon}>🔒</span>
-              </div>
+
+              {/* CONDITION: Is Editing AND Is Admin? */}
+              {isEditing && isAdmin ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  required
+                />
+              ) : (
+                <div className={`${styles.valueDisplay} ${styles.readOnly}`}>
+                  {user.email}
+                  {!isAdmin && <span className={styles.lockIcon}>🔒</span>}
+                </div>
+              )}
             </div>
 
-            {/* Action Buttons (Only visible in Edit Mode) */}
             {isEditing && (
               <div className={styles.actionButtons}>
                 <button
