@@ -1,12 +1,14 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import type { ReactNode } from "react";
 
 type UserRole = "admin" | "client";
 interface ProtectedRouteProps {
   allowedRoles: UserRole[];
+  children: ReactNode;
 }
 
-const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) => {
   const location = useLocation();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
@@ -22,7 +24,7 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   }
 
   // Authorized? -> Render the child route
-  return <Outlet />;
+  return children;
 };
 
 export default ProtectedRoute;

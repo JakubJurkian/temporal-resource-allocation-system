@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./UserManagement.module.scss";
+import styles from "./UserManagementPage.module.scss";
 import { getUsersFromStorage } from "../../../utils/userStorage";
 import type { User } from "../../../types/User";
 
