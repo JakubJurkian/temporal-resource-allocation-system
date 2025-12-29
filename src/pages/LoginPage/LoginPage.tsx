@@ -156,7 +156,7 @@ const LoginPage = () => {
           >
             {isLoading ? (
               <>
-                <span className={styles.spinner}></span>
+                <span className="spinner"></span>
                 Verifying...
               </>
             ) : (
