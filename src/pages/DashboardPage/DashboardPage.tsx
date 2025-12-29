@@ -20,10 +20,58 @@ const calculateActiveRentals = (userId: string): number => {
   }
 };
 
+// Hub addresses by city (normalized keys)
+interface HubInfo {
+  cityLabel: string;
+  address: string;
+  hours: string;
+}
+
+const HUBS: Record<string, HubInfo> = {
+  warsaw: {
+    cityLabel: "Warsaw",
+    address: "VeloCity Hub Śródmieście, ul. Marszałkowska 10, 00-001 Warszawa",
+    hours: "Mon–Sun, 7:00–22:00",
+  },
+  wroclaw: {
+    cityLabel: "Wrocław",
+    address: "VeloCity Hub Rynek, ul. Oławska 5, 50-123 Wrocław",
+    hours: "Mon–Sun, 8:00–21:00",
+  },
+  poznan: {
+    cityLabel: "Poznań",
+    address: "VeloCity Hub Centrum, ul. Półwiejska 25, 61-888 Poznań",
+    hours: "Mon–Sun, 8:00–21:00",
+  },
+  gdansk: {
+    cityLabel: "Gdańsk",
+    address: "VeloCity Hub Główne Miasto, ul. Długa 30, 80-827 Gdańsk",
+    hours: "Mon–Sun, 8:00–21:00",
+  },
+};
+
+const normalizeCity = (value?: string) =>
+  (value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+const getHubByCity = (city?: string): HubInfo | null => {
+  const key = normalizeCity(city);
+  if (["warsaw", "warszawa"].includes(key)) return HUBS.warsaw;
+  if (["wroclaw", "wrocław"].includes(key)) return HUBS.wroclaw;
+  if (["poznan", "poznań"].includes(key)) return HUBS.poznan;
+  if (["gdansk", "gdańsk"].includes(key)) return HUBS.gdansk;
+  return null;
+};
+
 const DashboardPage = () => {
   const user = useAppSelector((state) => state.auth.user);
   const userId = user?.id;
   const userCity = user?.city;
+
+  const hubInfo = useMemo(() => getHubByCity(userCity), [userCity]);
+
   const activeFleetCount = useMemo(() => {
     if (!userCity) return 0;
 
@@ -50,6 +98,19 @@ const DashboardPage = () => {
           .
         </h1>
         <p className={styles.subtitle}>Ready for your next ride?</p>
+        {hubInfo && (
+          <div className={styles.hubNotice} role="note" aria-live="polite">
+            <div className={styles.hubIcon}>📍</div>
+            <div className={styles.hubContent}>
+              <div className={styles.hubLine}>
+                Pick-up hub{" "}
+                <span className={styles.hubCity}>({hubInfo.cityLabel})</span>:
+                <span className={styles.hubAddress}> {hubInfo.address}</span>
+              </div>
+              <div className={styles.hubHours}>Hours: {hubInfo.hours}</div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* --- Stats Grid --- */}

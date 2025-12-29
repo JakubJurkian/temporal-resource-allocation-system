@@ -24,8 +24,8 @@ export default function StepDateSelection({
     if (!dates.start) return undefined;
 
     const startDate = new Date(dates.start);
-    // Add 21 days to the selected Start Date
-    startDate.setDate(startDate.getDate() + 21);
+    // Inclusive window: allow up to 21 calendar days (start + 20)
+    startDate.setDate(startDate.getDate() + 20);
 
     return startDate.toISOString().split("T")[0];
   }, [dates.start]);

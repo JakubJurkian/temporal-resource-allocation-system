@@ -20,6 +20,16 @@ import type { Reservation } from "../../types/Reservation";
 
 const MODELS = getModels();
 
+// Timezone-safe, inclusive day diff for YYYY-MM-DD (e.g., 29→31 = 3 days)
+const getInclusiveDays = (start: string, end: string) => {
+  const [sy, sm, sd] = start.split("-").map(Number);
+  const [ey, em, ed] = end.split("-").map(Number);
+  const startUTC = Date.UTC(sy, sm - 1, sd);
+  const endUTC = Date.UTC(ey, em - 1, ed);
+  const msPerDay = 24 * 60 * 60 * 1000;
+  return Math.floor((endUTC - startUTC) / msPerDay) + 1;
+};
+
 const RentBikePage = () => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
@@ -57,10 +67,14 @@ const RentBikePage = () => {
       return;
     }
 
-    const start = new Date(dates.start);
-    const end = new Date(dates.end);
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // Compare strings (YYYY-MM-DD) safely
+    if (dates.end < dates.start) {
+      setError("End date cannot be before start date.");
+      return;
+    }
+
+    // Inclusive, timezone-safe day count
+    const diffDays = getInclusiveDays(dates.start, dates.end);
 
     if (diffDays < 3) {
       setError("Minimum rental period is 3 days.");
@@ -69,11 +83,6 @@ const RentBikePage = () => {
 
     if (diffDays > 21) {
       setError("Maximum rental period is 21 days.");
-      return;
-    }
-
-    if (end < start) {
-      setError("End date cannot be before start date.");
       return;
     }
 
