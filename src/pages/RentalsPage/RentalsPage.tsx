@@ -8,6 +8,7 @@ import { getModels } from "../../utils/fleetStorage";
 import type { Reservation } from "../../types/Reservation";
 import type { BikeModel } from "../../types/Fleet";
 import styles from "./RentalsPage.module.scss";
+import { downloadReservationsCSV } from "../../utils/exportHelper";
 
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -88,6 +89,15 @@ const RentalsPage = () => {
       <header className={styles.header}>
         <h1>Ride History</h1>
         <p>Your past and upcoming journeys.</p>
+        {/* EXPORT BUTTON */}
+        {reservations.length > 0 && (
+          <button
+            className={styles.exportBtn}
+            onClick={() => downloadReservationsCSV(reservations)}
+          >
+            📥 Export CSV
+          </button>
+        )}
       </header>
 
       <div className={styles.grid}>
