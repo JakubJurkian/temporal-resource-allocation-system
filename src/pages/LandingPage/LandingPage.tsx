@@ -1,6 +1,30 @@
 import styles from "./LandingPage.module.scss";
 import LandingBtn from "../../components/LandingBtn/LandingBtn";
 
+const stats = [
+  { value: "100 km", label: "Max Range / Charge" },
+  { value: "45 km/h", label: "Max Speed" },
+  { value: "$0", label: "Maintenance Cost" },
+];
+
+const features = [
+  {
+    icon: "🔋",
+    title: "Infinite Range",
+    description: "Swap batteries at any VeloCity Hub in under 30 seconds.",
+  },
+  {
+    icon: "🛡️",
+    title: "Full Insurance",
+    description: "Accidents happen. We cover repairs so you keep earning.",
+  },
+  {
+    icon: "📱",
+    title: "Smart App",
+    description: "Book shifts & and unlock bikes via phone.",
+  },
+];
+
 const LandingPage = () => {
   return (
     <>
@@ -26,20 +50,15 @@ const LandingPage = () => {
       </section>
 
       <section className={styles.statsBar}>
-        <div className={styles.statItem}>
-          <h3>100 km</h3>
-          <p>Max Range / Charge</p>
-        </div>
-        <div className={styles.divider}></div>
-        <div className={styles.statItem}>
-          <h3>45 km/h</h3>
-          <p>Max Speed</p>
-        </div>
-        <div className={styles.divider}></div>
-        <div className={styles.statItem}>
-          <h3>$0</h3>
-          <p>Maintenance Cost</p>
-        </div>
+        {stats.map((stat, index) => (
+          <>
+            {index > 0 && <div className={styles.divider}></div>}
+            <div key={stat.label} className={styles.statItem}>
+              <h3>{stat.value}</h3>
+              <p>{stat.label}</p>
+            </div>
+          </>
+        ))}
       </section>
 
       <section className={styles.featuresSection}>
@@ -48,21 +67,13 @@ const LandingPage = () => {
         </h2>
 
         <div className={styles.grid}>
-          <div className={styles.card}>
-            <div className={styles.icon}>🔋</div>
-            <h3>Infinite Range</h3>
-            <p>Swap batteries at any VeloCity Hub in under 30 seconds.</p>
-          </div>
-          <div className={styles.card}>
-            <div className={styles.icon}>🛡️</div>
-            <h3>Full Insurance</h3>
-            <p>Accidents happen. We cover repairs so you keep earning.</p>
-          </div>
-          <div className={styles.card}>
-            <div className={styles.icon}>📱</div>
-            <h3>Smart App</h3>
-            <p>Book shifts & and unlock bikes via phone.</p>
-          </div>
+          {features.map((feature) => (
+            <div key={feature.title} className={styles.card}>
+              <div className={styles.icon}>{feature.icon}</div>
+              <h3>{feature.title}</h3>
+              <p>{feature.description}</p>
+            </div>
+          ))}
         </div>
       </section>
     </>

@@ -75,7 +75,7 @@ const PricingPage = () => {
         * Security deposit is required and refunded upon bike return in good
         condition.
         <br />
-        The minimum rental period is 3 days.
+        Rental periods range from 3 to 21 days.
       </p>
     </>
   );

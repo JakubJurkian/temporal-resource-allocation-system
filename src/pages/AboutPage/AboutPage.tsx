@@ -1,5 +1,33 @@
 import styles from "./AboutPage.module.scss";
 
+const STATS = [
+  { number: "2.5M", label: "Kilometers Ridden" },
+  { number: "140t", label: "CO₂ Saved" },
+  { number: "4", label: "Cities Active" },
+  { number: "24/7", label: "Support Team" },
+];
+
+const VALUES = [
+  {
+    icon: "🌱",
+    title: "Sustainability First",
+    description:
+      "Every bike is charged using 100% renewable energy sources. We recycle 95% of our battery components.",
+  },
+  {
+    icon: "🚀",
+    title: "Radical Speed",
+    description:
+      "No traffic jams. No parking hunting. Our fleet is optimized for the quickest point-A to point-B travel.",
+  },
+  {
+    icon: "🛡️",
+    title: "Safety by Design",
+    description:
+      "GPS tracking, automatic collision detection, and regular maintenance checks ensure you ride safe.",
+  },
+];
+
 const AboutPage = () => {
   return (
     <>
@@ -19,49 +47,26 @@ const AboutPage = () => {
 
       {/* Stats Grid */}
       <section className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <span className={styles.statNumber}>2.5M</span>
-          <span className={styles.statLabel}>Kilometers Ridden</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statNumber}>140t</span>
-          <span className={styles.statLabel}>CO₂ Saved</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statNumber}>4</span>
-          <span className={styles.statLabel}>Cities Active</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statNumber}>24/7</span>
-          <span className={styles.statLabel}>Support Team</span>
-        </div>
+        {STATS.map((stat) => (
+          <div key={stat.label} className={styles.statCard}>
+            <span className={styles.statNumber}>{stat.number}</span>
+            <span className={styles.statLabel}>{stat.label}</span>
+          </div>
+        ))}
       </section>
 
       {/* Values Section */}
       <section className={styles.valuesSection}>
         <h2>Our Core Values</h2>
         <div className={styles.valueRow}>
-          <div className={styles.valueItem}>
-            <h3>🌱 Sustainability First</h3>
-            <p>
-              Every bike is charged using 100% renewable energy sources. We
-              recycle 95% of our battery components.
-            </p>
-          </div>
-          <div className={styles.valueItem}>
-            <h3>🚀 Radical Speed</h3>
-            <p>
-              No traffic jams. No parking hunting. Our fleet is optimized for
-              the quickest point-A to point-B travel.
-            </p>
-          </div>
-          <div className={styles.valueItem}>
-            <h3>🛡️ Safety by Design</h3>
-            <p>
-              GPS tracking, automatic collision detection, and regular
-              maintenance checks ensure you ride safe.
-            </p>
-          </div>
+          {VALUES.map((value) => (
+            <div key={value.title} className={styles.valueItem}>
+              <h3>
+                {value.icon} {value.title}
+              </h3>
+              <p>{value.description}</p>
+            </div>
+          ))}
         </div>
       </section>
     </>
