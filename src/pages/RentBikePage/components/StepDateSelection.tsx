@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styles from "../RentBikePage.module.scss";
 
 interface Props {
@@ -16,6 +16,25 @@ export default function StepDateSelection({
 }: Props) {
   const [error, setError] = useState("");
 
+  const today = new Date().toISOString().split("T")[0];
+
+  // Calculate dynamic limits for the END DATE input
+  // It only exists if a Start Date is selected
+  const maxEndDate = useMemo(() => {
+    if (!dates.start) return undefined;
+
+    const startDate = new Date(dates.start);
+    // Add 21 days to the selected Start Date
+    startDate.setDate(startDate.getDate() + 21);
+
+    return startDate.toISOString().split("T")[0];
+  }, [dates.start]);
+
+  const handleDateChange = (field: "start" | "end", value: string) => {
+    if (error) setError("");
+    setDates({ ...dates, [field]: value });
+  };
+
   return (
     <div className={styles.stepContainer}>
       <div className={styles.locationBanner}>
@@ -27,7 +46,7 @@ export default function StepDateSelection({
       </div>
 
       <h1>When do you need it?</h1>
-      <p className={styles.subtitle}>Select your rental dates (min. 3 days).</p>
+      <p className={styles.subtitle}>Select your rental dates (3-21 days).</p>
 
       <form onSubmit={(e) => onSubmit(e, setError)} className={styles.dateForm}>
         <div className={styles.inputGroup}>
@@ -35,9 +54,10 @@ export default function StepDateSelection({
           <input
             type="date"
             value={dates.start}
-            onChange={(e) => setDates({ ...dates, start: e.target.value })}
-            min={new Date().toISOString().split("T")[0]}
+            onChange={(e) => handleDateChange("start", e.target.value)}
+            min={today}
             className={styles.input}
+            required
           />
         </div>
 
@@ -46,9 +66,25 @@ export default function StepDateSelection({
           <input
             type="date"
             value={dates.end}
-            onChange={(e) => setDates({ ...dates, end: e.target.value })}
+            onChange={(e) => handleDateChange("end", e.target.value)}
+            min={dates.start || today}
+            max={maxEndDate}
+            disabled={!dates.start}
             className={styles.input}
+            required
           />
+          {dates.start && (
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "#888",
+                marginTop: "4px",
+                display: "block",
+              }}
+            >
+              Max return date: {maxEndDate}
+            </span>
+          )}
         </div>
 
         {error && <div className={styles.errorBox}>⚠️ {error}</div>}
