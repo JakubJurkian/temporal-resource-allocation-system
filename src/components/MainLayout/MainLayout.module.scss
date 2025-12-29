@@ -6,6 +6,11 @@
   width: 100%;
   background-color: v.$color-bg-main;
   color: v.$color-text-main;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(v.$color-secondary, 0.15) 0%,
+    rgba(v.$color-bg-main, 0) 70%
+  );
 }
 
 // Orb Container: This acts like a "frame" for the background

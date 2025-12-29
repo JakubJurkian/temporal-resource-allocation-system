@@ -1,52 +1,11 @@
 @use "../../styles/variables" as v;
 
-.navLinks {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  font-size: 0.9rem;
-
-  @media (min-width: v.$tablet) {
-    gap: 2rem;
-    font-size: 1rem;
-  }
-
-  a {
-    color: v.$color-text-muted;
-    font-weight: 500;
-    transition: color 0.2s;
-    white-space: nowrap;
-    &:hover {
-      color: v.$color-text-main;
-    }
-  }
-
-  .loginBtn {
-    border: 1px solid v.$color-primary;
-    color: v.$color-primary;
-    padding: 0.4rem 1.2rem;
-    border-radius: v.$radius-md;
-    font-weight: 500;
-    transition: color 0.2s;
-    &:hover {
-      background: rgba(v.$color-primary, 0.1);
-      color: v.$color-text-main;
-    }
-    cursor: pointer;
-  }
-}
-
 // --- HERO SECTION ---
 .heroSection {
-  padding: 4rem 1rem;
+  padding: 0rem 0rem 4rem 0rem;
   display: flex;
   justify-content: center;
   text-align: center;
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(v.$color-secondary, 0.15) 0%,
-    rgba(v.$color-bg-main, 0) 70%
-  );
 
   @media (min-width: v.$tablet) {
     padding: 8rem 2rem;
