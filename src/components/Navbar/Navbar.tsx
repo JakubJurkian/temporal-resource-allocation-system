@@ -9,6 +9,8 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
 
+  const isAdmin = user?.role === "admin";
+
   // 1. State for Mobile Menu & Scroll
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,8 +38,10 @@ export const Navbar = () => {
 
   return (
     // 3. Dynamic Class: We add .scrolled if user scrolls OR if menu is open
-    <header 
-      className={`${styles.topBar} ${isScrolled || isMenuOpen ? styles.scrolled : ""}`}
+    <header
+      className={`${styles.topBar} ${
+        isScrolled || isMenuOpen ? styles.scrolled : ""
+      }`}
     >
       <Link to="/" className={styles.logo} onClick={closeMenu}>
         Velo<span className={styles.highlight}>City</span>
@@ -58,15 +62,26 @@ export const Navbar = () => {
       <div className={`${styles.navLinks} ${isMenuOpen ? styles.open : ""}`}>
         {!isAuthenticated ? (
           <>
-            <Link to="/about" onClick={closeMenu}>About</Link>
-            <Link to="/pricing" onClick={closeMenu}>Pricing</Link>
+            <Link to="/about" onClick={closeMenu}>
+              About
+            </Link>
+            <Link to="/pricing" onClick={closeMenu}>
+              Pricing
+            </Link>
             <Link to="/login" className={styles.loginBtn} onClick={closeMenu}>
               Login
             </Link>
           </>
         ) : (
           <>
-            <Link to="/dashboard" onClick={closeMenu}>Dashboard</Link>
+            {isAdmin && (
+              <Link to="/admin" className={styles.adminBadge}>
+                Admin Panel
+              </Link>
+            )}
+            <Link to="/dashboard" onClick={closeMenu}>
+              Dashboard
+            </Link>
             <div className={styles.userInfo}>
               <span className={styles.userName}>{user?.fullName}</span>
               <div className={styles.avatar}>

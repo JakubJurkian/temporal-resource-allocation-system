@@ -13,7 +13,7 @@ interface LoginFormData {
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
-  
+
   // Add Loading State
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,7 +75,11 @@ const LoginPage = () => {
 
     setFormData({ email: "", password: "", rememberMe: false });
     dispatch(loginSuccess(user!));
-    navigate("/dashboard", { replace: true });
+    if (user.role === "admin") {
+      navigate("/admin/panel", { replace: true });
+    } else {
+      navigate("/dashboard", { replace: true });
+    }
     // No need to set isLoading(false) here as we navigate away
   };
 
@@ -96,8 +100,12 @@ const LoginPage = () => {
           <div className={styles.logo}>
             Velo<span className={styles.highlight}>City</span>
           </div>
-          <h1 id="login-title" className={styles.title}>Welcome Back</h1>
-          <p className={styles.subtitle}>Enter your credentials to access the fleet.</p>
+          <h1 id="login-title" className={styles.title}>
+            Welcome Back
+          </h1>
+          <p className={styles.subtitle}>
+            Enter your credentials to access the fleet.
+          </p>
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -114,7 +122,9 @@ const LoginPage = () => {
               required
               onChange={handleInputChange}
             />
-            {errors.email && <span className={styles.errorText}>{errors.email}</span>}
+            {errors.email && (
+              <span className={styles.errorText}>{errors.email}</span>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
@@ -129,7 +139,9 @@ const LoginPage = () => {
               required
               onChange={handleInputChange}
             />
-            {errors.password && <span className={styles.errorText}>{errors.password}</span>}
+            {errors.password && (
+              <span className={styles.errorText}>{errors.password}</span>
+            )}
           </div>
 
           <div className={styles.formFooter}>
@@ -149,9 +161,9 @@ const LoginPage = () => {
           </div>
 
           {/* Button with Spinner Logic */}
-          <button 
-            type="submit" 
-            className={styles.submitBtn} 
+          <button
+            type="submit"
+            className={styles.submitBtn}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -166,7 +178,9 @@ const LoginPage = () => {
         </form>
 
         <footer className={styles.cardFooter}>
-          <p>Don't have an account? <Link to="/register">Register</Link></p>
+          <p>
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
         </footer>
       </section>
     </main>

@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -16,9 +22,11 @@ import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
 import ScrollToTop from "./components/Utils/ScrollToTop";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
-import UserManagement from "./pages/Admin/UserManagement/UserManagement";
 import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
-import Calendar from "./pages/Admin/Calendar/Calendar";
+import UserManagementPage from "./pages/Admin/UserManagementPage/UserManagementPage";
+import CalendarPage from "./pages/Admin/CalendarPage/CalendarPage";
+import PanelPage from "./pages/Admin/PanelPage/PanelPage";
+import AdminLayout from "./pages/Admin/AdminLayout/AdminLayout";
 
 const App = () => {
   return (
@@ -40,8 +48,15 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        {/* Protected routes */}
-        <Route element={<ProtectedRoute allowedRoles={["admin", "client"]} />}>
+
+        {/* Protected routes (for admin & user)*/}
+        <Route
+          element={
+            <ProtectedRoute allowedRoles={["admin", "client"]}>
+              <Outlet />
+            </ProtectedRoute>
+          }
+        >
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/profile" element={<ProfilePage />} />
@@ -50,11 +65,19 @@ const App = () => {
           <Route path="/rent-bike" element={<RentBikePage />} />
         </Route>
 
-        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-          <Route element={<MainLayout />}>
-            <Route path="/admin/users" element={<UserManagement />} />
-            <Route path="/admin/calendar" element={<Calendar />} />
-          </Route>
+        {/* Admin routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="panel" replace />} />
+          <Route path="panel" element={<PanelPage />} />
+          <Route path="users" element={<UserManagementPage />} />
+          <Route path="calendar" element={<CalendarPage />} />
         </Route>
       </Routes>
     </Router>

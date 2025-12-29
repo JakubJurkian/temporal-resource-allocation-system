@@ -13,7 +13,7 @@ import { enUS } from "date-fns/locale/en-US";
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import styles from "./Calendar.module.scss";
+import styles from "./CalendarPage.module.scss";
 
 // 1. SETUP LOCALIZER
 const locales = { "en-US": enUS };
