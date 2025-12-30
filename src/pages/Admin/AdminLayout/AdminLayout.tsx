@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import styles from "./AdminLayout.module.scss";
+import toast from "react-hot-toast";
 
 const AdminLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -14,6 +15,7 @@ const AdminLayout = () => {
 
   const handleLogout = () => {
     navigate("/");
+    toast.success("Logged out successfully!");
   };
 
   return (

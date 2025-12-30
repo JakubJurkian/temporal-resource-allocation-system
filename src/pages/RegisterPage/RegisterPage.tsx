@@ -5,6 +5,7 @@ import { useState } from "react";
 import { addUserToStorage, getUsersFromStorage } from "../../utils/userStorage";
 import { useAppDispatch } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
+import toast from "react-hot-toast";
 
 interface RegisterFormData {
   fullName: string;
@@ -120,6 +121,7 @@ const RegisterPage = () => {
 
     // Redirect immediately (No alert needed, smoother UX)
     navigate("/dashboard", { replace: true });
+    toast.success("You have been registered and logged in successfully!");
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +144,10 @@ const RegisterPage = () => {
       <main className={styles.registerContainer}>
         <div className={styles.glowOrb} aria-hidden="true"></div>
 
-        <section className={styles.registerCard} aria-labelledby="register-title">
+        <section
+          className={styles.registerCard}
+          aria-labelledby="register-title"
+        >
           <header className={styles.header}>
             <div className={styles.logo}>
               Velo<span className={styles.highlight}>City</span>

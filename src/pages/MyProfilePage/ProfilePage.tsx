@@ -34,11 +34,22 @@ const MyProfilePage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (user) {
-      dispatch(updateUser({ ...formData }));
-      setIsEditing(false);
-      toast.success("Profile updated successfully!");
+    if (!user) return;
+
+    // Check if any field has actually changed
+    const fieldsToCheck = ["fullName", "phone", "city", "email"] as const;
+    const hasChanged = fieldsToCheck.some(
+      (field) => user[field] !== formData[field]
+    );
+
+    if (!hasChanged) {
+      toast("No changes made.", { icon: "ℹ️" });
+      return;
     }
+
+    dispatch(updateUser({ ...formData }));
+    setIsEditing(false);
+    toast.success("Profile updated successfully!");
   };
 
   const handleCancel = () => {

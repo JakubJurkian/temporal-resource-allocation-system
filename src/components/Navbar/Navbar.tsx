@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout } from "../../store/slices/authSlice";
 import styles from "./Navbar.module.scss";
+import toast from "react-hot-toast";
 
 export const Navbar = () => {
   const dispatch = useAppDispatch();
@@ -29,9 +30,10 @@ export const Navbar = () => {
   }, []);
 
   const logoutHandle = () => {
-    dispatch(logout());
     setIsMenuOpen(false);
     navigate("/");
+    dispatch(logout());
+    toast.success("Logged out successfully!");
   };
 
   const closeMenu = () => setIsMenuOpen(false);

@@ -31,7 +31,7 @@ import Redirect from "./components/Utils/Redirect"; // Added custom Redirect to 
 import styles from "./styles/Toast.module.scss";
 
 const App = () => {
-  const location = useLocation(); 
+  const location = useLocation();
 
   return (
     <>
@@ -43,6 +43,10 @@ const App = () => {
         reverseOrder={false}
         toastOptions={{
           className: styles.toastBase,
+          iconTheme: {
+            primary: styles.info,
+            secondary: "#fff",
+          },
           success: {
             iconTheme: {
               primary: styles.success,
@@ -51,7 +55,7 @@ const App = () => {
           },
           error: {
             iconTheme: {
-              primary: styles.danger,
+              primary: styles.error,
               secondary: "#fff",
             },
           },

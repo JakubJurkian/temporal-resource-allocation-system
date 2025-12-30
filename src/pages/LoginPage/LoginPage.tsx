@@ -5,6 +5,7 @@ import { useState } from "react";
 import { getUsersFromStorage } from "../../utils/userStorage";
 import { useAppDispatch } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
+import toast from "react-hot-toast";
 
 interface LoginFormData {
   email: string;
@@ -81,6 +82,7 @@ const LoginPage = () => {
     } else {
       navigate("/dashboard", { replace: true });
     }
+    toast.success("Logged in successfully!");
     // No need to set isLoading(false) here as we navigate away
   };
 

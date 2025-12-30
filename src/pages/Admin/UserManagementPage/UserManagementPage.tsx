@@ -40,6 +40,28 @@ const UserManagement = () => {
     const updatedUsers = users.map((u) =>
       u.id === editingUser.id ? editingUser : u
     );
+    e.preventDefault();
+    if (!editingUser) return;
+
+    const originalUser = users.find((u) => u.id === editingUser.id);
+    if (!originalUser) return;
+
+    const fieldsToCheck = [
+      "fullName",
+      "email",
+      "phone",
+      "role",
+      "city",
+    ] as const;
+    const hasChanged = fieldsToCheck.some(
+      (field) => originalUser[field] !== editingUser[field]
+    );
+
+    if (!hasChanged) {
+      toast("No changes made.", { icon: "ℹ️" });
+      return;
+    }
+
     setUsers(updatedUsers);
     localStorage.setItem("velocity_users", JSON.stringify(updatedUsers));
     setIsModalOpen(false);
