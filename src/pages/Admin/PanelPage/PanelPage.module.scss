@@ -1,61 +1,151 @@
 @use "../../../styles/variables" as v;
 
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+// Container
+.panelPage {
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  // Mobile Padding
+  padding: 1rem; 
+  animation: fadeIn 0.5s ease-out;
+
+  @media (min-width: v.$tablet) {
+    padding: 2rem;
+  }
 }
 
-.kpiGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
+.header {
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: v.$color-text-main;
+    margin-bottom: 0.25rem;
+
+    @media (min-width: v.$tablet) {
+      font-size: 1.8rem;
+    }
+  }
+
+  p {
+    color: v.$color-text-muted;
+    font-size: 0.9rem;
+  }
+}
+
+// === CARD BASE STYLE ===
 .card {
   background: v.$color-bg-card;
-  padding: 1.5rem;
   border-radius: v.$radius-lg;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: v.$shadow-sm;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: v.$tablet) {
+    padding: 1.5rem;
+  }
 
   h3 {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: v.$color-text-muted;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
     margin-bottom: 0.5rem;
-  }
-
-  .value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: v.$color-text-main;
-  }
-
-  .subtext {
-    font-size: 0.8rem;
-    color: v.$color-text-muted;
-    margin-top: 0.5rem;
   }
 }
 
+// === KPI GRID SYSTEM ===
+.kpiGrid {
+  display: grid;
+  // Mobile: 1 column
+  grid-template-columns: 1fr; 
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  // Tablet: 2 columns
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // Desktop: 3 columns
+  @media (min-width: v.$desktop) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  // Specific styles for KPI cards
+  .card {
+    min-height: 120px;
+    justify-content: center;
+
+    .value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: v.$color-text-main;
+      margin: 0.25rem 0;
+
+      @media (min-width: v.$tablet) {
+        font-size: 2rem;
+      }
+    }
+
+    .subtext {
+      font-size: 0.8rem;
+      color: v.$success; // Using green for positive vibe
+      font-weight: 500;
+    }
+  }
+}
+
+// === CHARTS GRID SYSTEM ===
 .chartsGrid {
   display: grid;
-  grid-template-columns: 1fr; // Mobile first: 1 column
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 
-  @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr; // Desktop: 2/3 Revenue, 1/3 Pie
+  @media (min-width: v.$desktop) {
+    gap: 1.5rem;
+    // Desktop: Revenue takes 2 parts, Pie takes 1 part
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr; // Align heights
+  }
+}
+
+// Wrapper to control Recharts height via CSS
+.chartWrapper {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 250px; // Minimum height for mobile
+  margin-top: 1rem;
+
+  @media (min-width: v.$tablet) {
+    min-height: 300px;
   }
 }
 
 .chartCard {
-  @extend .card; // Reuse card styles
-  min-height: 400px;
-
-  h3 {
-    margin-bottom: 1.5rem;
+  min-height: 350px; // Ensure card has base height
+  
+  @media (min-width: v.$desktop) {
+    min-height: 400px;
   }
+}
+
+.revenueCard {
+  // Mobile order: 1
+  order: 1;
+}
+
+.pieCard {
+  // Mobile order: 2
+  order: 2;
 }
