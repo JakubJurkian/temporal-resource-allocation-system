@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import PageTransition from "../../components/common/PageTransition";
 import styles from "./DashboardPage.module.scss";
 import type { Reservation } from "../../types/Reservation";
 import { getFleet } from "../../utils/fleetStorage";
@@ -88,101 +89,103 @@ const DashboardPage = () => {
   if (!user) return null;
 
   return (
-    <>
-      <section className={styles.welcomeSection}>
-        <h1>
-          Hello,{" "}
-          <span className={styles.highlight}>
-            {user.fullName.split(" ")[0]}
-          </span>
-          .
-        </h1>
-        <p className={styles.subtitle}>Ready for your next ride?</p>
-        {hubInfo && (
-          <div className={styles.hubNotice} role="note" aria-live="polite">
-            <div className={styles.hubIcon}>📍</div>
-            <div className={styles.hubContent}>
-              <div className={styles.hubLine}>
-                Pick-up hub{" "}
-                <span className={styles.hubCity}>({hubInfo.cityLabel})</span>:
-                <span className={styles.hubAddress}> {hubInfo.address}</span>
+    <PageTransition>
+      <div className={styles.dashboardPage}>
+        <section className={styles.welcomeSection}>
+          <h1>
+            Hello,{" "}
+            <span className={styles.highlight}>
+              {user.fullName.split(" ")[0]}
+            </span>
+            .
+          </h1>
+          <p className={styles.subtitle}>Ready for your next ride?</p>
+          {hubInfo && (
+            <div className={styles.hubNotice} role="note" aria-live="polite">
+              <div className={styles.hubIcon}>📍</div>
+              <div className={styles.hubContent}>
+                <div className={styles.hubLine}>
+                  Pick-up hub{" "}
+                  <span className={styles.hubCity}>({hubInfo.cityLabel})</span>:
+                  <span className={styles.hubAddress}> {hubInfo.address}</span>
+                </div>
+                <div className={styles.hubHours}>Hours: {hubInfo.hours}</div>
               </div>
-              <div className={styles.hubHours}>Hours: {hubInfo.hours}</div>
+            </div>
+          )}
+        </section>
+
+        {/* --- Stats Grid --- */}
+        <section className={styles.statsGrid}>
+          <div className={styles.statCard}>
+            <h3>Rentals</h3>
+            <div className={styles.statValue}>
+              {activeRentals}
+              <span className={styles.statUnit}>
+                {activeRentals === 1 ? "bike" : "bikes"}
+              </span>
+            </div>
+            {/* Show 'Ongoing' only if there are active rentals */}
+            <div
+              className={`${styles.statusIndicator} ${
+                activeRentals > 0 ? styles.active : ""
+              }`}
+            >
+              {activeRentals > 0 ? "Ongoing" : "No active rides"}
             </div>
           </div>
-        )}
-      </section>
 
-      {/* --- Stats Grid --- */}
-      <section className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <h3>Rentals</h3>
-          <div className={styles.statValue}>
-            {activeRentals}
-            <span className={styles.statUnit}>
-              {activeRentals === 1 ? "bike" : "bikes"}
-            </span>
+          <div className={styles.statCard}>
+            <h3>Fleet Status</h3>
+            <div className={styles.statValue}>{activeFleetCount}</div>
+            <p className={styles.statLabel}>E-bikes nearby</p>
           </div>
-          {/* Show 'Ongoing' only if there are active rentals */}
-          <div
-            className={`${styles.statusIndicator} ${
-              activeRentals > 0 ? styles.active : ""
-            }`}
+
+          <div className={styles.statCard}>
+            <h3>Your Impact</h3>
+            <div className={styles.statValue}>128 km</div>
+            <p className={styles.statLabel}>Total distance ridden</p>
+          </div>
+        </section>
+
+        {/* --- Actions Grid --- */}
+        <h2 className={styles.sectionTitle}>Quick Actions</h2>
+        <section className={styles.actionsGrid}>
+          {/* Action 1: Rent a Bike */}
+          <Link
+            to="/rent-bike"
+            className={`${styles.actionCard} ${styles.primaryAction}`}
           >
-            {activeRentals > 0 ? "Ongoing" : "No active rides"}
-          </div>
-        </div>
+            <div className={styles.icon}>🚲</div>
+            <div className={styles.actionInfo}>
+              <h3>Rent a Bike</h3>
+              <p>Find and book an e-bike near you</p>
+            </div>
+            <div className={styles.arrow}>➜</div>
+          </Link>
 
-        <div className={styles.statCard}>
-          <h3>Fleet Status</h3>
-          <div className={styles.statValue}>{activeFleetCount}</div>
-          <p className={styles.statLabel}>E-bikes nearby</p>
-        </div>
+          {/* Action 2: Edit Profile */}
+          <Link to="/profile" className={styles.actionCard}>
+            <div className={styles.icon}>👤</div>
+            <div className={styles.actionInfo}>
+              <h3>My Profile</h3>
+              <p>Update your personal details</p>
+            </div>
+            <div className={styles.arrow}>➜</div>
+          </Link>
 
-        <div className={styles.statCard}>
-          <h3>Your Impact</h3>
-          <div className={styles.statValue}>128 km</div>
-          <p className={styles.statLabel}>Total distance ridden</p>
-        </div>
-      </section>
-
-      {/* --- Actions Grid --- */}
-      <h2 className={styles.sectionTitle}>Quick Actions</h2>
-      <section className={styles.actionsGrid}>
-        {/* Action 1: Rent a Bike */}
-        <Link
-          to="/rent-bike"
-          className={`${styles.actionCard} ${styles.primaryAction}`}
-        >
-          <div className={styles.icon}>🚲</div>
-          <div className={styles.actionInfo}>
-            <h3>Rent a Bike</h3>
-            <p>Find and book an e-bike near you</p>
-          </div>
-          <div className={styles.arrow}>➜</div>
-        </Link>
-
-        {/* Action 2: Edit Profile */}
-        <Link to="/profile" className={styles.actionCard}>
-          <div className={styles.icon}>👤</div>
-          <div className={styles.actionInfo}>
-            <h3>My Profile</h3>
-            <p>Update your personal details</p>
-          </div>
-          <div className={styles.arrow}>➜</div>
-        </Link>
-
-        {/* Action 3: History */}
-        <Link to="/my-rentals" className={styles.actionCard}>
-          <div className={styles.icon}>📜</div>
-          <div className={styles.actionInfo}>
-            <h3>Ride History</h3>
-            <p>View your ride history</p>
-          </div>
-          <div className={styles.arrow}>➜</div>
-        </Link>
-      </section>
-    </>
+          {/* Action 3: History */}
+          <Link to="/my-rentals" className={styles.actionCard}>
+            <div className={styles.icon}>📜</div>
+            <div className={styles.actionInfo}>
+              <h3>Ride History</h3>
+              <p>View your ride history</p>
+            </div>
+            <div className={styles.arrow}>➜</div>
+          </Link>
+        </section>
+      </div>
+    </PageTransition>
   );
 };
 

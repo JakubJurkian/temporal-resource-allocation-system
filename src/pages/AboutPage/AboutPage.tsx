@@ -1,3 +1,4 @@
+import PageTransition from "../../components/common/PageTransition";
 import styles from "./AboutPage.module.scss";
 
 const STATS = [
@@ -30,45 +31,48 @@ const VALUES = [
 
 const AboutPage = () => {
   return (
-    <>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <h1>
-          Moving Cities <br />
-          <span className={styles.gradientText}>Forward.</span>
-        </h1>
-        <p className={styles.lead}>
-          We are VeloCity. We believe the future of urban transport is silent,
-          clean, and incredibly fast. Our mission is to replace 100,000 car
-          trips with e-bike rides by 2027.
-        </p>
-      </section>
+    <PageTransition>
+      <div className={styles.aboutPage}>
+        {/* Hero Section */}
+        <section className={styles.hero}>
+          <div className={styles.glowOrb} aria-hidden="true"></div>
+          <h1>
+            Moving Cities <br />
+            <span className={styles.gradientText}>Forward.</span>
+          </h1>
+          <p className={styles.lead}>
+            We are VeloCity. We believe the future of urban transport is silent,
+            clean, and incredibly fast. Our mission is to replace 100,000 car
+            trips with e-bike rides by 2027.
+          </p>
+        </section>
 
-      {/* Stats Grid */}
-      <section className={styles.statsGrid}>
-        {STATS.map((stat) => (
-          <div key={stat.label} className={styles.statCard}>
-            <span className={styles.statNumber}>{stat.number}</span>
-            <span className={styles.statLabel}>{stat.label}</span>
-          </div>
-        ))}
-      </section>
-
-      {/* Values Section */}
-      <section className={styles.valuesSection}>
-        <h2>Our Core Values</h2>
-        <div className={styles.valueRow}>
-          {VALUES.map((value) => (
-            <div key={value.title} className={styles.valueItem}>
-              <h3>
-                {value.icon} {value.title}
-              </h3>
-              <p>{value.description}</p>
+        {/* Stats Grid */}
+        <section className={styles.statsGrid}>
+          {STATS.map((stat) => (
+            <div key={stat.label} className={styles.statCard}>
+              <span className={styles.statNumber}>{stat.number}</span>
+              <span className={styles.statLabel}>{stat.label}</span>
             </div>
           ))}
-        </div>
-      </section>
-    </>
+        </section>
+
+        {/* Values Section */}
+        <section className={styles.valuesSection}>
+          <h2>Our Core Values</h2>
+          <div className={styles.valueRow}>
+            {VALUES.map((value) => (
+              <div key={value.title} className={styles.valueItem}>
+                <h3>
+                  {value.icon} {value.title}
+                </h3>
+                <p>{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </PageTransition>
   );
 };
 

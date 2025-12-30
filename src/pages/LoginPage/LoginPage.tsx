@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import PageTransition from "../../components/common/PageTransition";
 import styles from "./LoginPage.module.scss";
 import { useState } from "react";
 import { getUsersFromStorage } from "../../utils/userStorage";
@@ -92,98 +93,100 @@ const LoginPage = () => {
   };
 
   return (
-    <main className={styles.loginContainer}>
-      <div className={styles.glowOrb} aria-hidden="true"></div>
+    <PageTransition>
+      <main className={styles.loginContainer}>
+        <div className={styles.glowOrb} aria-hidden="true"></div>
 
-      <section className={styles.loginCard} aria-labelledby="login-title">
-        <header className={styles.header}>
-          <div className={styles.logo}>
-            Velo<span className={styles.highlight}>City</span>
-          </div>
-          <h1 id="login-title" className={styles.title}>
-            Welcome Back
-          </h1>
-          <p className={styles.subtitle}>
-            Enter your credentials to access the fleet.
-          </p>
-        </header>
+        <section className={styles.loginCard} aria-labelledby="login-title">
+          <header className={styles.header}>
+            <div className={styles.logo}>
+              Velo<span className={styles.highlight}>City</span>
+            </div>
+            <h1 id="login-title" className={styles.title}>
+              Welcome Back
+            </h1>
+            <p className={styles.subtitle}>
+              Enter your credentials to access the fleet.
+            </p>
+          </header>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          {/* Inputs (Email/Password)  */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              placeholder="name@velocity.com"
-              autoComplete="email"
-              required
-              onChange={handleInputChange}
-            />
-            {errors.email && (
-              <span className={styles.errorText}>{errors.email}</span>
-            )}
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              placeholder="••••••••"
-              autoComplete="current-password"
-              required
-              onChange={handleInputChange}
-            />
-            {errors.password && (
-              <span className={styles.errorText}>{errors.password}</span>
-            )}
-          </div>
-
-          <div className={styles.formFooter}>
-            <label className={styles.checkboxContainer}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            {/* Inputs (Email/Password)  */}
+            <div className={styles.inputGroup}>
+              <label htmlFor="email">Email Address</label>
               <input
-                type="checkbox"
-                name="rememberMe"
-                checked={formData.rememberMe}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                placeholder="name@velocity.com"
+                autoComplete="email"
+                required
                 onChange={handleInputChange}
               />
-              <span className={styles.checkmark}></span>
-              Remember me
-            </label>
-            <a href="#" className={styles.forgotLink}>
-              Forgot Password?
-            </a>
-          </div>
+              {errors.email && (
+                <span className={styles.errorText}>{errors.email}</span>
+              )}
+            </div>
 
-          {/* Button with Spinner Logic */}
-          <button
-            type="submit"
-            className={styles.submitBtn}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                Verifying...
-              </>
-            ) : (
-              "Log In ➜"
-            )}
-          </button>
-        </form>
+            <div className={styles.inputGroup}>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                placeholder="••••••••"
+                autoComplete="current-password"
+                required
+                onChange={handleInputChange}
+              />
+              {errors.password && (
+                <span className={styles.errorText}>{errors.password}</span>
+              )}
+            </div>
 
-        <footer className={styles.cardFooter}>
-          <p>
-            Don't have an account? <Link to="/register">Register</Link>
-          </p>
-        </footer>
-      </section>
-    </main>
+            <div className={styles.formFooter}>
+              <label className={styles.checkboxContainer}>
+                <input
+                  type="checkbox"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleInputChange}
+                />
+                <span className={styles.checkmark}></span>
+                Remember me
+              </label>
+              <a href="#" className={styles.forgotLink}>
+                Forgot Password?
+              </a>
+            </div>
+
+            {/* Button with Spinner Logic */}
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  Verifying...
+                </>
+              ) : (
+                "Log In ➜"
+              )}
+            </button>
+          </form>
+
+          <footer className={styles.cardFooter}>
+            <p>
+              Don't have an account? <Link to="/register">Register</Link>
+            </p>
+          </footer>
+        </section>
+      </main>
+    </PageTransition>
   );
 };
 

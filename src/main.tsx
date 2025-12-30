@@ -6,6 +6,7 @@ import { store } from "./store";
 import { initializeUsers } from "./utils/userStorage";
 import { initializeFleet } from "./utils/fleetStorage";
 import "./styles/globals.scss";
+import { BrowserRouter } from "react-router-dom";
 
 // initialize data for localStorage
 const bootstrapApp = () => {
@@ -23,7 +24,9 @@ bootstrapApp();
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

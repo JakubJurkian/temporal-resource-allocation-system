@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import PageTransition from "../../components/common/PageTransition";
 import styles from "./RegisterPage.module.scss";
 import { useState } from "react";
 import { addUserToStorage, getUsersFromStorage } from "../../utils/userStorage";
@@ -137,179 +138,181 @@ const RegisterPage = () => {
   };
 
   return (
-    <main className={styles.registerContainer}>
-      <div className={styles.glowOrb} aria-hidden="true"></div>
+    <PageTransition>
+      <main className={styles.registerContainer}>
+        <div className={styles.glowOrb} aria-hidden="true"></div>
 
-      <section className={styles.registerCard} aria-labelledby="register-title">
-        <header className={styles.header}>
-          <div className={styles.logo}>
-            Velo<span className={styles.highlight}>City</span>
-          </div>
-          <h1 id="register-title" className={styles.title}>
-            Join the Fleet
-          </h1>
-          <p className={styles.subtitle}>
-            Create your courier account and start earning today.
-          </p>
-        </header>
+        <section className={styles.registerCard} aria-labelledby="register-title">
+          <header className={styles.header}>
+            <div className={styles.logo}>
+              Velo<span className={styles.highlight}>City</span>
+            </div>
+            <h1 id="register-title" className={styles.title}>
+              Join the Fleet
+            </h1>
+            <p className={styles.subtitle}>
+              Create your courier account and start earning today.
+            </p>
+          </header>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          {/* Name & Phone Grid */}
-          <div className={styles.formGrid}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            {/* Name & Phone Grid */}
+            <div className={styles.formGrid}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="fullName">Full Name</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  placeholder="Sam Bridges"
+                  autoComplete="name"
+                  required
+                  onChange={handleInputChange}
+                />
+                {errors.fullName && (
+                  <span className={styles.errorText}>{errors.fullName}</span>
+                )}
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="+48 000 000 000"
+                  autoComplete="tel"
+                  required
+                  onChange={handleInputChange}
+                />
+                {errors.phone && (
+                  <span className={styles.errorText}>{errors.phone}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Email */}
             <div className={styles.inputGroup}>
-              <label htmlFor="fullName">Full Name</label>
+              <label htmlFor="email">Email Address</label>
               <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                placeholder="Sam Bridges"
-                autoComplete="name"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="name@velocity.com"
+                autoComplete="email"
                 required
                 onChange={handleInputChange}
               />
-              {errors.fullName && (
-                <span className={styles.errorText}>{errors.fullName}</span>
+              {errors.email && (
+                <span className={styles.errorText}>{errors.email}</span>
               )}
             </div>
 
-            <div className={styles.inputGroup}>
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="+48 000 000 000"
-                autoComplete="tel"
-                required
-                onChange={handleInputChange}
-              />
-              {errors.phone && (
-                <span className={styles.errorText}>{errors.phone}</span>
-              )}
-            </div>
-          </div>
+            {/* Passwords Grid */}
+            <div className={styles.formGrid}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  required
+                  onChange={handleInputChange}
+                />
+                {errors.password && (
+                  <span className={styles.errorText}>{errors.password}</span>
+                )}
+              </div>
 
-          {/* Email */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="name@velocity.com"
-              autoComplete="email"
-              required
-              onChange={handleInputChange}
-            />
-            {errors.email && (
-              <span className={styles.errorText}>{errors.email}</span>
-            )}
-          </div>
-
-          {/* Passwords Grid */}
-          <div className={styles.formGrid}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="••••••••"
-                autoComplete="new-password"
-                required
-                onChange={handleInputChange}
-              />
-              {errors.password && (
-                <span className={styles.errorText}>{errors.password}</span>
-              )}
+              <div className={styles.inputGroup}>
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  required
+                  onChange={handleInputChange}
+                />
+                {errors.confirmPassword && (
+                  <span className={styles.errorText}>
+                    {errors.confirmPassword}
+                  </span>
+                )}
+              </div>
             </div>
 
+            {/* City Selection */}
             <div className={styles.inputGroup}>
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="••••••••"
-                autoComplete="new-password"
-                required
-                onChange={handleInputChange}
-              />
-              {errors.confirmPassword && (
+              <label htmlFor="city">City</label>
+              <div className={styles.selectControl}>
+                <select
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleCityChange}
+                  required
+                >
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Terms Checkbox */}
+            <div className={styles.termsGroup}>
+              <label className={styles.checkboxContainer}>
+                <input
+                  type="checkbox"
+                  required
+                  name="agreeOnTerms"
+                  checked={formData.agreeOnTerms}
+                  onChange={handleInputChange}
+                />
+                <span className={styles.checkmark}></span>
+                <span className={styles.termsText}>
+                  I agree to the <a href="#">Terms of Service</a> and{" "}
+                  <a href="#">Privacy Policy</a>.
+                </span>
+              </label>
+              {errors.agreeOnTerms && (
                 <span className={styles.errorText}>
-                  {errors.confirmPassword}
+                  {String(errors.agreeOnTerms)}
                 </span>
               )}
             </div>
-          </div>
 
-          {/* City Selection */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="city">City</label>
-            <div className={styles.selectControl}>
-              <select
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleCityChange}
-                required
-              >
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+            {/* Submit Button with Spinner */}
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account ➜"
+              )}
+            </button>
+          </form>
 
-          {/* Terms Checkbox */}
-          <div className={styles.termsGroup}>
-            <label className={styles.checkboxContainer}>
-              <input
-                type="checkbox"
-                required
-                name="agreeOnTerms"
-                checked={formData.agreeOnTerms}
-                onChange={handleInputChange}
-              />
-              <span className={styles.checkmark}></span>
-              <span className={styles.termsText}>
-                I agree to the <a href="#">Terms of Service</a> and{" "}
-                <a href="#">Privacy Policy</a>.
-              </span>
-            </label>
-            {errors.agreeOnTerms && (
-              <span className={styles.errorText}>
-                {String(errors.agreeOnTerms)}
-              </span>
-            )}
-          </div>
-
-          {/* Submit Button with Spinner */}
-          <button
-            type="submit"
-            className={styles.submitBtn}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                Creating Account...
-              </>
-            ) : (
-              "Create Account ➜"
-            )}
-          </button>
-        </form>
-
-        <footer className={styles.cardFooter}>
-          <p>
-            Already have an account? <Link to="/login">Log in here</Link>
-          </p>
-        </footer>
-      </section>
-    </main>
+          <footer className={styles.cardFooter}>
+            <p>
+              Already have an account? <Link to="/login">Log in here</Link>
+            </p>
+          </footer>
+        </section>
+      </main>
+    </PageTransition>
   );
 };
 

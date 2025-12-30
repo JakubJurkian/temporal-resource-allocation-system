@@ -15,8 +15,10 @@ import StepLoading from "./components/StepLoading";
 import StepBikeSelection from "./components/StepBikeSelection";
 import StepSummary from "./components/StepSummary";
 import StepPayment from "./components/StepPayment";
+import PageTransition from "../../components/common/PageTransition";
 import styles from "./RentBikePage.module.scss";
 import type { Reservation } from "../../types/Reservation";
+import toast from "react-hot-toast";
 
 const MODELS = getModels();
 
@@ -205,7 +207,10 @@ const RentBikePage = () => {
         status: "confirmed",
       };
       addReservation(newReservation);
-      setTimeout(() => navigate("/my-rentals"), 2000);
+      setTimeout(() => {
+        navigate("/my-rentals");
+        toast.success("Reservation booked successfully!");
+      }, 2000);
     } catch (error) {
       console.log(error);
       // STATE: REJECTION
@@ -214,59 +219,63 @@ const RentBikePage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <header className={styles.topBar}>
-        <div className={styles.logo}>
-          Velo<span className={styles.highlight}>City</span>
+    <PageTransition>
+      <div className={styles.rentBikePage}>
+        <div className={styles.container}>
+          <header className={styles.topBar}>
+            <div className={styles.logo}>
+              Velo<span className={styles.highlight}>City</span>
+            </div>
+            <Link to="/dashboard" className={styles.closeBtn}>
+              ✕
+            </Link>
+          </header>
+
+          <main className={styles.wizardContent}>
+            {/* --- STEP 1: DATE SELECTION --- */}
+            {step === 1 && (
+              <StepDateSelection
+                dates={dates}
+                setDates={setDates}
+                city={userCity}
+                onSubmit={handleBikeSearch}
+              />
+            )}
+
+            {/* --- STEP 2: LOADING --- */}
+            {step === 2 && <StepLoading city={userCity} />}
+
+            {/* --- STEP 3: RESULTS --- */}
+            {step === 3 && (
+              <StepBikeSelection
+                availableBikes={availableBikes}
+                setStep={setStep}
+                onClick={handleBook}
+                city={userCity}
+              />
+            )}
+            {/* --- STEP 4: SUMMARY & CONFIRM --- */}
+            {step === 4 && chosenBikeModel && (
+              <StepSummary
+                setStep={setStep}
+                chosenBikeModel={chosenBikeModel}
+                dates={dates}
+                onClick={handleProceedToPayment}
+              />
+            )}
+            {/* --- STEP 5: PAYMENT PROCESS --- */}
+            {step === 5 && chosenBikeModel && (
+              <StepPayment
+                setStep={setStep}
+                onSubmit={handleFinalPayment}
+                paymentStatus={paymentStatus}
+                price={getDynamicPrice(getRentalDays(dates)).total}
+              />
+            )}
+          </main>
         </div>
-        <Link to="/dashboard" className={styles.closeBtn}>
-          ✕
-        </Link>
-      </header>
-
-      <main className={styles.wizardContent}>
-        {/* --- STEP 1: DATE SELECTION --- */}
-        {step === 1 && (
-          <StepDateSelection
-            dates={dates}
-            setDates={setDates}
-            city={userCity}
-            onSubmit={handleBikeSearch}
-          />
-        )}
-
-        {/* --- STEP 2: LOADING --- */}
-        {step === 2 && <StepLoading city={userCity} />}
-
-        {/* --- STEP 3: RESULTS --- */}
-        {step === 3 && (
-          <StepBikeSelection
-            availableBikes={availableBikes}
-            setStep={setStep}
-            onClick={handleBook}
-            city={userCity}
-          />
-        )}
-        {/* --- STEP 4: SUMMARY & CONFIRM --- */}
-        {step === 4 && chosenBikeModel && (
-          <StepSummary
-            setStep={setStep}
-            chosenBikeModel={chosenBikeModel}
-            dates={dates}
-            onClick={handleProceedToPayment}
-          />
-        )}
-        {/* --- STEP 5: PAYMENT PROCESS --- */}
-        {step === 5 && chosenBikeModel && (
-          <StepPayment
-            setStep={setStep}
-            onSubmit={handleFinalPayment}
-            paymentStatus={paymentStatus}
-            price={getDynamicPrice(getRentalDays(dates)).total}
-          />
-        )}
-      </main>
-    </div>
+      </div>
+    </PageTransition>
   );
 };
 
