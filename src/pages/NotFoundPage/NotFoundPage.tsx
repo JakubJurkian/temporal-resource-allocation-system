@@ -4,7 +4,7 @@ import styles from "./NotFoundPage.module.scss";
 const NotFoundPage = () => {
   return (
     <PageTransition>
-      <div className={styles.notFoundPage}>
+      <div className={styles.errorContainer}>
         <h1 className={styles.errorCode}>404</h1>
 
         <div className={styles.messageBox}>

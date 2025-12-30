@@ -1,16 +1,20 @@
-import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import { Outlet } from "react-router-dom";
+import Redirect from "../Utils/Redirect.tsx";
 
-const PublicOnlyRoute = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+interface Props {
+  children?: React.ReactNode;
+}
 
-  // If user is ALREADY logged in, send them to dashboard
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+const PublicOnlyRoute = ({ children }: Props) => {
+  const user = useAppSelector((state) => state.auth.user);
+
+  if (user) {
+    // Redirect to dashboard if already logged in
+    return <Redirect to="/dashboard" />;
   }
 
-  // Otherwise, render the Login/Register page
-  return <Outlet />;
+  return children ? <>{children}</> : <Outlet />;
 };
 
 export default PublicOnlyRoute;

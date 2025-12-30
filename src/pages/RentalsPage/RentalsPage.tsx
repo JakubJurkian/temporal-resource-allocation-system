@@ -10,6 +10,7 @@ import type { BikeModel } from "../../types/Fleet";
 import PageTransition from "../../components/common/PageTransition";
 import styles from "./RentalsPage.module.scss";
 import { downloadReservationsCSV } from "../../utils/exportHelper";
+import toast from "react-hot-toast";
 
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -55,9 +56,11 @@ const RentalsPage = () => {
       setReservations(getUserReservations(user.id!)); // Refresh list
       setIsModalOpen(false); // Close modal
       setSelectedResId(null);
+      toast.success("Reservation cancelled successfully!");
     } else {
       // Handle error (optional: add separate error state)
       setIsModalOpen(false);
+      toast.error("Failed to cancel reservation. It might be too late.");
     }
   };
 

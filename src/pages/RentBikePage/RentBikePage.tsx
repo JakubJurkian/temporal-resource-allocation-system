@@ -18,6 +18,7 @@ import StepPayment from "./components/StepPayment";
 import PageTransition from "../../components/common/PageTransition";
 import styles from "./RentBikePage.module.scss";
 import type { Reservation } from "../../types/Reservation";
+import toast from "react-hot-toast";
 
 const MODELS = getModels();
 
@@ -206,7 +207,10 @@ const RentBikePage = () => {
         status: "confirmed",
       };
       addReservation(newReservation);
-      setTimeout(() => navigate("/my-rentals"), 2000);
+      setTimeout(() => {
+        navigate("/my-rentals");
+        toast.success("Reservation booked successfully!");
+      }, 2000);
     } catch (error) {
       console.log(error);
       // STATE: REJECTION

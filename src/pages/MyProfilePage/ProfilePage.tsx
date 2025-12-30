@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { updateUser } from "../../store/slices/authSlice";
 import PageTransition from "../../components/common/PageTransition";
@@ -36,7 +37,7 @@ const MyProfilePage = () => {
     if (user) {
       dispatch(updateUser({ ...formData }));
       setIsEditing(false);
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
     }
   };
 

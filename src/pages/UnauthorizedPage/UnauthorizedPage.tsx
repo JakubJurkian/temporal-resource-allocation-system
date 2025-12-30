@@ -4,7 +4,7 @@ import styles from "./UnauthorizedPage.module.scss";
 const UnauthorizedPage = () => {
   return (
     <PageTransition>
-      <div className={styles.unauthorizedPage}>
+      <div className={styles.unauthorizedContainer}>
         <h1>403 - Access Denied</h1>
         <p>You do not have permission to view this page.</p>
       </div>
