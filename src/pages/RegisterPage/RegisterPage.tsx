@@ -1,143 +1,92 @@
 import { Link, useNavigate } from "react-router-dom";
 import PageTransition from "../../components/common/PageTransition";
 import styles from "./RegisterPage.module.scss";
-import { useState } from "react";
 import { addUserToStorage, getUsersFromStorage } from "../../utils/userStorage";
 import { useAppDispatch } from "../../store/hooks";
 import { loginSuccess } from "../../store/slices/authSlice";
 import toast from "react-hot-toast";
-
-interface RegisterFormData {
-  fullName: string;
-  phone: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  agreeOnTerms: boolean;
-  city: "Warsaw" | "Gdansk" | "Poznan" | "Wroclaw";
-}
-
-interface FormErrors {
-  fullName?: string;
-  phone?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  agreeOnTerms?: string;
-}
+import { useForm } from "../../hooks/useForm";
+import {
+  validateEmail,
+  validateMinLength,
+  validatePhone,
+} from "../../utils/validators";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // 1. Add Loading State
-  const [isLoading, setIsLoading] = useState(false);
+  const { values, errors, isSubmitting, handleChange, handleSubmit } = useForm({
+    initialValues: {
+      fullName: "",
+      phone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      agreeOnTerms: false,
+      city: "Warsaw",
+    },
+    validate: (vals) => {
+      const errs: Record<string, string> = {};
+      const fullNameError = validateMinLength(vals.fullName, 2, "Full Name");
+      if (fullNameError) errs.fullName = fullNameError;
 
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [formData, setFormData] = useState<RegisterFormData>({
-    fullName: "",
-    phone: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    agreeOnTerms: false,
-    city: "Warsaw",
+      const phoneError = validatePhone(vals.phone);
+      if (phoneError) errs.phone = phoneError;
+
+      const emailError = validateEmail(vals.email);
+      if (emailError) errs.email = emailError;
+
+      const passwordError = validateMinLength(vals.password, 6, "Password");
+      if (passwordError) errs.password = passwordError;
+
+      if (vals.password !== vals.confirmPassword) {
+        errs.confirmPassword = "Passwords do not match.";
+      }
+
+      if (!vals.agreeOnTerms) {
+        errs.agreeOnTerms = "You must agree to the terms to continue.";
+      }
+
+      return errs;
+    },
+    onSubmit: async (vals) => {
+      // Fake delay for spinner
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // CRITICAL: Check if Email already exists
+      const existingUsers = getUsersFromStorage();
+      const emailExists = existingUsers.some((u) => u.email === values.email);
+
+      if (emailExists) {
+        toast.error("This email is already registered.");
+        return;
+      }
+
+      // Create User Data
+      const userData = {
+        id: Math.random().toString(36).substring(2, 10),
+        fullName: vals.fullName,
+        phone: vals.phone,
+        email: vals.email,
+        password: vals.password,
+        role: "client" as const,
+        city: vals.city as "Warsaw" | "Gdansk" | "Poznan" | "Wroclaw",
+        status: "active" as const,
+        joinedDate: new Date().toLocaleDateString("en-CA"),
+      };
+
+      // Save & Login
+      addUserToStorage(userData);
+      dispatch(loginSuccess(userData));
+
+      // Redirect immediately (No alert needed, smoother UX)
+      navigate("/dashboard", { replace: true });
+      toast.success("You have been registered and logged in successfully!");
+    },
   });
 
   const cities = ["Warsaw", "Gdansk", "Poznan", "Wroclaw"];
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const newErrors: FormErrors = {};
-
-    // --- VALIDATION STEPS ---
-    if (!formData.fullName || formData.fullName.trim().length < 2) {
-      newErrors.fullName = "Name must be at least 2 characters.";
-    }
-
-    const phoneRegex = /^\+?[0-9]{9,15}$/;
-    if (
-      !formData.phone ||
-      !phoneRegex.test(formData.phone.replace(/\s/g, ""))
-    ) {
-      newErrors.phone = "Please enter a valid phone number.";
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email || !emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    if (!formData.password || formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
-    }
-
-    if (!formData.agreeOnTerms) {
-      newErrors.agreeOnTerms = "You must agree to the terms and conditions."; // Note: Use string for error message
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    // Start Loading & Fake API Delay
-    setIsLoading(true);
-    setErrors({}); // Clear previous errors
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // CRITICAL: Check if Email already exists
-    const existingUsers = getUsersFromStorage();
-    const emailExists = existingUsers.some((u) => u.email === formData.email);
-
-    if (emailExists) {
-      setErrors({ email: "This email is already registered." });
-      setIsLoading(false);
-      return;
-    }
-
-    // Create User Data
-    const userData = {
-      id: Math.random().toString(36).substring(2, 10),
-      fullName: formData.fullName,
-      phone: formData.phone,
-      email: formData.email,
-      password: formData.password,
-      role: "client" as const,
-      city: formData.city,
-      status: "active" as const,
-      joinedDate: new Date().toLocaleDateString("en-CA"),
-    };
-
-    // Save & Login
-    addUserToStorage(userData);
-    dispatch(loginSuccess(userData));
-
-    // Redirect immediately (No alert needed, smoother UX)
-    navigate("/dashboard", { replace: true });
-    toast.success("You have been registered and logged in successfully!");
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      city: e.target.value as RegisterFormData["city"],
-    }));
-  };
 
   return (
     <PageTransition>
@@ -172,7 +121,7 @@ const RegisterPage = () => {
                   placeholder="Sam Bridges"
                   autoComplete="name"
                   required
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                 />
                 {errors.fullName && (
                   <span className={styles.errorText}>{errors.fullName}</span>
@@ -188,7 +137,7 @@ const RegisterPage = () => {
                   placeholder="+48 000 000 000"
                   autoComplete="tel"
                   required
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                 />
                 {errors.phone && (
                   <span className={styles.errorText}>{errors.phone}</span>
@@ -206,7 +155,7 @@ const RegisterPage = () => {
                 placeholder="name@velocity.com"
                 autoComplete="email"
                 required
-                onChange={handleInputChange}
+                onChange={handleChange}
               />
               {errors.email && (
                 <span className={styles.errorText}>{errors.email}</span>
@@ -224,7 +173,7 @@ const RegisterPage = () => {
                   placeholder="••••••••"
                   autoComplete="new-password"
                   required
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                 />
                 {errors.password && (
                   <span className={styles.errorText}>{errors.password}</span>
@@ -240,7 +189,7 @@ const RegisterPage = () => {
                   placeholder="••••••••"
                   autoComplete="new-password"
                   required
-                  onChange={handleInputChange}
+                  onChange={handleChange}
                 />
                 {errors.confirmPassword && (
                   <span className={styles.errorText}>
@@ -257,8 +206,8 @@ const RegisterPage = () => {
                 <select
                   id="city"
                   name="city"
-                  value={formData.city}
-                  onChange={handleCityChange}
+                  value={values.city}
+                  onChange={handleChange}
                   required
                 >
                   {cities.map((city) => (
@@ -277,8 +226,8 @@ const RegisterPage = () => {
                   type="checkbox"
                   required
                   name="agreeOnTerms"
-                  checked={formData.agreeOnTerms}
-                  onChange={handleInputChange}
+                  checked={!!values.agreeOnTerms}
+                  onChange={handleChange}
                 />
                 <span className={styles.checkmark}></span>
                 <span className={styles.termsText}>
@@ -297,9 +246,9 @@ const RegisterPage = () => {
             <button
               type="submit"
               className={styles.submitBtn}
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <span className="spinner"></span>
                   Creating Account...
