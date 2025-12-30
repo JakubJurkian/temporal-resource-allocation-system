@@ -1,10 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Outlet,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -27,60 +21,63 @@ import UserManagementPage from "./pages/Admin/UserManagementPage/UserManagementP
 import CalendarPage from "./pages/Admin/CalendarPage/CalendarPage";
 import PanelPage from "./pages/Admin/PanelPage/PanelPage";
 import AdminLayout from "./pages/Admin/AdminLayout/AdminLayout";
+import { AnimatePresence } from "framer-motion";
 
 const App = () => {
   return (
-    <Router>
+    <>
       <ScrollToTop />
-      <Routes>
-        {/* Public routes */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/fleet" element={<FleetPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-        {/* Public ONLY routes */}
-        <Route element={<PublicOnlyRoute />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-        </Route>
-
-        {/* Protected routes (for admin & user)*/}
-        <Route
-          element={
-            <ProtectedRoute allowedRoles={["admin", "client"]}>
-              <Outlet />
-            </ProtectedRoute>
-          }
-        >
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          {/* Public routes */}
           <Route element={<MainLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/my-rentals" element={<RentalsPage />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/fleet" element={<FleetPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
-          <Route path="/rent-bike" element={<RentBikePage />} />
-        </Route>
+          {/* Public ONLY routes */}
+          <Route element={<PublicOnlyRoute />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Route>
 
-        {/* Admin routes */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Navigate to="panel" replace />} />
-          <Route path="panel" element={<PanelPage />} />
-          <Route path="users" element={<UserManagementPage />} />
-          <Route path="calendar" element={<CalendarPage />} />
-        </Route>
-      </Routes>
-    </Router>
+          {/* Protected routes (for admin & user)*/}
+          <Route
+            element={
+              <ProtectedRoute allowedRoles={["admin", "client"]}>
+                <Outlet />
+              </ProtectedRoute>
+            }
+          >
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/my-rentals" element={<RentalsPage />} />
+            </Route>
+            <Route path="/rent-bike" element={<RentBikePage />} />
+          </Route>
+
+          {/* Admin routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="panel" replace />} />
+            <Route path="panel" element={<PanelPage />} />
+            <Route path="users" element={<UserManagementPage />} />
+            <Route path="calendar" element={<CalendarPage />} />
+          </Route>
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 };
 
