@@ -1,82 +1,99 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { logout } from "../../../store/slices/authSlice";
+import { useState } from "react";
+import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import styles from "./AdminLayout.module.scss";
 
 const AdminLayout = () => {
-  const dispatch = useAppDispatch();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAppSelector((state) => state.auth);
+
+  const navLinks = [
+    { to: "/admin/panel", icon: "📊", label: "Dashboard" },
+    { to: "/admin/users", icon: "👥", label: "Users" },
+    { to: "/admin/calendar", icon: "📅", label: "Calendar" },
+  ];
 
   const handleLogout = () => {
-    dispatch(logout());
     navigate("/");
   };
 
   return (
     <div className={styles.adminContainer}>
-      {/* --- SIDEBAR --- */}
-      <aside className={styles.sidebar}>
-        <div className={styles.brand}>
-          Velo<span className={styles.highlight}>Admin</span>
-        </div>
-
-        <div className={styles.userSnippet}>
-          <div className={styles.avatar}>
-            {user?.fullName?.charAt(0).toUpperCase() || "A"}
-          </div>
-          <div className={styles.meta}>
-            <span className={styles.name}>{user?.fullName}</span>
-            <span className={styles.role}>Administrator</span>
-          </div>
-        </div>
-
-        <nav className={styles.navMenu}>
-          <p className={styles.menuLabel}>Management</p>
-
-          <NavLink
-            to="/admin/panel"
-            className={({ isActive }) =>
-              `${styles.navItem} ${isActive ? styles.active : ""}`
-            }
-            end
+      {/* === TOP NAVIGATION BAR === */}
+      <nav className={styles.topNav}>
+        
+        {/* LEFT: Mobile Toggle + Brand */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button 
+            className={styles.mobileToggle}
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label="Toggle menu"
           >
-            <span className={styles.icon}>📊</span> Panel
-          </NavLink>
-
-          <NavLink
-            to="/admin/users"
-            className={({ isActive }) =>
-              `${styles.navItem} ${isActive ? styles.active : ""}`
-            }
-          >
-            <span className={styles.icon}>👥</span> Users
-          </NavLink>
-
-          <NavLink
-            to="/admin/calendar"
-            className={({ isActive }) =>
-              `${styles.navItem} ${isActive ? styles.active : ""}`
-            }
-          >
-            <span className={styles.icon}>📅</span> Calendar
-          </NavLink>
-
-          <p className={styles.menuLabel}>System</p>
-
-          <NavLink to="/" className={styles.navItem}>
-            <span className={styles.icon}>🏠</span> Back to App
-          </NavLink>
-
-          <button onClick={handleLogout} className={styles.logoutBtn}>
-            <span className={styles.icon}>🚪</span> Log Out
+            {isMobileOpen ? "✕" : "☰"}
           </button>
-        </nav>
-      </aside>
+          
+          <div className={styles.brand}>
+            Velo<span className={styles.highlight}>City</span> Admin
+          </div>
+        </div>
 
-      {/* --- MAIN CONTENT --- */}
+        {/* CENTER: Desktop Menu */}
+        <div className={styles.desktopMenu}>
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) => 
+                `${styles.navItem} ${isActive ? styles.active : ""}`
+              }
+            >
+              <span className={styles.icon}>{link.icon}</span>
+              {link.label}
+            </NavLink>
+          ))}
+        </div>
+
+        {/* RIGHT: User Actions (HIDDEN ON MOBILE via CSS) */}
+        <div className={styles.userSection}>
+          <Link to="/dashboard" className={styles.switchBtn} title="Go to User View">
+            🏠 <span>Client View</span>
+          </Link>
+
+          <button className={styles.logoutBtn} onClick={handleLogout}>
+            🚪 <span>Logout</span>
+          </button>
+        </div>
+      </nav>
+
+      {/* === MOBILE DRAWER === */}
+      <div className={`${styles.mobileDrawer} ${isMobileOpen ? styles.open : ""}`}>
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            className={({ isActive }) => 
+              `${styles.navItem} ${isActive ? styles.active : ""}`
+            }
+            onClick={() => setIsMobileOpen(false)}
+          >
+            <span className={styles.icon}>{link.icon}</span>
+            {link.label}
+          </NavLink>
+        ))}
+
+        {/* ✅ MOBILE ACTIONS (Visible only in Drawer) */}
+        <div className={styles.mobileActions}>
+            <Link to="/dashboard" className={styles.mobileSwitch}>
+               🏠 Client View
+            </Link>
+            
+            <button className={styles.mobileLogout} onClick={handleLogout}>
+               🚪 Logout
+            </button>
+        </div>
+      </div>
+
+      {/* === MAIN CONTENT === */}
       <main className={styles.mainContent}>
-        {/* The child admin pages (Dashboard, Users, Fleet) render here */}
         <Outlet />
       </main>
     </div>

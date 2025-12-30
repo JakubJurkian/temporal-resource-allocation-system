@@ -128,11 +128,17 @@
 
 // --- RESPONSIVE TABLE ---
 .tableContainer {
+  width: 100%;
+
   @media (min-width: v.$tablet) {
     background: v.$color-bg-card;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: v.$radius-lg;
-    overflow: hidden;
+    box-shadow: v.$shadow-sm;
+
+    overflow-x: auto; // Allows horizontal scroll if content is too wide
+    overflow-y: hidden; // Prevents vertical scroll glitches
+    -webkit-overflow-scrolling: touch; // Smooth scrolling on touch devices
   }
 }
 
@@ -140,6 +146,9 @@
   width: 100%;
   border-collapse: collapse;
 
+  @media (min-width: v.$tablet) {
+    min-width: 900px; // Forces the table to be at least this wide, triggering the scrollbar if needed
+  }
   // MOBILE VIEW (Card Layout)
   thead {
     display: none;
