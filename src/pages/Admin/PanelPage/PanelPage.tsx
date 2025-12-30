@@ -12,6 +12,7 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import PageTransition from "../../../components/common/PageTransition";
 import styles from "./PanelPage.module.scss";
 import { getUserReservations } from "../../../utils/bookingHelper";
 import { getModels } from "../../../utils/fleetStorage";
@@ -75,86 +76,88 @@ const PanelPage = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
-    <div className={styles.dashboard}>
-      <header className={styles.header}>
-        <h1>Dashboard Overview</h1>
-        <p>Real-time fleet analytics.</p>
-      </header>
+    <PageTransition>
+      <div className={styles.panelPage}>
+        <header className={styles.header}>
+          <h1>Dashboard Overview</h1>
+          <p>Real-time fleet analytics.</p>
+        </header>
 
-      {/* KPI CARDS */}
-      <div className={styles.kpiGrid}>
-        <div className={styles.card}>
-          <h3>Total Revenue</h3>
-          <div className={styles.value}>{dashboardData.kpi.revenue} PLN</div>
-        </div>
-        <div className={styles.card}>
-          <h3>Occupancy Rate (Month)</h3>
-          <div className={styles.value}>{dashboardData.kpi.occupancy}%</div>
-          <div className={styles.subtext}>of total fleet capacity</div>
-        </div>
-        <div className={styles.card}>
-          <h3>Active Rentals</h3>
-          <div className={styles.value}>{dashboardData.kpi.activeRentals}</div>
-        </div>
-      </div>
-
-      {/* CHARTS GRID */}
-      <div className={styles.chartsGrid}>
-        {/* CHART 1: REVENUE */}
-        <div className={styles.chartCard} style={{ minWidth: 0 }}>
-          <h3>Revenue Trend</h3>
-          <div style={{ width: "100%", height: 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={dashboardData.revenueData}>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.1)"
-                />
-                <XAxis dataKey="name" stroke="#8884d8" />
-                <YAxis stroke="#8884d8" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#1a1a2e",
-                    borderColor: "#333",
-                  }}
-                  itemStyle={{ color: "#fff" }}
-                />
-                <Bar dataKey="revenue" fill="#82ca9d" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        {/* KPI CARDS */}
+        <div className={styles.kpiGrid}>
+          <div className={styles.card}>
+            <h3>Total Revenue</h3>
+            <div className={styles.value}>{dashboardData.kpi.revenue} PLN</div>
+          </div>
+          <div className={styles.card}>
+            <h3>Occupancy Rate (Month)</h3>
+            <div className={styles.value}>{dashboardData.kpi.occupancy}%</div>
+            <div className={styles.subtext}>of total fleet capacity</div>
+          </div>
+          <div className={styles.card}>
+            <h3>Active Rentals</h3>
+            <div className={styles.value}>{dashboardData.kpi.activeRentals}</div>
           </div>
         </div>
 
-        {/* CHART 2: POPULARITY */}
-        <div className={styles.chartCard} style={{ minWidth: 0 }}>
-          <h3>Model Popularity</h3>
-          <div style={{ width: "100%", height: 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={dashboardData.popularityData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="count"
-                >
-                  {dashboardData.popularityData.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+        {/* CHARTS GRID */}
+        <div className={styles.chartsGrid}>
+          {/* CHART 1: REVENUE */}
+          <div className={styles.chartCard} style={{ minWidth: 0 }}>
+            <h3>Revenue Trend</h3>
+            <div style={{ width: "100%", height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={dashboardData.revenueData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.1)"
+                  />
+                  <XAxis dataKey="name" stroke="#8884d8" />
+                  <YAxis stroke="#8884d8" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1a1a2e",
+                      borderColor: "#333",
+                    }}
+                    itemStyle={{ color: "#fff" }}
+                  />
+                  <Bar dataKey="revenue" fill="#82ca9d" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* CHART 2: POPULARITY */}
+          <div className={styles.chartCard} style={{ minWidth: 0 }}>
+            <h3>Model Popularity</h3>
+            <div style={{ width: "100%", height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={dashboardData.popularityData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="count"
+                  >
+                    {dashboardData.popularityData.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 
