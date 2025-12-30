@@ -33,7 +33,6 @@ const AboutPage = () => {
     <>
       {/* Hero Section */}
       <section className={styles.hero}>
-        <div className={styles.glowOrb} aria-hidden="true"></div>
         <h1>
           Moving Cities <br />
           <span className={styles.gradientText}>Forward.</span>
