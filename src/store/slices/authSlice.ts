@@ -22,35 +22,24 @@ const initialUser = getStoredUser();
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  loading: boolean;
-  error: string | null;
 }
 
 const initialState: AuthState = {
   user: initialUser,
   isAuthenticated: !!initialUser,
-  loading: false,
-  error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
     loginSuccess: (state, action: PayloadAction<User>) => {
-      state.loading = false;
       state.isAuthenticated = true;
       state.user = action.payload;
     },
-    loginFailure: (state, action: PayloadAction<string>) => {
-      state.loading = false;
+    loginFailure: (state) => {
       state.isAuthenticated = false;
       state.user = null;
-      state.error = action.payload;
     },
 
     // We clear BOTH to ensure the user is definitely logged out
@@ -79,6 +68,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout, updateUser } =
+export const { loginSuccess, loginFailure, logout, updateUser } =
   authSlice.actions;
 export default authSlice.reducer;
