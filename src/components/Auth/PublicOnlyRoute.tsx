@@ -1,6 +1,6 @@
 import { useAppSelector } from "../../store/hooks";
 import { Outlet } from "react-router-dom";
-import Redirect from "../Utils/Redirect.tsx";
+import Redirect from "../common/Redirect.tsx";
 
 interface Props {
   children?: React.ReactNode;

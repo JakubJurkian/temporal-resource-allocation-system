@@ -1,5 +1,6 @@
+// Libraries dependencies
 import { Routes, Route, Outlet, useLocation } from "react-router-dom"; // ✅ Added useLocation, Removed Navigate
-import { Toaster } from "react-hot-toast"; // ✅ Added Toaster
+import { Toaster } from "react-hot-toast";
 import { AnimatePresence } from "framer-motion";
 
 // Pages
@@ -19,16 +20,15 @@ import ContactPage from "./pages/ContactPage/ContactPage";
 import MainLayout from "./components/MainLayout/MainLayout";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import PublicOnlyRoute from "./components/Auth/PublicOnlyRoute";
-import ScrollToTop from "./components/Utils/ScrollToTop";
+import ScrollToTop from "./components/common/ScrollToTop";
 import RentalsPage from "./pages/RentalsPage/RentalsPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage/UnauthorizedPage";
 import UserManagementPage from "./pages/Admin/UserManagementPage/UserManagementPage";
 import CalendarPage from "./pages/Admin/CalendarPage/CalendarPage";
 import PanelPage from "./pages/Admin/PanelPage/PanelPage";
 import AdminLayout from "./pages/Admin/AdminLayout/AdminLayout";
-import Redirect from "./components/Utils/Redirect"; // Added custom Redirect to fix crash
-
-import styles from "./styles/Toast.module.scss";
+import Redirect from "./components/common/Redirect"; // Added custom Redirect to fix crash
+import { toastConfig } from "./utils/toastConfig";
 
 const App = () => {
   const location = useLocation();
@@ -37,29 +37,10 @@ const App = () => {
     <>
       <ScrollToTop />
 
-      {/* GLOBAL TOASTER CONFIGURATION */}
       <Toaster
         position="top-center"
         reverseOrder={false}
-        toastOptions={{
-          className: styles.toastBase,
-          iconTheme: {
-            primary: styles.info,
-            secondary: "#fff",
-          },
-          success: {
-            iconTheme: {
-              primary: styles.success,
-              secondary: "#fff",
-            },
-          },
-          error: {
-            iconTheme: {
-              primary: styles.error,
-              secondary: "#fff",
-            },
-          },
-        }}
+        toastOptions={toastConfig}
       />
 
       <AnimatePresence mode="wait">
