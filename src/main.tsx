@@ -8,7 +8,7 @@ import { initializeFleet } from "./utils/fleetStorage";
 import "./styles/globals.scss";
 import { BrowserRouter } from "react-router-dom";
 
-// initialize data for localStorage
+// initialize data for localStorage (backend simulation, seed data)
 const bootstrapApp = () => {
   try {
     initializeUsers();
