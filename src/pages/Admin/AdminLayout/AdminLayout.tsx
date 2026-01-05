@@ -82,7 +82,7 @@ const AdminLayout = () => {
           </NavLink>
         ))}
 
-        {/* ✅ MOBILE ACTIONS (Visible only in Drawer) */}
+        {/* MOBILE ACTIONS (Visible only in Drawer) */}
         <div className={styles.mobileActions}>
             <Link to="/dashboard" className={styles.mobileSwitch}>
                🏠 Client View

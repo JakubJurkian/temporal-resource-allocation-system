@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -40,10 +40,14 @@ const getAllReservations = (): Reservation[] => {
 };
 
 const PanelPage = () => {
-  const [dashboardData] = useState(() => {
+  // OPTIMIZATION: Replaced useState with useMemo
+  // This logic now runs ONLY once on mount, or if dependencies change.
+  // It separates "Calculation" from "State".
+  const dashboardData = useMemo(() => {
     const reservations = getAllReservations();
     const models: BikeModel[] = getModels();
 
+    // Heavy calculations
     const revenueChart = getMonthlyRevenue(reservations);
     const popularityChart = getPopularityStats(reservations, models);
 
@@ -63,7 +67,7 @@ const PanelPage = () => {
         activeRentals: active,
       },
     };
-  });
+  }, []); // Empty array = Calculate once on mount (Component Did Mount)
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
