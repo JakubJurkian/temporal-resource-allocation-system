@@ -8,7 +8,7 @@
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 |                        Landing Page                         |                         User Dashboard                          |
 | :---------------------------------------------------------: | :-------------------------------------------------------------: |
@@ -34,7 +34,7 @@
 - **Analytics Dashboard:** Real-time charts (Recharts) visualizing revenue, occupancy rates, and fleet popularity.
 - **User Management:** View user database and manage permissions.
 
-### ⚙️ Technical Highlights (Under the Hood)
+### Technical Highlights (Under the Hood)
 
 - **Custom Form Hook (`useForm`):** A generic, reusable hook built from scratch for form state management and validation (No external form libraries).
 - **Backend Simulation:** A sophisticated `LocalStorage` adapter that mimics REST API behavior, complete with CRUD operations and relational data linking (Users ↔ Reservations).
@@ -44,7 +44,7 @@
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Core:**
 
@@ -54,7 +54,7 @@
 
 **State & Logic:**
 
-- ![Redux](https://img.shields.io/badge/Redux-Toolkit-764ABC?logo=redux&logoColor=white) **Redux Toolkit** (Global Auth State)
+- **Redux Toolkit** (Global Auth State)
 - **React Router v6** (Navigation & Layout Composition)
 - **Framer Motion** (Page Transitions & Animations)
 - **Recharts** (Data Visualization)
@@ -62,7 +62,7 @@
 
 ---
 
-## 🏗️ Project Architecture Map
+## Project Architecture Map
 
 The project follows a scalable, modular folder structure designed for growth.
 
@@ -73,7 +73,7 @@ src/
 │   ├── common/          # PageTransition
 │   └── MainLayout/      # Layout wrappers (Navbar, Footer)
 ├── hooks/               # Custom Hooks
-│   └── useForm.ts       # ⭐️ Custom generic form engine
+│   └── useForm.ts       # Custom generic form engine
 ├── pages/               # Route Components
 │   ├── Admin/           # Admin-specific views
 │   ├── DashboardPage/   # Client views
@@ -127,7 +127,7 @@ public/
 
 ---
 
-## 💡 Best Practices Implemented
+## Best Practices Implemented
 
 * **Component Composition:** Used throughout the app (e.g., `AdminLayout` with `<Outlet />`, `PageTransition` wrapping content) to avoid prop drilling and enhance modularity.
 * **Lazy Initialization:** Complex state logic (e.g., inside `PanelPage` stats calculation) is initialized lazily or memoized to improve startup performance and reduce re-renders.
@@ -139,7 +139,7 @@ public/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please follow these steps:
 
